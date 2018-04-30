@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <!-- change here if you want name of unit different -->
+  <persistence-unit name="riders" transaction-type="RESOURCE_LOCAL">
+    <!-- change here if your class/Entity package different -->
+    <class>ch.buhls.billmanager.persistance.database.entities.Article</class>
+    <!--<class>ch.buhls.billmanager.persistance.database.entities.Person</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.PersonBaseData</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.Settings</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.Position</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.Bill</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.BillBaseData</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.BillTemplate</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.FinancialYear</class>-->
+    <class>ch.buhls.billmanager.persistance.database.entities.Role</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.PersonBaseData</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.Person</class>
+    <properties>
+      <!-- change here if your jdbc driver different -->
+      <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:d://sample.db"/>
+      <property name="javax.persistence.jdbc.user" value="sa"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <!-- EclipseLink should create the database schema automatically -->
+      <property name="eclipselink.ddl-generation" value="create"/>
+      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+    </properties>
+  </persistence-unit>
+</persistence>

@@ -1,0 +1,68 @@
+package ch.buhls.billmanager.gui.controller;
+
+import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.framework.IGUIFramework;
+import ch.buhls.billmanager.gui.data.GUIRole;
+import ch.buhls.billmanager.gui.view.builder.ListRolesBuilder;
+import ch.buhls.billmanager.gui.view.listener.IListRolesListener;
+import javafx.collections.ObservableList;
+
+/**
+ *
+ * @author simon
+ */
+public class ListRolesController extends AController implements IListRolesListener
+{
+
+    private final ListRolesBuilder builder;
+
+    public ListRolesController(IGUIFramework containerManager, DataHandler dataHandler) {
+        super(containerManager, dataHandler, "Rollen");
+
+        this.builder = new ListRolesBuilder(this, dataHandler.getRolesBuffer());
+
+        containerManager.displayMask(builder.getView(), tabName, IGUIFramework.Area.LEFT).focus();
+    }
+
+    @Override
+    public void create() {
+        new CreateRoleController(framework, dataHandler);
+    }
+
+    @Override
+    public void edit(GUIRole selected) {
+        new EditRoleController(framework, dataHandler, tabName, selected);
+    }
+
+    @Override
+    public void show(GUIRole selected) {
+        new ShowRolesController(framework, dataHandler, selected);
+    }
+
+    @Override
+    public void delete(GUIRole selected) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mark(GUIRole selected) {
+        if (selected == null) {
+            return;
+        }
+        
+        if (dataHandler.getMarkedRole().get() != null) {
+            // remove old mark
+            dataHandler.getMarkedRole().get().getMarked().set(false);
+        }
+
+        // mark new
+        dataHandler.getMarkedRole().set(selected);
+        selected.getMarked().set(true);
+    }
+
+    @Override
+    public void contextMenuOpened(ObservableList<GUIRole> selected) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+}
