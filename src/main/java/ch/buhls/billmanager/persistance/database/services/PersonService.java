@@ -44,7 +44,7 @@ public class PersonService extends AService<Person>
     {
         managedEntity.setPersonBaseData(entity.getPersonBaseData());
         
-        this.handlePositions(managedEntity, entity);
+        //this.handlePositions(managedEntity, entity);
         this.handleRoles(managedEntity, entity);
         this.handleBills(managedEntity, entity);
     }

@@ -59,7 +59,7 @@ public class ArticleTableContainer
         {
             TableColumn<GUIArticle, Boolean> column = new TableColumn("marked (intern)");
             column.setCellValueFactory(cellData -> cellData.getValue().getMarked());
-            //table.getColumns().add(column);
+            table.getColumns().add(column);
 
             column.setCellFactory((TableColumn<GUIArticle, Boolean> param)
                     -> {

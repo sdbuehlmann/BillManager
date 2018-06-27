@@ -3,7 +3,6 @@ package ch.buhls.billmanager.gui.view.container.form;
 import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.view.elements.LabledSwitchableControlContainer;
 import ch.buhls.billmanager.gui.view.elements.NumberField;
-import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 

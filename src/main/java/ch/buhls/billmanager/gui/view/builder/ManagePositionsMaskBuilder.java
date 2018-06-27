@@ -25,8 +25,9 @@ public class ManagePositionsMaskBuilder
 {
     private final VBox view;
     
-    private final ToolBar mainBar, managePositionsBar;
-    private final Button bSave, bSavePosition, bRemovePosition, bAddMarkedArticle, bEditPosition;
+    private final ToolBar mainBar, managePositionsBar, safePositionsBar;
+    private final Button bSave, bRemovePosition, bAddMarkedArticle, bEditPosition;
+    private final Button bSaveEditPosition, bAbortEditPosition;
 
     private final ManagePositionsFormContainer formContainer;
     private final PositionsTableContainer tableContainer;
@@ -40,10 +41,11 @@ public class ManagePositionsMaskBuilder
         this.editedPos = editedPos;
         
         bSave = new Button(GUIStringCollection.SAVE);
-        bSavePosition = new Button(GUIStringCollection.POSITION_SAVE_POSITION);
         bRemovePosition = new Button(GUIStringCollection.POSITION_REMOVE_POSITION);
         bAddMarkedArticle = new Button(GUIStringCollection.PERSON_ADD_ART_TO_BILL);
         bEditPosition = new Button(GUIStringCollection.POSITION_EDIT_POSITION);
+        bSaveEditPosition = new Button(GUIStringCollection.POSITION_SAVE_POSITION);
+        bAbortEditPosition = new Button(GUIStringCollection.ABORT);
         
         mainBar = new ToolBar();
         mainBar.setPadding(new Insets(10));
@@ -51,7 +53,7 @@ public class ManagePositionsMaskBuilder
         
         managePositionsBar = new ToolBar();
         managePositionsBar.setPadding(new Insets(10));
-        managePositionsBar.getItems().addAll(bSavePosition,bEditPosition,bRemovePosition);
+        managePositionsBar.getItems().addAll(bEditPosition,bRemovePosition);
         
         formContainer = new ManagePositionsFormContainer();
         LabledSwitchableControlContainer.changeToReadOnlyState(formContainer.getTfArtTitleContainer());
@@ -59,10 +61,14 @@ public class ManagePositionsMaskBuilder
         LabledSwitchableControlContainer.changeToReadOnlyState(formContainer.getNfArtPrizeContainer());
         LabledSwitchableControlContainer.changeToReadOnlyState(formContainer.getTfArtCategorieContainer());
         
+        safePositionsBar = new ToolBar();
+        safePositionsBar.setPadding(new Insets(10));
+        safePositionsBar.getItems().addAll(bSaveEditPosition,bAbortEditPosition);
+        
         tableContainer = new PositionsTableContainer();
         tableContainer.getTable().setItems(positions);
         
-        view = new VBox(mainBar,tableContainer.getTable(),new Separator(),managePositionsBar,formContainer.getView());
+        view = new VBox(mainBar,tableContainer.getTable(),new Separator(),managePositionsBar,formContainer.getView(), safePositionsBar);
         view.setVgrow(tableContainer.getTable(), Priority.ALWAYS);
         
         connectListener();
@@ -76,7 +82,7 @@ public class ManagePositionsMaskBuilder
             listener.save();
         });
         
-        bSavePosition.setOnAction((ActionEvent event) -> {
+        bSaveEditPosition.setOnAction((ActionEvent event) -> {
             listener.savePos(editedPos);
         });
         
@@ -94,6 +100,10 @@ public class ManagePositionsMaskBuilder
         
         tableContainer.getTable().getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change<? extends GUIPosition> c) -> {
             listener.selectionChanged(tableContainer.getTable().getSelectionModel().getSelectedItem());
+        });
+        
+        bAbortEditPosition.setOnAction((ActionEvent event) -> {
+            listener.abortEditPos();
         });
     }
     
@@ -135,8 +145,8 @@ public class ManagePositionsMaskBuilder
             LabledSwitchableControlContainer.changeToReadOnlyState(formContainer.getNfPositionContainer());
         }
         
-        bSavePosition.setDisable(!enable);
-        
+        bSaveEditPosition.setDisable(!enable);
+        bAbortEditPosition.setDisable(!enable);
     }
 
     public GUIPosition getEditedPos() {

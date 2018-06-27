@@ -41,7 +41,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
             builder.setMenuSelectionMode(AListBuilder.MenuSelectionMode.SINGLE);
         }
 
-        builder.enableToAddArticle(dataHandler.getMarkedArticle().get() != null);
+        builder.enableToAddArticle(dataHandler.getMarkedArticleProperty().get() != null);
         builder.enableToAddRole(dataHandler.getMarkedRole().get() != null);
     }
 
@@ -73,12 +73,12 @@ public class ListPersonsController extends AController implements IListPersonsLi
     @Override
     public void addArticleToBusket(ObservableList<GUIPerson> persons, int nr) {
         if (framework.confirmToAddArticle()) {
-            GUIArticle marked = dataHandler.getMarkedArticle().get();
+            GUIArticle marked = dataHandler.getMarkedArticleProperty().get();
 
             for (GUIPerson person : persons) {
                 try {
-                    GUIPosition guiPosition = dataHandler.createPositionForPerson(marked, person, nr);
-                    dataHandler.addPositionToPersonsBusket(person, guiPosition);
+                    GUIPosition guiPosition = dataHandler.createPosition(marked, dataHandler.getNextPositionNr(person), nr);
+                    dataHandler.addPositionAndStoreBusket(person, guiPosition);
                 }
                 catch (PersistanceException ex) {
                     framework.showExceptionDialoque(ex);

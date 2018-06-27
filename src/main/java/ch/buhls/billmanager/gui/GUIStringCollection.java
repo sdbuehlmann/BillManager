@@ -81,6 +81,7 @@ public class GUIStringCollection
     
     public static String EDIT = "bearbeiten";
     public static String SAVE = "speichern";
+    public static String ABORT = "abbrechen";
     public static String NEW = "neu";
     public static String SHOW = "anzeigen";
     public static String SHOW_VERSIONS = "Versionsverlauf anzeigen";

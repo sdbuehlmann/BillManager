@@ -17,8 +17,8 @@ public class GUIPosition extends AGUIData<Position>
     
     private final GUIArticle guiArticle;
     
-    public GUIPosition(Position t, GUIArticle guiArticle) {
-        super(t);
+    public GUIPosition(Position pos, GUIArticle guiArticle) {
+        super(pos);
         
         this.guiArticle = guiArticle;
         

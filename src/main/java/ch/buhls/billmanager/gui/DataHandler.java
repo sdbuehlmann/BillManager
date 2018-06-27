@@ -15,6 +15,7 @@ import ch.buhls.billmanager.persistance.database.entities.Person;
 import ch.buhls.billmanager.persistance.database.entities.PersonBaseData;
 import ch.buhls.billmanager.persistance.database.entities.Position;
 import ch.buhls.billmanager.persistance.database.entities.Role;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -36,7 +37,7 @@ public class DataHandler
     private ObservableList<GUIArticle> articlesBuffer;
     private ObservableList<GUIBill> billsBuffer;
 
-    private ObjectProperty<GUIArticle> markedArticle;
+    private ObjectProperty<GUIArticle> markedArticleProperty;
     private ObjectProperty<GUIRole> markedRole;
 
     public DataHandler(Project project) {
@@ -47,7 +48,7 @@ public class DataHandler
         articlesBuffer = FXCollections.observableArrayList();
         billsBuffer = FXCollections.observableArrayList();
 
-        markedArticle = new SimpleObjectProperty<>();
+        markedArticleProperty = new SimpleObjectProperty<>();
         markedRole = new SimpleObjectProperty<>();
     }
 
@@ -74,8 +75,8 @@ public class DataHandler
         return versionsBuffer;
     }
     
-    public ObjectProperty<GUIArticle> getMarkedArticle() {
-        return markedArticle;
+    public ObjectProperty<GUIArticle> getMarkedArticleProperty() {
+        return markedArticleProperty;
     }
     
     public GUIArticle createArticle(){
@@ -204,28 +205,20 @@ public class DataHandler
         }
         
         return busket;
-    }
-    
-    public void addPositionToPersonsBusket(GUIPerson guiPerson, GUIPosition guiPosition) throws PersistanceException{
-        guiPerson.getData().getBusket().add(guiPosition.getData());
-        storePerson(guiPerson);
-    }
-    
-    
+    }   
     
     // positions
     public GUIPosition createPosition(GUIArticle guiArticle){
-        Position pos = new Position();
-        pos.setArticle(guiArticle.getData());
+        Position pos = persistanceFascade.createPosition(guiArticle.getData());
         
         return new GUIPosition(pos, guiArticle);
     }
     
-    public GUIPosition createPositionForPerson(GUIArticle guiArticle, GUIPerson guiPerson, int amount){
-        Position pos = new Position();
-        pos.setArticle(guiArticle.getData());
+    public GUIPosition createPosition(GUIArticle guiArticle, int position, int amount){
+        Position pos = persistanceFascade.createPosition(guiArticle.getData());
+        
         pos.setNumber(amount);
-        pos.setPosition(getHighestPosNumber(guiPerson.getData().getBusket())+POS_NR_STEP);
+        pos.setPosition(position);
         
         return new GUIPosition(pos, guiArticle);
     }
@@ -234,14 +227,55 @@ public class DataHandler
         return new GUIPosition(new Position(modelPos.getData()), modelPos.getGuiArticle());
     }
     
-    private int getHighestPosNumber(List<Position> positions){
+    public void deletePosition(GUIPosition guiPosition) throws PersistanceException{
+        persistanceFascade.deletePosition(guiPosition.getData());
+    }
+    
+    public void storePosition(GUIPosition guiPosition) throws PersistanceException{
+        persistanceFascade.storePosition(guiPosition.getData());
+    }
+    
+    public void updatePosition(GUIPosition guiPosition) throws PersistanceException{
+        persistanceFascade.updatePosition(guiPosition.getData());
+    }
+    
+    public void addPositionAndStoreBusket(GUIPerson guiPerson, GUIPosition guiPosition) throws PersistanceException{
+        guiPerson.getData().getBusket().add(guiPosition.getData());
+        
+        storePosition(guiPosition);
+        storePerson(guiPerson);
+    }
+    
+    public void mergeAndStoreBusket(GUIPerson guiPerson, 
+            ObservableList<GUIPosition> guiBusket) throws PersistanceException{
+        
+        List<Position> busket = new ArrayList<>(guiBusket.size());
+        for(GUIPosition guiPos : guiBusket){
+            busket.add(guiPos.getData());
+        }
+        
+        persistanceFascade.mergeAndStoreBusket(guiPerson.getData(), busket);
+    }
+    
+    public int getNextPositionNr(List<GUIPosition> guiPositions){
         int highestPosNr = 0;
-        for(Position pos : positions){
-            if(pos.getNumber() > highestPosNr){
-                highestPosNr = pos.getNumber();
+        for(GUIPosition pos : guiPositions){
+            if(pos.getPosition().get() > highestPosNr){
+                highestPosNr = pos.getPosition().get();
             }
         }
         
-        return highestPosNr;
+        return highestPosNr + POS_NR_STEP;
+    }
+    
+    public int getNextPositionNr(GUIPerson guiPerson){
+        int highestPosNr = 0;
+        for(Position pos : guiPerson.getData().getBusket()){
+            if(pos.getPosition() > highestPosNr){
+                highestPosNr = pos.getPosition();
+            }
+        }
+        
+        return highestPosNr + POS_NR_STEP;
     }
 }

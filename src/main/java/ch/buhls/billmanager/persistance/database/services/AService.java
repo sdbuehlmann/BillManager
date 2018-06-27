@@ -167,6 +167,9 @@ public abstract class AService<T extends AEntity> implements IService<T>
         T managedEntity = this.container.add(entity);
 
         transaction.commit();
+        
+        entity.setId(managedEntity.getId());
+        entity.setVersion(managedEntity.getVersion());
     }
 
     /**
@@ -200,6 +203,8 @@ public abstract class AService<T extends AEntity> implements IService<T>
         this.updateManagedEntity(managedEntity, entity);
 
         transaction.commit();
+        
+        entity.setVersion(managedEntity.getVersion());
     }
 
     /**

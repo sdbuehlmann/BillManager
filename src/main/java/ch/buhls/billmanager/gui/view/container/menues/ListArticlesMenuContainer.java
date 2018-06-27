@@ -4,6 +4,7 @@ package ch.buhls.billmanager.gui.view.container.menues;
 import ch.buhls.billmanager.gui.GUIStringCollection;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 
 /**
  *
@@ -20,7 +21,7 @@ public class ListArticlesMenuContainer
         itemMark = new MenuItem(GUIStringCollection.MARK);
         itemShowVersions = new MenuItem(GUIStringCollection.SHOW_VERSIONS);
         
-        contextMenu = new ContextMenu(itemNew, itemEdit, itemMark, itemShowVersions);
+        contextMenu = new ContextMenu(itemNew, itemEdit, new SeparatorMenuItem(), itemMark, new SeparatorMenuItem(), itemShowVersions);
     }
 
     public ContextMenu getContextMenu() {

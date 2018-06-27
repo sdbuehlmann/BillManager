@@ -4,6 +4,8 @@ package ch.buhls.billmanager.gui.data;
 import ch.buhls.billmanager.gui.data.properties.IPropertyData;
 import ch.buhls.billmanager.gui.data.properties.IntegerAdapterProperty;
 import ch.buhls.billmanager.persistance.database.entities.Person;
+import ch.buhls.billmanager.persistance.database.entities.Position;
+import java.util.List;
 import javafx.beans.property.IntegerProperty;
 
 /**
@@ -107,6 +109,4 @@ public class GUIPerson extends AGUIData<Person>
     public GUIPersonBaseData getBaseData() {
         return baseData;
     }
-    
-    
 }

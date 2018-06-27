@@ -53,13 +53,13 @@ public class ListArticlesController implements IListArticlesListener
     @Override
     public void mark(List<GUIArticle> selected) {
         if (selected.get(0) != null) {
-            if (dataHandler.getMarkedArticle().get() != null) {
+            if (dataHandler.getMarkedArticleProperty().get() != null) {
                 // remove old mark
-                dataHandler.getMarkedArticle().get().getMarked().set(false);
+                dataHandler.getMarkedArticleProperty().get().getMarked().set(false);
             };
 
             // mark new
-            dataHandler.getMarkedArticle().set(selected.get(0));
+            dataHandler.getMarkedArticleProperty().set(selected.get(0));
             selected.get(0).getMarked().set(true);
         }
     }

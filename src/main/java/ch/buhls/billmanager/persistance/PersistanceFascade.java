@@ -2,6 +2,7 @@ package ch.buhls.billmanager.persistance;
 
 import ch.buhls.billmanager.persistance.database.ContainerFactory;
 import ch.buhls.billmanager.persistance.database.container.EntityNotFoundException;
+import ch.buhls.billmanager.persistance.database.entities.AEntity;
 import ch.buhls.billmanager.persistance.database.entities.ATrackedEntity;
 import ch.buhls.billmanager.persistance.database.entities.Article;
 import ch.buhls.billmanager.persistance.database.entities.Bill;
@@ -17,14 +18,19 @@ import ch.buhls.billmanager.persistance.database.services.BillBaseDataService;
 import ch.buhls.billmanager.persistance.database.services.BillService;
 import ch.buhls.billmanager.persistance.database.services.BillTemplateService;
 import ch.buhls.billmanager.persistance.database.services.FinancialYearService;
+import ch.buhls.billmanager.persistance.database.services.ListDeltasTO;
 import ch.buhls.billmanager.persistance.database.services.PersonBaseDataService;
 import ch.buhls.billmanager.persistance.database.services.PersonService;
+import ch.buhls.billmanager.persistance.database.services.PositionService;
 import ch.buhls.billmanager.persistance.database.services.RoleService;
 import ch.buhls.billmanager.persistance.database.services.ServiceException;
+import ch.buhls.billmanager.persistance.database.services.UpdatableEntityPaire;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,6 +40,7 @@ public class PersistanceFascade
 {
 
     private ArticleService articleService;
+    private PositionService positionService;
     private PersonService personService;
     private PersonBaseDataService personBaseDataService;
     private RoleService roleService;
@@ -46,6 +53,7 @@ public class PersistanceFascade
         ContainerFactory factory = new ContainerFactory(project);
 
         articleService = new ArticleService(factory);
+        positionService = new PositionService(factory);
         personService = new PersonService(factory);
         personBaseDataService = new PersonBaseDataService(factory);
         roleService = new RoleService(factory);
@@ -444,5 +452,84 @@ public class PersistanceFascade
         return billService.getContainer().findAll();
     }
     
+    // position
+    public Position createPosition(Article art) {
+        Position pos = new Position();
+        pos.setArticle(art);
+
+        return pos;
+    }
     
+    public void storePosition(Position position) throws PersistanceException{
+        position.setId(0);
+        position.setPosition(0);
+        
+        try {
+            positionService.add(position);
+        }
+        catch (ServiceException ex) {
+            throw new PersistanceException(ex);
+        }
+    }
+    
+    public void updatePosition(Position position) throws PersistanceException{
+        try {
+            positionService.update(position);
+        }
+        catch (ServiceException ex) {
+            throw new PersistanceException(ex);
+        }
+    }
+    
+    public void deletePosition(Position position) throws PersistanceException{
+        try {
+            positionService.remove(position);
+        }
+        catch (ServiceException ex) {
+            throw new PersistanceException(ex);
+        }
+    }
+    
+    public void mergeAndStoreBusket(Person person, List<Position> newBusket) throws PersistanceException{
+        List<Position> oldPositions = findOldEntitiesComparedByID(person.getBusket(), newBusket);
+        
+        // store all used positions
+        for(Position pos : newBusket){
+            storePosition(pos);
+        }
+        
+        // update person entity
+        person.getBusket().clear();
+        person.getBusket().addAll(newBusket);
+        storePerson(person);
+        
+        // delete unused
+        for(Position pos : oldPositions){
+            deletePosition(pos);
+        }
+    }
+    
+    /**
+     * Finds all old entities only compared by their id (without version). Each entry which is in the old but not in the new list is a old entry and will be returned in the return-list.
+     * @param oldList
+     * @param newList
+     * @return a list with all old entries
+     */
+    private <X extends AEntity> List<X> findOldEntitiesComparedByID(List<X> oldList, List<X> newList){
+        List<X> oldEntries = new ArrayList<>(oldList.size());
+        oldEntries.addAll(oldList);
+
+        for (X oldEntity : oldList)
+        {
+            for (X newEntity : newList)
+            {
+                if(oldEntity.getId() == newEntity.getId()){
+                    oldEntries.remove(oldEntity);
+                    break;
+                }
+            }
+        }
+
+        return oldEntries;
+    }
 }
