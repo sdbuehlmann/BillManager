@@ -17,7 +17,10 @@ public class FinancialYearService extends AService<FinancialYear>
 
     @Override
     protected void updateManagedEntity(FinancialYear managedEntity, FinancialYear entity) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        managedEntity.setBillIdPrefix(entity.getBillIdPrefix());
+        managedEntity.setName(entity.getName());
+        managedEntity.setFirstDay(entity.getFirstDay());
+        managedEntity.setLastDay(entity.getLastDay());
     }
     
 }

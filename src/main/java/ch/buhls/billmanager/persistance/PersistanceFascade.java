@@ -216,30 +216,27 @@ public class PersistanceFascade
     
     // financial year
     public FinancialYear createFinancialYear() {
-        return new FinancialYear();
+        FinancialYear year = new FinancialYear();
+        year.setFirstDay(new Date());
+        year.setLastDay(new Date());
+        
+        return year;
     }
 
     public FinancialYear editFinancialYear(FinancialYear year) {
-        // trackable entity
         FinancialYear temp = new FinancialYear(year);
-
-        temp.setId(0);
-        temp.setVersion(0);
-
-        temp.setChangeTxt(null);
-        temp.setFollowingVersion(null);
-        temp.setPreviousVersion(year);
 
         return temp;
     }
 
     public void storeFinancialYear(FinancialYear year) throws PersistanceException {
         try {
-            financialYearService.add(year);
-
-            if (year.getPreviousVersion() != null) {
-                // change the entry for the following version
-                year.getPreviousVersion().setFollowingVersion(year);
+            if (year.getId() == 0) {
+                // new entity
+                financialYearService.add(year);
+            }
+            else {
+                // existing entity
                 financialYearService.update(year);
             }
         }
@@ -247,7 +244,7 @@ public class PersistanceFascade
             throw new PersistanceException(ex);
         }
     }
-
+    
     public List<FinancialYear> getAllFinancialYears() {
         return financialYearService.getContainer().findAll();
     }
@@ -370,8 +367,8 @@ public class PersistanceFascade
         BillBaseData tempBaseData = new BillBaseData(origBill.getBillBaseData());
         tempBaseData.setId(0);
         tempBaseData.setVersion(0);
-        tempBaseData.setFollowingVersion(null);
-        tempBaseData.setPreviousVersion(origBill.getBillBaseData());
+        //tempBaseData.setFollowingVersion(null);
+        //tempBaseData.setPreviousVersion(origBill.getBillBaseData());
         
         // duplicate all positions
         for(Position pos : origBill.getBillBaseData().getPositions()){
@@ -396,10 +393,10 @@ public class PersistanceFascade
             billBaseDataService.add(temp);
 
             // update previous version
-            if (temp.getPreviousVersion() != null) {
+            /*if (temp.getPreviousVersion() != null) {
                 temp.getPreviousVersion().setFollowingVersion(temp);
                 billBaseDataService.update(temp.getPreviousVersion());
-            }
+            }*/
 
             // update with new base data
             billService.update(bill);

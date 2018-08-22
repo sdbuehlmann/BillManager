@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
  */
 public class ArticleFormContainer
 {
-
     private final VBox view;
 
     private final LabledSwitchableControlContainer<NumberField> nfIdDBContainer;

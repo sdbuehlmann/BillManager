@@ -1,5 +1,5 @@
 
-package ch.buhls.billmanager.gui.view;
+package ch.buhls.billmanager.gui.view.builder;
 
 import javafx.scene.layout.VBox;
 

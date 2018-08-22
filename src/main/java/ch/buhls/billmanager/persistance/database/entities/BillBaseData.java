@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
  * @author simon
  */
 @Entity
-public class BillBaseData extends ATrackedEntity<BillBaseData>
+public class BillBaseData extends AEntity<BillBaseData>
 {
     private int billNr;
     

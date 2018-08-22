@@ -5,7 +5,7 @@ import ch.buhls.billmanager.gui.DataHandler;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.data.GUIRole;
 import ch.buhls.billmanager.gui.view.builder.RoleMaskBuilder;
-import ch.buhls.billmanager.gui.view.listener.IDefaultMaskListener;
+import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
 import ch.buhls.billmanager.persistance.PersistanceException;
 
 /**

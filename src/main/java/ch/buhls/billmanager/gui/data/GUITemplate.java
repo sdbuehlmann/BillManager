@@ -76,4 +76,9 @@ public class GUITemplate extends AGUIData<BillTemplate>
     public IntegerProperty getMaxNrPositions() {
         return maxNrPositions;
     }
+
+    @Override
+    public String toString() {
+        return name.get();
+    }
 }

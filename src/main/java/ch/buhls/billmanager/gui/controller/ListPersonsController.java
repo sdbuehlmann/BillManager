@@ -62,7 +62,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
     @Override
     public void createNewBill(ObservableList<GUIPerson> persons) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        new CreateBillController(framework, dataHandler, persons);
     }
 
     @Override

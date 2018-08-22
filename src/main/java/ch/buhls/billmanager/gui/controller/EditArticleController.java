@@ -8,7 +8,7 @@ import ch.buhls.billmanager.gui.framework.ITabHandle;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.view.builder.ArticleMaskBuilder;
 import ch.buhls.billmanager.persistance.PersistanceException;
-import ch.buhls.billmanager.gui.view.listener.IDefaultMaskListener;
+import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
 
 
 /**

@@ -1,10 +1,9 @@
 package ch.buhls.billmanager.gui.view.builder;
 
 import ch.buhls.billmanager.gui.data.GUIRole;
-import ch.buhls.billmanager.gui.view.IMaskBuilder;
 import ch.buhls.billmanager.gui.view.container.form.RoleFormContainer;
 import ch.buhls.billmanager.gui.view.elements.LabledSwitchableControlContainer;
-import ch.buhls.billmanager.gui.view.listener.IDefaultMaskListener;
+import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
 import javafx.scene.layout.VBox;
 
 /**

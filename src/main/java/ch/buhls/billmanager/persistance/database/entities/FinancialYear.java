@@ -11,15 +11,16 @@ import javax.persistence.TemporalType;
  * @author simon
  */
 @Entity
-public class FinancialYear extends ATrackedEntity<FinancialYear>
+public class FinancialYear extends AEntity<FinancialYear>
 {
+    private String name;
+    private String billIdPrefix;
+    
     @Temporal(TemporalType.DATE)
     private Date firstDay;
     
     @Temporal(TemporalType.DATE)
     private Date lastDay;
-    
-    private String billIdPrefix;
 
     public FinancialYear() {
     }
@@ -54,14 +55,22 @@ public class FinancialYear extends ATrackedEntity<FinancialYear>
         this.billIdPrefix = billIdPrefix;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    } 
+    
     @Override
     public void copyData(FinancialYear other) {
         other.billIdPrefix = billIdPrefix;
+        other.name = name;
         other.firstDay = new Date(firstDay.getTime());
         other.lastDay = new Date(lastDay.getTime());
         
         super.copyData(other);
     }
-    
     
 }

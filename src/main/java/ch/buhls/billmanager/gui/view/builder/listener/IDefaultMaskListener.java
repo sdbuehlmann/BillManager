@@ -1,5 +1,5 @@
 
-package ch.buhls.billmanager.gui.view.listener;
+package ch.buhls.billmanager.gui.view.builder.listener;
 
 
 /**

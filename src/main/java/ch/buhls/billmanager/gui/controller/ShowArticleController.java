@@ -5,7 +5,7 @@ import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.framework.IGUIFramework.Area;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.view.builder.ArticleMaskBuilder;
-import ch.buhls.billmanager.gui.view.listener.IDefaultMaskListener;
+import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
 
 
 /**

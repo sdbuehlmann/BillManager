@@ -1,6 +1,7 @@
 
 package ch.buhls.billmanager.gui;
 
+import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 
 /**
@@ -63,7 +64,13 @@ public class GUIStringCollection
     public static String BILL_STATUS_PAID = "Bezahlt";
     public static String BILL_STATUS_STORNO = "Storniert";
     public static String BILL_STATUS_SUCCESSOR = "Nachfolgerechnung erstellen";
-    public static String BILL_LOCATION = "Ort";
+    public static String BILL_LOCATION = "Rechnungsort";
+    public static String BILL_DATE = "Rechnungsdatum";
+    public static String BILL_PAYMENT_DEADLINE = "Zahlungsfrist (Tage)";
+    public static String BILL_TEMPLATE = "Rechnungsvorlage";
+    public static String BILL_CREATE = "Erstellen";
+    public static String BILL_PERSONS = "Rechnungspersonen";
+    public static String BILL_REMOVE_PERSON = "Person entfernen";
     
     public static String ART_TITLE = "Titel";
     public static String ART_DESCRIPTION = "Beschrieb";
@@ -74,6 +81,12 @@ public class GUIStringCollection
     
     public static String TEMPLATE_NAME = "Bezeichnung";
     public static String TEMPLATE_MAX_POS = "Max. Anzahl Positionen";
+    
+    public static String YEAR_NAME = "Bezeichnung";
+    public static String YEAR_PREFIX = "Rechnungsnummer Präfix";
+    public static String YEAR_FIRST_DAY = "Erster Tag";
+    public static String YEAR_LAST_DAY = "Letzter Tag";
+    
     
     public static String DATE = "Datum";
     public static String TEMPLATE = "Vorlage";
@@ -116,6 +129,17 @@ public class GUIStringCollection
     public static String getTitleForManageRoles(GUIPersonBaseData person){
         return String.format("Rollen Mitglied %d", person.getPersonalId().get());
     }
+    public static String getTitleForCreateBill(){
+        return "Rechnung erstellen";
+    }
     
-    
+    public static String getTitleForListFinancialYears(){
+        return "Vereinsjahre";
+    }
+    public static String getTitleForCreateFinancialYear(){
+        return "neues Vereinsjahr efassen";
+    }
+    public static String getTitleForEditFinancialYear(GUIFinancialYear year){
+        return String.format("Vereinsjahr \"%s\" bearbeiten", year.getName().get());
+    }
 }

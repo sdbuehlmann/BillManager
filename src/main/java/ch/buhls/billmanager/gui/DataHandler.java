@@ -2,7 +2,8 @@
 package ch.buhls.billmanager.gui;
 
 import ch.buhls.billmanager.gui.data.GUIArticle;
-import ch.buhls.billmanager.gui.data.GUIBill;
+import ch.buhls.billmanager.gui.data.GUICreateBillData;
+import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIPosition;
@@ -13,19 +14,17 @@ import ch.buhls.billmanager.persistance.PersistanceException;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
 import ch.buhls.billmanager.persistance.database.entities.Article;
 import ch.buhls.billmanager.persistance.database.entities.BillTemplate;
+import ch.buhls.billmanager.persistance.database.entities.FinancialYear;
 import ch.buhls.billmanager.persistance.database.entities.Person;
 import ch.buhls.billmanager.persistance.database.entities.PersonBaseData;
 import ch.buhls.billmanager.persistance.database.entities.Position;
 import ch.buhls.billmanager.persistance.database.entities.Role;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -45,8 +44,9 @@ public class DataHandler
     private ObservableList<GUIRole> rolesBuffer;
     private ObservableList<GUIPerson> personsBuffer;
     private ObservableList<GUIArticle> articlesBuffer;
-    private ObservableList<GUIBill> billsBuffer;
+    private ObservableList<GUICreateBillData> billsBuffer;
     private ObservableList<GUITemplate> templatesBuffer;
+    private ObservableList<GUIFinancialYear> financialYearsBuffer;
 
     private ObjectProperty<GUIArticle> markedArticleProperty;
     private ObjectProperty<GUIRole> markedRole;
@@ -60,6 +60,7 @@ public class DataHandler
         articlesBuffer = FXCollections.observableArrayList();
         billsBuffer = FXCollections.observableArrayList();
         templatesBuffer = FXCollections.observableArrayList();
+        financialYearsBuffer = FXCollections.observableArrayList();
 
         markedArticleProperty = new SimpleObjectProperty<>();
         markedRole = new SimpleObjectProperty<>();
@@ -293,7 +294,6 @@ public class DataHandler
     }
     
     // templates
-
     public ObservableList<GUITemplate> getTemplatesBuffer() {
         return templatesBuffer;
     }
@@ -330,5 +330,35 @@ public class DataHandler
     public void updateTemplate(GUITemplate template) throws PersistanceException{
         persistanceFascade.storeBillTemplate(template.getData());
         reloadTemplatesBuffer();
+    }
+
+    // financial years
+    public ObservableList<GUIFinancialYear> getFinancialYearsBuffer() {
+        return financialYearsBuffer;
+    }
+    
+    public void reloadFinancialYearsBuffer(){
+        financialYearsBuffer.clear();
+        for(FinancialYear year : persistanceFascade.getAllFinancialYears()){
+            financialYearsBuffer.add(new GUIFinancialYear(year));
+        }
+    }
+    
+    public GUIFinancialYear createFinancialYear(){
+        return new GUIFinancialYear(persistanceFascade.createFinancialYear());
+    }
+    
+    public GUIFinancialYear editFinancialYear(GUIFinancialYear year){
+        return new GUIFinancialYear(persistanceFascade.editFinancialYear(year.getData()));
+    }
+    
+    public void storeFinancialYear(GUIFinancialYear year) throws PersistanceException{
+        persistanceFascade.storeFinancialYear(year.getData());
+        reloadFinancialYearsBuffer();
+    }
+    
+    // bills
+    public void createBill(GUICreateBillData data){
+        
     }
 }

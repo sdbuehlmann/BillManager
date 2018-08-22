@@ -84,7 +84,7 @@ public class LabledSwitchableControlContainer<T extends Control>
 
     static public void bindDatePicker(LabledSwitchableControlContainer<DatePicker> cont, Property<LocalDate> prop, boolean disabled)
     {
-        cont.getControl().setValue(prop.getValue());
+        cont.getControl().valueProperty().bindBidirectional(prop);
         cont.getControl().setDisable(disabled);
         cont.getHyperlink().setVisible(false);
     }

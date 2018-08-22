@@ -1,11 +1,10 @@
 
 package ch.buhls.billmanager.gui.view.builder;
 
-import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.view.container.form.PersonFormContainer;
 import ch.buhls.billmanager.gui.view.elements.LabledSwitchableControlContainer;
-import ch.buhls.billmanager.gui.view.listener.IDefaultMaskListener;
+import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
 
 /**
  *
