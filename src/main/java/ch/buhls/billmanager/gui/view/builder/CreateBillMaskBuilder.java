@@ -41,6 +41,9 @@ public class CreateBillMaskBuilder
         formContainer.getCbTemplates().getControl().setItems(data.getTemplates());
         formContainer.getCbTemplates().getControl().valueProperty().bindBidirectional(data.getSelectedTemplate());
         
+        formContainer.getCbFinancialYear().getControl().setItems(data.getYears());
+        formContainer.getCbFinancialYear().getControl().valueProperty().bindBidirectional(data.getSelectedYear());
+        
         formContainer.getPersonTableContainer().getTable().setItems(data.getPersons());
     }
     

@@ -21,7 +21,7 @@ public class CreateBillController extends AController implements ICreateBillMask
     public CreateBillController(IGUIFramework framework, DataHandler dataHandler, List<GUIPerson> persons) {
         super(framework, dataHandler, GUIStringCollection.getTitleForCreateBill());
         
-        GUICreateBillData data = new GUICreateBillData(dataHandler.getTemplatesBuffer(), persons);
+        GUICreateBillData data = new GUICreateBillData(dataHandler.getTemplatesBuffer(), dataHandler.getFinancialYearsBuffer(), persons);
         
         builder = new CreateBillMaskBuilder(data, this);
         display(builder.getView(), IGUIFramework.Area.RIGHT);

@@ -68,6 +68,7 @@ public class GUIStringCollection
     public static String BILL_DATE = "Rechnungsdatum";
     public static String BILL_PAYMENT_DEADLINE = "Zahlungsfrist (Tage)";
     public static String BILL_TEMPLATE = "Rechnungsvorlage";
+    public static String BILL_FINANCIAL_YEAR = "Vereinsjahr";
     public static String BILL_CREATE = "Erstellen";
     public static String BILL_PERSONS = "Rechnungspersonen";
     public static String BILL_REMOVE_PERSON = "Person entfernen";

@@ -1,9 +1,23 @@
 package ch.buhls.billmanager.model;
 
+import ch.buhls.billmanager.model.converter.ConverterException;
+import ch.buhls.billmanager.model.converter.SVGToPDFConverter;
+import ch.buhls.billmanager.model.data.TemplateData;
+import ch.buhls.billmanager.model.svgHandling.SVGException;
+import ch.buhls.billmanager.model.templates.Template;
+import ch.buhls.billmanager.model.templates.TemplateLoader;
+import ch.buhls.billmanager.model.templates.TemplateWriter;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
 import ch.buhls.billmanager.persistance.files.ProjectInfo;
 import ch.buhls.billmanager.persistance.files.XMLHandler;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Calendar;
+import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -11,23 +25,73 @@ import java.io.File;
  */
 public class ModelFascade
 {
-    /*
+
+    private final static String FILE_ENDING = ".hbcm";
+
+    Logger LOG = java.util.logging.Logger.getLogger(ModelFascade.class.getName());
+
+    // services
+    private TemplateLoader templateLoader;
+    private TemplateWriter writer;
+    private SVGToPDFConverter converter;
+
+    public ModelFascade() {
+        templateLoader = new TemplateLoader();
+        writer = new TemplateWriter();
+        converter = new SVGToPDFConverter();
+    }
+
+    public File createPDF(
+            File destinationDirectory,
+            File templatesDirectory,
+            File inkscapeDir,
+            TemplateData data) throws ParserConfigurationException, SAXException, IOException, SVGException, TransformerException, ConverterException {
+        File pdfFile = createBillFilename(destinationDirectory.getAbsolutePath(), data.getNumber(), data.getName(), ".pdf");
+        File templateFile = new File(templatesDirectory.getAbsolutePath() + "/" + data.getTemplate());
+
+        Template template = templateLoader.getTemplate(templateFile);
+        writer.fillTemplate(template, data);
+
+        // create file for temp svg file
+        File svg = new File(pdfFile.getAbsolutePath().replace(".pdf", ".svg"));
+
+        templateLoader.storeTemplate(template, svg);
+
+        converter.convert(svg, pdfFile, inkscapeDir);
+
+        // delete temp
+        Files.delete(svg.toPath());
+
+        return pdfFile;
+    }
+
+    public void openPDF(File pdfFile) throws IOException {
+        System.openPDF(pdfFile);
+    }
+
+    public static File createBillFilename(String directory, String number, String name, String ending) {
+        String storageName = name;
+        storageName = storageName.replace(' ', '_');
+        storageName = number + "_" + storageName;
+
+        return new File(directory + "/" + storageName + ending);
+    }
+
+    public Project createProject(File location) throws ModelException {
+        /*
     - Project
     -- templates (Dir)
     -- bills (Dir)
     -- temp (Dir)
     -- database
     -- info.hbcm (version etc.)
-     */
+         */
 
-    private final static String FILE_ENDING = ".hbcm";
-
-    public Project createProject(File location) throws ModelException {
         if (location == null
                 || location.exists()) {
             throw new ModelException("Can not create project.");
         }
-        
+
         location.mkdir();
 
         File locationTemplates = new File(location, "templates");
@@ -58,9 +122,9 @@ public class ModelFascade
                 || !projectFile.isFile()) {
             throw new ModelException("Can not create project.");
         }
-        
+
         ProjectInfo projectInfo = XMLHandler.INSTANCE.loadProjectInfo(projectFile);
-        
+
         File projectDir = projectFile.getParentFile();
 
         File locationTemplates = new File(projectDir, "templates");

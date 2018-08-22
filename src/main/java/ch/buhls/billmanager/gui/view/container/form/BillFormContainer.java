@@ -2,6 +2,7 @@
 package ch.buhls.billmanager.gui.view.container.form;
 
 import ch.buhls.billmanager.gui.GUIStringCollection;
+import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUITemplate;
 import ch.buhls.billmanager.gui.view.container.table.PersonTableContainer;
 import ch.buhls.billmanager.gui.view.elements.LabledSwitchableControlContainer;
@@ -9,6 +10,7 @@ import ch.buhls.billmanager.gui.view.elements.NumberField;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
@@ -26,6 +28,7 @@ public class BillFormContainer
     private final LabledSwitchableControlContainer<TextField> tfLocation;
     private final LabledSwitchableControlContainer<NumberField> nfPaymentDeadlineInDays;
     private final LabledSwitchableControlContainer<ComboBox<GUITemplate>> cbTemplates;
+    private final LabledSwitchableControlContainer<ComboBox<GUIFinancialYear>> cbFinancialYear;
     
     // table
     private final PersonTableContainer personTableContainer;
@@ -54,6 +57,11 @@ public class BillFormContainer
                 GUIStringCollection.EDIT, 
                 new ComboBox());
         
+        cbFinancialYear = new LabledSwitchableControlContainer<>(
+                GUIStringCollection.BILL_FINANCIAL_YEAR, 
+                GUIStringCollection.EDIT, 
+                new ComboBox());
+        
         // table
         itemRemove = new MenuItem(GUIStringCollection.BILL_REMOVE_PERSON);
         contextMenu = new ContextMenu(itemRemove);
@@ -68,8 +76,9 @@ public class BillFormContainer
                 tfLocation.getView(),
                 nfPaymentDeadlineInDays.getView(),
                 cbTemplates.getView(),
+                cbFinancialYear.getView(),
                 new Separator(),
-                new TextField(GUIStringCollection.BILL_PERSONS),
+                new Label(GUIStringCollection.BILL_PERSONS),
                 personTableContainer.getTable(),
                 new Separator(),
                 bCreate);
@@ -95,6 +104,10 @@ public class BillFormContainer
         return cbTemplates;
     }
 
+    public LabledSwitchableControlContainer<ComboBox<GUIFinancialYear>> getCbFinancialYear() {
+        return cbFinancialYear;
+    }
+    
     public PersonTableContainer getPersonTableContainer() {
         return personTableContainer;
     }

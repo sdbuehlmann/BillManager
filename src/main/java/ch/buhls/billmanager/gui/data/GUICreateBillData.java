@@ -20,17 +20,25 @@ public class GUICreateBillData
     private final StringProperty date;
     private final StringProperty location;
     private final IntegerProperty paymentDeadlineInDays;
+    
     private final ObservableList<GUITemplate> templates;
     private final ObjectProperty<GUITemplate> selectedTemplate;
+    
+    private final ObservableList<GUIFinancialYear> years;
+    private final ObjectProperty<GUIFinancialYear> selectedYear;
+    
     private final ObservableList<GUIPerson> persons;
 
-    public GUICreateBillData(List<GUITemplate> templates, List<GUIPerson> persons) {
+    public GUICreateBillData(List<GUITemplate> templates, List<GUIFinancialYear> years, List<GUIPerson> persons) {
         date = new SimpleStringProperty();
         location = new SimpleStringProperty();
         paymentDeadlineInDays = new SimpleIntegerProperty();
         
         this.templates = FXCollections.observableArrayList(templates);
         this.selectedTemplate = new SimpleObjectProperty<>();
+        
+        this.years = FXCollections.observableArrayList(years);
+        this.selectedYear = new SimpleObjectProperty<>();
         
         this.persons = FXCollections.observableArrayList(persons);
     }
@@ -58,4 +66,14 @@ public class GUICreateBillData
     public ObjectProperty<GUITemplate> getSelectedTemplate() {
         return selectedTemplate;
     }
+
+    public ObservableList<GUIFinancialYear> getYears() {
+        return years;
+    }
+
+    public ObjectProperty<GUIFinancialYear> getSelectedYear() {
+        return selectedYear;
+    }
+    
+    
 }

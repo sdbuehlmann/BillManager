@@ -125,6 +125,9 @@ public class GUIFinancialYear extends AGUIData<FinancialYear>
     public ObjectProperty<LocalDate> getLastDay() {
         return lastDay;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return name.get();
+    }
 }
