@@ -18,7 +18,9 @@ public class BillTemplateService extends AService<BillTemplate>
 
     @Override
     protected void updateManagedEntity(BillTemplate managedEntity, BillTemplate entity) throws ServiceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        managedEntity.setName(entity.getName());
+        managedEntity.setMaxPositions(entity.getMaxPositions());
+        managedEntity.setTypePaimentSlip(entity.getTypePaimentSlip());
     }
     
 }

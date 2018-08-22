@@ -72,6 +72,9 @@ public class GUIStringCollection
     
     public static String ROLE_NAME = "Bezeichnung";
     
+    public static String TEMPLATE_NAME = "Bezeichnung";
+    public static String TEMPLATE_MAX_POS = "Max. Anzahl Positionen";
+    
     public static String DATE = "Datum";
     public static String TEMPLATE = "Vorlage";
     

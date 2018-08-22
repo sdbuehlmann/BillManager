@@ -10,11 +10,11 @@ import javax.persistence.Enumerated;
  * @author simon
  */
 @Entity
-public class BillTemplate extends ATrackedEntity<BillTemplate>
+public class BillTemplate extends AEntity<BillTemplate>
 {
     private String name;
     
-    private int maxPositions, nrOfPages;
+    private int maxPositions;
     
     @Enumerated(EnumType.STRING)
     private TypePaimentSlip typePaimentSlip;
@@ -43,15 +43,7 @@ public class BillTemplate extends ATrackedEntity<BillTemplate>
     public void setMaxPositions(int maxPositions) {
         this.maxPositions = maxPositions;
     }
-
-    public int getNrOfPages() {
-        return nrOfPages;
-    }
-
-    public void setNrOfPages(int nrOfPages) {
-        this.nrOfPages = nrOfPages;
-    }
-
+    
     public TypePaimentSlip getTypePaimentSlip() {
         return typePaimentSlip;
     }
@@ -64,7 +56,6 @@ public class BillTemplate extends ATrackedEntity<BillTemplate>
     public void copyData(BillTemplate other) {
         other.name = name;
         other.maxPositions = maxPositions;
-        other.nrOfPages = nrOfPages;
         other.typePaimentSlip = typePaimentSlip;
 
         super.copyData(other);

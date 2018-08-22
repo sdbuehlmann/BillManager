@@ -54,6 +54,4 @@ public class GUIRole extends AGUIData<Role>
     public BooleanProperty getMarked() {
         return marked;
     }
-    
-    
 }

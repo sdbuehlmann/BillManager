@@ -30,9 +30,15 @@ public class WorkingAppController implements IMainViewListener
         
         this.setAppTitle(false);
         
+        new ListArticlesController(framework, dataHandler);
+        new ListRolesController(framework, dataHandler);
+        new ListPersonsController(framework, dataHandler);
+        new ListTemplatesController(framework, dataHandler);
+        
         dataHandler.reloadArticlesBuffer();
         dataHandler.reloadRolesBuffer();
         dataHandler.reloadPersonsBuffer();
+        dataHandler.reloadTemplatesBuffer();
     }
 
     @Override

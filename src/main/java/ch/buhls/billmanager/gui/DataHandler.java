@@ -7,16 +7,25 @@ import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIPosition;
 import ch.buhls.billmanager.gui.data.GUIRole;
+import ch.buhls.billmanager.gui.data.GUITemplate;
 import ch.buhls.billmanager.model.Project;
 import ch.buhls.billmanager.persistance.PersistanceException;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
 import ch.buhls.billmanager.persistance.database.entities.Article;
+import ch.buhls.billmanager.persistance.database.entities.BillTemplate;
 import ch.buhls.billmanager.persistance.database.entities.Person;
 import ch.buhls.billmanager.persistance.database.entities.PersonBaseData;
 import ch.buhls.billmanager.persistance.database.entities.Position;
 import ch.buhls.billmanager.persistance.database.entities.Role;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -30,23 +39,27 @@ public class DataHandler
 {
     private final static int POS_NR_STEP = 10;
     
+    private final Project project;
     private PersistanceFascade persistanceFascade;
     
     private ObservableList<GUIRole> rolesBuffer;
     private ObservableList<GUIPerson> personsBuffer;
     private ObservableList<GUIArticle> articlesBuffer;
     private ObservableList<GUIBill> billsBuffer;
+    private ObservableList<GUITemplate> templatesBuffer;
 
     private ObjectProperty<GUIArticle> markedArticleProperty;
     private ObjectProperty<GUIRole> markedRole;
 
     public DataHandler(Project project) {
+        this.project = project;
         persistanceFascade = project.getDb();
         
         rolesBuffer = FXCollections.observableArrayList();
         personsBuffer = FXCollections.observableArrayList();
         articlesBuffer = FXCollections.observableArrayList();
         billsBuffer = FXCollections.observableArrayList();
+        templatesBuffer = FXCollections.observableArrayList();
 
         markedArticleProperty = new SimpleObjectProperty<>();
         markedRole = new SimpleObjectProperty<>();
@@ -277,5 +290,45 @@ public class DataHandler
         }
         
         return highestPosNr + POS_NR_STEP;
+    }
+    
+    // templates
+
+    public ObservableList<GUITemplate> getTemplatesBuffer() {
+        return templatesBuffer;
+    }
+    
+    public void reloadTemplatesBuffer(){
+        templatesBuffer.clear();
+        for(BillTemplate template : persistanceFascade.getAllBillTemplates()){
+            templatesBuffer.add(new GUITemplate(template));
+        }
+    }
+    
+    public GUITemplate createTemplate(){
+        return new GUITemplate(new BillTemplate());
+    }
+    
+    public GUITemplate editTemplate(GUITemplate template){
+        return new GUITemplate(persistanceFascade.editBillTemplate(template.getData()));
+    }
+    
+    public void storeTemplate(GUITemplate template, File svg) throws PersistanceException{
+        persistanceFascade.storeBillTemplate(template.getData());
+        reloadTemplatesBuffer();
+        
+        // copy file
+        try {
+            File dest = new File(project.getLocationTemplates(), project.createTemplateName(template.getData().getId()));
+            Files.copy(svg.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (IOException ex) {
+            throw new PersistanceException(ex);
+        }
+    }
+    
+    public void updateTemplate(GUITemplate template) throws PersistanceException{
+        persistanceFascade.storeBillTemplate(template.getData());
+        reloadTemplatesBuffer();
     }
 }

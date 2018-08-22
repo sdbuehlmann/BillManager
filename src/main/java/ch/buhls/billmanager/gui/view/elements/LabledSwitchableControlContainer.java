@@ -2,9 +2,6 @@ package ch.buhls.billmanager.gui.view.elements;
 
 import java.time.LocalDate;
 import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;

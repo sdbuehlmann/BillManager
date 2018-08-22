@@ -50,5 +50,7 @@ public class Project
         return info;
     }
 
-    
+    public String createTemplateName(int id){
+        return "template_" + id + ".svg";
+    }
 }

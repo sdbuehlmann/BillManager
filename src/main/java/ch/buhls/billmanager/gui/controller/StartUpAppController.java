@@ -53,9 +53,6 @@ public class StartUpAppController implements IMainViewListener
                 DataHandler dataHandler = new DataHandler(project);
                 
                 new WorkingAppController(viewBuilder, framework, project, dataHandler);
-                new ListArticlesController(framework, dataHandler);
-                new ListRolesController(framework, dataHandler);
-                new ListPersonsController(framework, dataHandler);
                 
                 /*new ListBillController(framework, project);
                 
@@ -88,9 +85,7 @@ public class StartUpAppController implements IMainViewListener
                 DataHandler dataHandler = new DataHandler(project);
                 
                 new WorkingAppController(viewBuilder, framework, project, dataHandler);
-                new ListArticlesController(framework, dataHandler);
-                new ListRolesController(framework, dataHandler);
-                new ListPersonsController(framework, dataHandler);
+                
                 
                 /*new ListBillController(framework, project);
                 

@@ -15,6 +15,7 @@
     <class>ch.buhls.billmanager.persistance.database.entities.PersonBaseData</class>
     <class>ch.buhls.billmanager.persistance.database.entities.Person</class>
     <class>ch.buhls.billmanager.persistance.database.entities.Position</class>
+    <class>ch.buhls.billmanager.persistance.database.entities.BillTemplate</class>
     <properties>
       <!-- change here if your jdbc driver different -->
       <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>

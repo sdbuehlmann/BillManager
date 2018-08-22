@@ -18,19 +18,15 @@ import ch.buhls.billmanager.persistance.database.services.BillBaseDataService;
 import ch.buhls.billmanager.persistance.database.services.BillService;
 import ch.buhls.billmanager.persistance.database.services.BillTemplateService;
 import ch.buhls.billmanager.persistance.database.services.FinancialYearService;
-import ch.buhls.billmanager.persistance.database.services.ListDeltasTO;
 import ch.buhls.billmanager.persistance.database.services.PersonBaseDataService;
 import ch.buhls.billmanager.persistance.database.services.PersonService;
 import ch.buhls.billmanager.persistance.database.services.PositionService;
 import ch.buhls.billmanager.persistance.database.services.RoleService;
 import ch.buhls.billmanager.persistance.database.services.ServiceException;
-import ch.buhls.billmanager.persistance.database.services.UpdatableEntityPaire;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -193,26 +189,19 @@ public class PersistanceFascade
     }
 
     public BillTemplate editBillTemplate(BillTemplate template) {
-        // trackable entity
         BillTemplate temp = new BillTemplate(template);
-
-        temp.setId(0);
-        temp.setVersion(0);
-
-        temp.setChangeTxt(null);
-        temp.setFollowingVersion(null);
-        temp.setPreviousVersion(template);
 
         return temp;
     }
 
     public void storeBillTemplate(BillTemplate template) throws PersistanceException {
         try {
-            billTemplateService.add(template);
-
-            if (template.getPreviousVersion() != null) {
-                // change the entry for the following version
-                template.getPreviousVersion().setFollowingVersion(template);
+            if (template.getId() == 0) {
+                // new entity
+                billTemplateService.add(template);
+            }
+            else {
+                // existing entity
                 billTemplateService.update(template);
             }
         }
