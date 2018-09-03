@@ -1,7 +1,7 @@
 package ch.buhls.billmanager.model.templates;
 
 
-import ch.buhls.billmanager.model.data.Position;
+import ch.buhls.billmanager.model.data.TemplatePosition;
 import ch.buhls.billmanager.model.data.TemplateData;
 import java.text.DateFormat;
 import java.util.Date;
@@ -61,10 +61,10 @@ public class TemplateWriter
 
     public void writeSalutation(TemplateData bill, Template template)
     {
-        template.salutation.setContent(bill.getSalutation() + " " + bill.getSalutationName());
+        template.salutation.setContent(bill.getSalutation());
     }
 
-    public void writePosition(Position position, Template template, int pos)
+    public void writePosition(TemplatePosition position, Template template, int pos)
     {
         if (position != null)
         {
@@ -90,7 +90,7 @@ public class TemplateWriter
     {
         for (int cnt = 0; cnt < 4; cnt++)
         {
-            Position pos = null;
+            TemplatePosition pos = null;
             if (bill.getPositions().size() >= cnt + 1)
             {
                 pos = bill.getPositions().get(cnt);

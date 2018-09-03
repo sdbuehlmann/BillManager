@@ -1,8 +1,8 @@
 
 package ch.buhls.billmanager.gui.view.builder;
 
-import ch.buhls.billmanager.gui.data.GUICreateBillData;
-import ch.buhls.billmanager.gui.view.container.form.BillFormContainer;
+import ch.buhls.billmanager.gui.data.GUICreateBillsData;
+import ch.buhls.billmanager.gui.view.container.form.CreateBillFormContainer;
 import ch.buhls.billmanager.gui.view.elements.LabledSwitchableControlContainer;
 import javafx.event.ActionEvent;
 import ch.buhls.billmanager.gui.view.builder.listener.ICreateBillMaskListener;
@@ -15,26 +15,26 @@ import javafx.scene.layout.VBox;
 public class CreateBillMaskBuilder
 {
     // data
-    private final GUICreateBillData data;
+    private final GUICreateBillsData data;
 
     // view
-    private final BillFormContainer formContainer;
+    private final CreateBillFormContainer formContainer;
 
     // listener
     private final ICreateBillMaskListener listener;
     
-    public CreateBillMaskBuilder(GUICreateBillData data, ICreateBillMaskListener listener) {
+    public CreateBillMaskBuilder(GUICreateBillsData data, ICreateBillMaskListener listener) {
         this.listener = listener;
         this.data = data;
         
-        formContainer = new BillFormContainer();
+        formContainer = new CreateBillFormContainer();
         
         bindData();
         bindListener();
     }
     
     private void bindData(){
-        LabledSwitchableControlContainer.bindTextfield(formContainer.getTfDate(), data.getDate(), false);
+        LabledSwitchableControlContainer.bindDatePicker(formContainer.getDpDate(), data.getDate(), false);
         LabledSwitchableControlContainer.bindTextfield(formContainer.getTfLocation(), data.getLocation(), false);
         LabledSwitchableControlContainer.bindNumberfield(formContainer.getNfPaymentDeadlineInDays(), data.getPaymentDeadlineInDays(), false);
         

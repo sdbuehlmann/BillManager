@@ -17,8 +17,9 @@ public class BillService extends AService<Bill>
     }
 
     @Override
-    protected void updateManagedEntity(Bill managedEntity, Bill entity) throws ServiceException
-    {
-        
+    protected void updateManagedEntity(Bill managedEntity, Bill entity) throws ServiceException{
+        managedEntity.setComment(entity.getComment());
+        managedEntity.setDateClosed(entity.getDateClosed());
+        managedEntity.setBillState(entity.getBillState());
     }
 }

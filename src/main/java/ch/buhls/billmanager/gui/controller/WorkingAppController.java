@@ -35,12 +35,14 @@ public class WorkingAppController implements IMainViewListener
         new ListPersonsController(framework, dataHandler);
         new ListTemplatesController(framework, dataHandler);
         new ListFinancialYearsController(framework, dataHandler);
+        new ListBillsController(framework, dataHandler);
         
         dataHandler.reloadArticlesBuffer();
         dataHandler.reloadRolesBuffer();
         dataHandler.reloadPersonsBuffer();
         dataHandler.reloadTemplatesBuffer();
         dataHandler.reloadFinancialYearsBuffer();
+        dataHandler.reloadBillsBuffer();
     }
 
     @Override

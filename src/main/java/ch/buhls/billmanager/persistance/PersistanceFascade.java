@@ -1,12 +1,11 @@
 package ch.buhls.billmanager.persistance;
 
 import ch.buhls.billmanager.persistance.database.ContainerFactory;
-import ch.buhls.billmanager.persistance.database.container.EntityNotFoundException;
+import ch.buhls.billmanager.persistance.database.container.BillContainer;
 import ch.buhls.billmanager.persistance.database.entities.AEntity;
 import ch.buhls.billmanager.persistance.database.entities.ATrackedEntity;
 import ch.buhls.billmanager.persistance.database.entities.Article;
 import ch.buhls.billmanager.persistance.database.entities.Bill;
-import ch.buhls.billmanager.persistance.database.entities.BillBaseData;
 import ch.buhls.billmanager.persistance.database.entities.BillTemplate;
 import ch.buhls.billmanager.persistance.database.entities.FinancialYear;
 import ch.buhls.billmanager.persistance.database.entities.Person;
@@ -14,7 +13,6 @@ import ch.buhls.billmanager.persistance.database.entities.PersonBaseData;
 import ch.buhls.billmanager.persistance.database.entities.Position;
 import ch.buhls.billmanager.persistance.database.entities.Role;
 import ch.buhls.billmanager.persistance.database.services.ArticleService;
-import ch.buhls.billmanager.persistance.database.services.BillBaseDataService;
 import ch.buhls.billmanager.persistance.database.services.BillService;
 import ch.buhls.billmanager.persistance.database.services.BillTemplateService;
 import ch.buhls.billmanager.persistance.database.services.FinancialYearService;
@@ -43,7 +41,6 @@ public class PersistanceFascade
     private BillTemplateService billTemplateService;
     private FinancialYearService financialYearService;
     private BillService billService;
-    private BillBaseDataService billBaseDataService;
 
     public PersistanceFascade(File project) {
         ContainerFactory factory = new ContainerFactory(project);
@@ -56,7 +53,6 @@ public class PersistanceFascade
         billTemplateService = new BillTemplateService(factory);
         financialYearService = new FinancialYearService(factory);
         billService = new BillService(factory);
-        billBaseDataService = new BillBaseDataService(factory);
     }
 
     public <T extends ATrackedEntity<T>> List<T> getAllVersions(T art) {
@@ -349,7 +345,6 @@ public class PersistanceFascade
     // bill
     public Bill createBill() {
         Bill temp = new Bill();
-        temp.setBillBaseData(new BillBaseData());
         temp.setBillState(Bill.BillState.SENDET);
 
         return temp;
@@ -363,49 +358,18 @@ public class PersistanceFascade
      * @return
      */
     public Bill editBill(Bill origBill) {
-        // trackable entity
-        BillBaseData tempBaseData = new BillBaseData(origBill.getBillBaseData());
-        tempBaseData.setId(0);
-        tempBaseData.setVersion(0);
-        //tempBaseData.setFollowingVersion(null);
-        //tempBaseData.setPreviousVersion(origBill.getBillBaseData());
+
+        Bill tempBill = new Bill(origBill);
+
         
         // duplicate all positions
-        for(Position pos : origBill.getBillBaseData().getPositions()){
-            tempBaseData.getPositions().add(new Position(pos));
+        for(Position pos : origBill.getPositions()){
+            tempBill.getPositions().add(new Position(pos));
         }
-        
-        Bill temp = new Bill(origBill);
-        temp.setBillBaseData(tempBaseData);
 
-        return temp;
+        return tempBill;
     }
-
-    /**
-     * Stores only the base data (without the bill) into the db.
-     * @param bill
-     * @throws PersistanceException 
-     */
-    public void storeBillBaseData(Bill bill) throws PersistanceException {
-        try {
-            BillBaseData temp = bill.getBillBaseData();
-
-            billBaseDataService.add(temp);
-
-            // update previous version
-            /*if (temp.getPreviousVersion() != null) {
-                temp.getPreviousVersion().setFollowingVersion(temp);
-                billBaseDataService.update(temp.getPreviousVersion());
-            }*/
-
-            // update with new base data
-            billService.update(bill);
-        }
-        catch (ServiceException ex) {
-            throw new PersistanceException(ex);
-        }
-    }
-
+    
     /**
      * Stores only the bill (without the base data) into the db.
      * @param bill
@@ -415,14 +379,7 @@ public class PersistanceFascade
         try {
             if (bill.getId() == 0) {
                 // new bill
-                try {
-                    // check: base data allready stored?
-                    personBaseDataService.getContainer().findByID(bill.getBillBaseData().getId());
-                    billService.add(bill);
-                }
-                catch (EntityNotFoundException ex) {
-                    throw new PersistanceException(ex);
-                } 
+                billService.add(bill);
             }
             else {
                 // existing
@@ -437,6 +394,12 @@ public class PersistanceFascade
     public List<Bill> getAllBills() {
         return billService.getContainer().findAll();
     }
+    
+    public List<Bill> getBillsByFinancialYear(FinancialYear year) {
+        BillContainer container = (BillContainer)billService.getContainer(); // TEMP! Dirty Cast
+        return container.findByFinancialYearID(year.getId());
+    }
+    
     
     // position
     public Position createPosition(Article art) {

@@ -1,7 +1,6 @@
 package ch.buhls.billmanager.persistance.database;
 
 import ch.buhls.billmanager.persistance.database.container.ArticleContainer;
-import ch.buhls.billmanager.persistance.database.container.BillBaseDataContainer;
 import ch.buhls.billmanager.persistance.database.container.BillContainer;
 import ch.buhls.billmanager.persistance.database.container.BillTemplateContainer;
 import ch.buhls.billmanager.persistance.database.container.FinancialYearContainer;
@@ -59,10 +58,6 @@ public class ContainerFactory
         return new BillContainer(em);
     }
 
-    public BillBaseDataContainer getBillBaseDataContainer(){
-        return new BillBaseDataContainer(em);
-    }
-    
     public PositionContainer getPositionContainer() {
         return new PositionContainer(em);
     }

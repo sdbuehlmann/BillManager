@@ -5,12 +5,15 @@ package ch.buhls.billmanager.model.data;
  *
  * @author sdb
  */
-public class Position
+public class TemplatePosition
 {
     private int position, number, price, sum;
     private String firstLine, secondLine;
 
-    public Position(int position, int number, int price, int sum, String firstLine, String secondLine)
+    public TemplatePosition() {
+    }
+    
+    public TemplatePosition(int position, int number, int price, int sum, String firstLine, String secondLine)
     {
         this.position = position;
         this.number = number;
@@ -25,9 +28,10 @@ public class Position
         return position;
     }
 
-    public void setPosition(int position)
+    public TemplatePosition setPosition(int position)
     {
         this.position = position;
+        return this;
     }
 
     public int getNumber()
@@ -35,9 +39,10 @@ public class Position
         return number;
     }
 
-    public void setNumber(int number)
+    public TemplatePosition setNumber(int number)
     {
         this.number = number;
+        return this;
     }
 
     public int getPrice()
@@ -45,9 +50,10 @@ public class Position
         return price;
     }
 
-    public void setPrice(int price)
+    public TemplatePosition setPrice(int price)
     {
         this.price = price;
+        return this;
     }
 
     public int getSum()
@@ -55,9 +61,10 @@ public class Position
         return sum;
     }
 
-    public void setSum(int sum)
+    public TemplatePosition setSum(int sum)
     {
         this.sum = sum;
+        return this;
     }
 
     public String getFirstLine()
@@ -65,9 +72,10 @@ public class Position
         return firstLine;
     }
 
-    public void setFirstLine(String firstLine)
+    public TemplatePosition setFirstLine(String firstLine)
     {
         this.firstLine = firstLine;
+        return this;
     }
 
     public String getSecondLine()
@@ -75,9 +83,10 @@ public class Position
         return secondLine;
     }
 
-    public void setSecondLine(String secondLine)
+    public TemplatePosition setSecondLine(String secondLine)
     {
         this.secondLine = secondLine;
+        return this;
     }
 
     

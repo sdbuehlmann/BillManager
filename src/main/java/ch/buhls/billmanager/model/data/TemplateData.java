@@ -1,8 +1,6 @@
-
 package ch.buhls.billmanager.model.data;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,18 +9,16 @@ import java.util.List;
  */
 public class TemplateData
 {
-    private String salutation, salutationName, title, prename, name, street, plz, city, number, location, template, date;
-    private List<Position> positions;
+
+    private String salutation, title, prename, name, street, plz, city, number, location, template, date;
+    private List<TemplatePosition> positions;
     private int total;
 
-    public TemplateData()
-    {
+    public TemplateData() {
     }
-    
-    public TemplateData(String salutation, String salutationName, String title, String prename, String name, String street, String plz, String city, String number, String location, String template, String date, List<Position> positions, int total)
-    {
+
+    public TemplateData(String salutation, String title, String prename, String name, String street, String plz, String city, String number, String location, String template, String date, List<TemplatePosition> positions, int total) {
         this.salutation = salutation;
-        this.salutationName = salutationName;
         this.title = title;
         this.prename = prename;
         this.name = name;
@@ -37,145 +33,120 @@ public class TemplateData
         this.total = total;
     }
 
-
-    public String getSalutation()
-    {
+    public String getSalutation() {
         return salutation;
     }
 
-    public void setSalutation(String salutation)
-    {
+    public TemplateData setSalutation(String salutation) {
         this.salutation = salutation;
+        return this;
     }
 
-    public String getSalutationName()
-    {
-        return salutationName;
-    }
-
-    public void setSalutationName(String salutationName)
-    {
-        this.salutationName = salutationName;
-    }
-
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title)
-    {
+    public TemplateData setTitle(String title) {
         this.title = title;
+        return this;
     }
 
-    public String getPrename()
-    {
+    public String getPrename() {
         return prename;
     }
 
-    public void setPrename(String prename)
-    {
+    public TemplateData setPrename(String prename) {
         this.prename = prename;
+        return this;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public TemplateData setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public String getStreet()
-    {
+    public String getStreet() {
         return street;
     }
 
-    public void setStreet(String street)
-    {
+    public TemplateData setStreet(String street) {
         this.street = street;
+        return this;
     }
 
-    public String getPlz()
-    {
+    public String getPlz() {
         return plz;
     }
 
-    public void setPlz(String plz)
-    {
+    public TemplateData setPlz(String plz) {
         this.plz = plz;
+        return this;
     }
 
-    public String getCity()
-    {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(String city)
-    {
+    public TemplateData setCity(String city) {
         this.city = city;
+        return this;
     }
 
-    public String getNumber()
-    {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(String number)
-    {
+    public TemplateData setNumber(String number) {
         this.number = number;
+        return this;
     }
 
-    public List<Position> getPositions()
-    {
-        if(this.positions == null)
-        {
+    public List<TemplatePosition> getPositions() {
+        if (this.positions == null) {
             this.positions = new ArrayList<>();
         }
-        
+
         return positions;
     }
-    
-    public int getTotal()
-    {
+
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(int total)
-    {
+    public TemplateData setTotal(int total) {
         this.total = total;
+        return this;
     }
 
-    public String getLocation()
-    {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location)
-    {
+    public TemplateData setLocation(String location) {
         this.location = location;
+        return this;
     }
 
-    public String getDate()
-    {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(String date)
-    {
+    public TemplateData setDate(String date) {
         this.date = date;
+        return this;
     }
 
-    public String getTemplate()
-    {
+    public String getTemplate() {
         return template;
     }
 
-    public void setTemplate(String template)
-    {
+    public TemplateData setTemplate(String template) {
         this.template = template;
+        return this;
     }
-    
+
 }

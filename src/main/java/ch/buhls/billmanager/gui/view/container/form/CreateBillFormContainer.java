@@ -10,6 +10,7 @@ import ch.buhls.billmanager.gui.view.elements.NumberField;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
@@ -20,11 +21,11 @@ import javafx.scene.layout.VBox;
  *
  * @author simon
  */
-public class BillFormContainer
+public class CreateBillFormContainer
 {
     private final VBox view;
    
-    private final LabledSwitchableControlContainer<TextField> tfDate;
+    private final LabledSwitchableControlContainer<DatePicker> dpDate;
     private final LabledSwitchableControlContainer<TextField> tfLocation;
     private final LabledSwitchableControlContainer<NumberField> nfPaymentDeadlineInDays;
     private final LabledSwitchableControlContainer<ComboBox<GUITemplate>> cbTemplates;
@@ -38,11 +39,11 @@ public class BillFormContainer
     // buttons
     private final Button bCreate;
     
-    public BillFormContainer(){        
-        tfDate = new LabledSwitchableControlContainer<>(
+    public CreateBillFormContainer(){        
+        dpDate = new LabledSwitchableControlContainer<>(
                 GUIStringCollection.BILL_DATE, 
                 GUIStringCollection.EDIT, 
-                new TextField());
+                new DatePicker());
         tfLocation = new LabledSwitchableControlContainer<>(
                 GUIStringCollection.BILL_LOCATION, 
                 GUIStringCollection.EDIT, 
@@ -72,7 +73,7 @@ public class BillFormContainer
         bCreate = new Button(GUIStringCollection.BILL_CREATE);
         
         view = new VBox(
-                tfDate.getView(),
+                dpDate.getView(),
                 tfLocation.getView(),
                 nfPaymentDeadlineInDays.getView(),
                 cbTemplates.getView(),
@@ -88,8 +89,8 @@ public class BillFormContainer
         return view;
     }
 
-    public LabledSwitchableControlContainer<TextField> getTfDate() {
-        return tfDate;
+    public LabledSwitchableControlContainer<DatePicker> getDpDate() {
+        return dpDate;
     }
 
     public LabledSwitchableControlContainer<TextField> getTfLocation() {

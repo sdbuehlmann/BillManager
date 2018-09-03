@@ -4,6 +4,7 @@ package ch.buhls.billmanager.gui.view.container.menues;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 
 /**
  *
@@ -19,11 +20,18 @@ public class MainMenuBarContainer
     
     private final MenuItem miNew;
     private final MenuItem miOpen;
+    private final Menu mOpenRecent;
+    private final MenuItem miOpenRecent1;
+    private final MenuItem miOpenRecent2;
+    private final MenuItem miOpenRecent3;
+    private final MenuItem miOpenRecent4;
+    private final MenuItem miOpenRecent5;
     private final MenuItem miSave;
+    private final MenuItem miSaveAs;
     private final MenuItem miImportMembers;
     private final MenuItem miImportArticles;
     private final MenuItem miExportArticles;
-    private final MenuItem miSaveAs;
+    
     private final MenuItem miMembers;
     private final MenuItem miBills;
     private final MenuItem miComponents;
@@ -34,6 +42,12 @@ public class MainMenuBarContainer
     {
         miNew = new MenuItem("Neu");
         miOpen = new MenuItem("Öffnen");
+        miOpenRecent1 = new MenuItem();
+        miOpenRecent2 = new MenuItem();
+        miOpenRecent3 = new MenuItem();
+        miOpenRecent4 = new MenuItem();
+        miOpenRecent5 = new MenuItem();
+        mOpenRecent = new Menu("Kürzlich verwendet", null, miOpenRecent1, miOpenRecent2, miOpenRecent3, miOpenRecent4, miOpenRecent5);
         miSave = new MenuItem("Speichern");
         miImportMembers = new MenuItem("Mitglieder importieren");
         miImportArticles = new MenuItem("Artikel importieren");
@@ -47,7 +61,7 @@ public class MainMenuBarContainer
         
         mTables = new Menu("Tabellen", null, miMembers, miBills, miComponents);
         mView = new Menu("Anzeigen", null, mTables, miSettings, miGlobalSettings);
-        mEdit = new Menu("Datei", null, miNew, miOpen, miSave, miSaveAs, miImportMembers, miImportArticles, miExportArticles);
+        mEdit = new Menu("Datei", null, miNew, miOpen, mOpenRecent, miSave, miSaveAs, new SeparatorMenuItem(), miImportMembers, miImportArticles, miExportArticles);
        
         menuBar = new MenuBar();
         menuBar.getMenus().add(mEdit);

@@ -13,7 +13,6 @@ import ch.buhls.billmanager.persistance.files.XMLHandler;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Calendar;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -40,41 +39,47 @@ public class ModelFascade
         writer = new TemplateWriter();
         converter = new SVGToPDFConverter();
     }
-
-    public File createPDF(
-            File destinationDirectory,
-            File templatesDirectory,
+    
+    public void createPDF(
+            File destinationFile,
+            File templateFile,
             File inkscapeDir,
-            TemplateData data) throws ParserConfigurationException, SAXException, IOException, SVGException, TransformerException, ConverterException {
-        File pdfFile = createBillFilename(destinationDirectory.getAbsolutePath(), data.getNumber(), data.getName(), ".pdf");
-        File templateFile = new File(templatesDirectory.getAbsolutePath() + "/" + data.getTemplate());
+            TemplateData data) throws ModelException {
+        try {
+            Template template = templateLoader.getTemplate(templateFile);
+            writer.fillTemplate(template, data);
 
-        Template template = templateLoader.getTemplate(templateFile);
-        writer.fillTemplate(template, data);
+            // create temp file for svg
+            File svgFile = new File(destinationFile.getParentFile(), "temp.svg");
 
-        // create file for temp svg file
-        File svg = new File(pdfFile.getAbsolutePath().replace(".pdf", ".svg"));
+            templateLoader.storeTemplate(template, svgFile);
 
-        templateLoader.storeTemplate(template, svg);
+            try{
+                converter.convert(svgFile, destinationFile, inkscapeDir);
+            }catch(ConverterException ex){
+                // delete temp
+                Files.delete(svgFile.toPath());
+                throw ex;
+            }
 
-        converter.convert(svg, pdfFile, inkscapeDir);
-
-        // delete temp
-        Files.delete(svg.toPath());
-
-        return pdfFile;
+            // delete temp
+            Files.delete(svgFile.toPath());
+        }
+        catch (Exception ex) {
+            throw new ModelException(ex.getMessage());
+        }
     }
 
     public void openPDF(File pdfFile) throws IOException {
         System.openPDF(pdfFile);
     }
 
-    public static File createBillFilename(String directory, String number, String name, String ending) {
+    public static String createBillFilename(String number, String name, String ending) {
         String storageName = name;
         storageName = storageName.replace(' ', '_');
         storageName = number + "_" + storageName;
 
-        return new File(directory + "/" + storageName + ending);
+        return storageName + ending;
     }
 
     public Project createProject(File location) throws ModelException {

@@ -1,6 +1,7 @@
 
 package ch.buhls.billmanager.gui.data;
 
+import java.time.LocalDate;
 import java.util.List;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -15,9 +16,9 @@ import javafx.collections.ObservableList;
  *
  * @author simon
  */
-public class GUICreateBillData
+public class GUICreateBillsData
 {
-    private final StringProperty date;
+    private final ObjectProperty<LocalDate> date;
     private final StringProperty location;
     private final IntegerProperty paymentDeadlineInDays;
     
@@ -29,8 +30,8 @@ public class GUICreateBillData
     
     private final ObservableList<GUIPerson> persons;
 
-    public GUICreateBillData(List<GUITemplate> templates, List<GUIFinancialYear> years, List<GUIPerson> persons) {
-        date = new SimpleStringProperty();
+    public GUICreateBillsData(List<GUITemplate> templates, List<GUIFinancialYear> years, List<GUIPerson> persons) {
+        date = new SimpleObjectProperty();
         location = new SimpleStringProperty();
         paymentDeadlineInDays = new SimpleIntegerProperty();
         
@@ -43,7 +44,7 @@ public class GUICreateBillData
         this.persons = FXCollections.observableArrayList(persons);
     }
 
-    public StringProperty getDate() {
+    public ObjectProperty<LocalDate> getDate() {
         return date;
     }
 

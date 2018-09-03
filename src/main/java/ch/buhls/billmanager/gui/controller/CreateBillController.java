@@ -3,7 +3,7 @@ package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
 import ch.buhls.billmanager.gui.GUIStringCollection;
-import ch.buhls.billmanager.gui.data.GUICreateBillData;
+import ch.buhls.billmanager.gui.data.GUICreateBillsData;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.CreateBillMaskBuilder;
@@ -21,15 +21,23 @@ public class CreateBillController extends AController implements ICreateBillMask
     public CreateBillController(IGUIFramework framework, DataHandler dataHandler, List<GUIPerson> persons) {
         super(framework, dataHandler, GUIStringCollection.getTitleForCreateBill());
         
-        GUICreateBillData data = new GUICreateBillData(dataHandler.getTemplatesBuffer(), dataHandler.getFinancialYearsBuffer(), persons);
+        GUICreateBillsData data = dataHandler.createBills(persons);
         
         builder = new CreateBillMaskBuilder(data, this);
         display(builder.getView(), IGUIFramework.Area.RIGHT);
     }
 
     @Override
-    public void create(GUICreateBillData bill) {
-        dataHandler.createBill(bill);
+    public void create(GUICreateBillsData billsData) {
+        framework.confirmToAddArticle(); // TEMP! Not "add article"
+        
+        try {
+            dataHandler.storeBills(billsData);
+            tabHandle.close();
+        }
+        catch (Exception ex) {
+            framework.showExceptionDialoque(ex);
+        }
     }
 
     @Override

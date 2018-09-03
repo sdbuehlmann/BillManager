@@ -31,4 +31,8 @@ public abstract class AController
         tabHandle = framework.displayMask(node, tabName, area);
         tabHandle.focus();
     }
+    
+    protected final void close(){
+        tabHandle.close();
+    }
 }
