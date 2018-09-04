@@ -184,4 +184,22 @@ public class GUIFramework implements IGUIFramework
                 "Artikel hinzufügen", 
                 "Sind Sie sicher, dass Sie den Artikel hinzufügen wollen? (Die Änderungen werden direkt gespeichert.)");
     }
+
+    @Override
+    public void showInfoDialoque(String header, String content) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    @Override
+    public void showInfo_canNotOpenProject() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText("Öffnen fehlgeschlagen");
+        alert.setContentText("Das Projekt kann nicht geöffnet werden.");
+        alert.showAndWait();
+    }
 }

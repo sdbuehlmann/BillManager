@@ -111,7 +111,7 @@ public class ModelFascade
         ProjectInfo info = new ProjectInfo();
         info.setVersion("0.2");
 
-        XMLHandler.INSTANCE.storeProjectInfo(new File(location, location.getName() + FILE_ENDING), info);
+        //XMLHandler.INSTANCE.storeProjectInfo(new File(location, location.getName() + FILE_ENDING), info);
 
         return new Project(
                 location,
@@ -128,7 +128,7 @@ public class ModelFascade
             throw new ModelException("Can not create project.");
         }
 
-        ProjectInfo projectInfo = XMLHandler.INSTANCE.loadProjectInfo(projectFile);
+        //ProjectInfo projectInfo = XMLHandler.INSTANCE.loadProjectInfo(projectFile);
 
         File projectDir = projectFile.getParentFile();
 

@@ -1,6 +1,8 @@
 package ch.buhls.billmanager.persistance.files;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXB;
 
 /**
@@ -9,49 +11,56 @@ import javax.xml.bind.JAXB;
  */
 public class XMLHandler
 {
-    public static XMLHandler INSTANCE = new XMLHandler();
-    private History history;
 
-    private XMLHandler()
-    {
-        history = load();
+    private static final Logger LOG = Logger.getLogger(XMLHandler.class.getName());
+
+    public XMLHandler() {
     }
-    
-    public static File loadFile(String path)
-    {
-        try
-        {
-            return new File(path);
-            
+
+    public void store(History history) {
+        File historyFile = getHistoryFile();
+        try {
+            if (!historyFile.exists()) {
+                historyFile.createNewFile();
+                LOG.log(Level.INFO, "New history.xml file created");
+            }
+            JAXB.marshal(history, historyFile);
+            LOG.log(Level.INFO, "history.xml file changed");
         }
-        catch (Exception ex)
-        {
-            return new File("user.home");
+        catch (Exception ex) {
+            LOG.log(Level.INFO, null, ex);
         }
     }
-    
-    public void store()
-    {
-       JAXB.marshal(history, new File(this.getClass().getClassLoader().getResource("META-INF/history.xml").getPath()));
+
+    public History load() {
+        File historyFile = getHistoryFile();
+        try {
+            if (historyFile.exists()) {
+                History temp = JAXB.unmarshal(historyFile, History.class);
+                LOG.log(Level.INFO, "history.xml succesfully loaded");
+                return temp;
+            }
+        }
+        catch (Exception ex) {
+            Logger.getLogger(XMLHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        LOG.log(Level.INFO, "Can not load history.xml");
+        return new History();
     }
-    
-    public History load()
-    {
-        History history = JAXB.unmarshal(this.getClass().getClassLoader().getResource("META-INF/history.xml"), History.class );
-        return history;
+
+    public ProjectInfo loadProjectInfo(File file) {
+        return JAXB.unmarshal(file, ProjectInfo.class);
     }
-    
-    // getter and setter
-    public History getHistory()
-    {
-        return history;
-    }
-    
-    public ProjectInfo loadProjectInfo(File file){
-        return JAXB.unmarshal(file, ProjectInfo.class );
-    }
-    
-    public void storeProjectInfo(File file, ProjectInfo projectInfo){
+
+    public void storeProjectInfo(File file, ProjectInfo projectInfo) {
         JAXB.marshal(projectInfo, file);
+    }
+
+    public File getHistoryFile() {
+        File jarFile = new File(XMLHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        //File historyFile = new File(jarFile.getParent() + "/history.xml");
+        File historyFile = new File(jarFile.getParentFile().getParent() + "/history.xml");
+        
+        return historyFile;
     }
 }

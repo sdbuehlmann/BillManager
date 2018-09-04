@@ -181,14 +181,7 @@ public class WorkingAppController implements IMainViewListener
     }
 
     @Override
-    public void importArticles()
-    {
-        //new ImportArticlesController(guiManager, project);
-    }
-
-    @Override
-    public void exportArticles()
-    {
+    public void openRecent(String desc) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

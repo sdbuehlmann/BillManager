@@ -143,6 +143,32 @@ public class MainMenuBarContainer
         return miExportArticles;
     }
 
+    public Menu getmOpenRecent() {
+        return mOpenRecent;
+    }
+
+    public MenuItem getMiOpenRecent1() {
+        return miOpenRecent1;
+    }
+
+    public MenuItem getMiOpenRecent2() {
+        return miOpenRecent2;
+    }
+
+    public MenuItem getMiOpenRecent3() {
+        return miOpenRecent3;
+    }
+
+    public MenuItem getMiOpenRecent4() {
+        return miOpenRecent4;
+    }
+
+    public MenuItem getMiOpenRecent5() {
+        return miOpenRecent5;
+    }
+    
+    
+
     public MenuBar getMenuBar() {
         return menuBar;
     }

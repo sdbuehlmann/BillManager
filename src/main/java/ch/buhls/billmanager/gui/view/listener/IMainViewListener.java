@@ -9,12 +9,11 @@ public interface IMainViewListener
 {
     public void create();
     public void open();
+    public void openRecent(String desc);
     public void save();
     public void saveAs();
     
     public void importMembers();
-    public void importArticles();
-    public void exportArticles();
     
     public void showSettings();
     public void showGlobalSettings();

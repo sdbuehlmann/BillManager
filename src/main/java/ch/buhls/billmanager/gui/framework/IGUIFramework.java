@@ -20,7 +20,11 @@ public interface IGUIFramework
     
     // dialoques
     public File openFileSaveDialoque(String title, File lastDirectory);
+    
     public void showExceptionDialoque(Exception ex);
+    public void showInfoDialoque(String header, String content);
+    public void showInfo_canNotOpenProject();
+    
     public boolean showConfirmationDialoque(String title, String header, String content);
     public boolean confirmToStore();
     public boolean confirmToAddRole();
