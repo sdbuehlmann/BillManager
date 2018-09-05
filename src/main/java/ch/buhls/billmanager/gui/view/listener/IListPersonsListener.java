@@ -2,7 +2,6 @@
 package ch.buhls.billmanager.gui.view.listener;
 
 import ch.buhls.billmanager.gui.data.GUIPerson;
-import java.time.LocalDate;
 import java.util.List;
 import javafx.collections.ObservableList;
 
@@ -28,4 +27,7 @@ public interface IListPersonsListener
     public void showRoles(ObservableList<GUIPerson> persons);
     
     public void showVersions(ObservableList<GUIPerson> persons);
+    
+    public void showMarkedRoleMembers();
+    public void hideMarkedRoleMembers();
 }

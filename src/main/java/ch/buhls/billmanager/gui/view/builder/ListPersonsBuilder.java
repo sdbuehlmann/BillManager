@@ -137,7 +137,9 @@ public class ListPersonsBuilder extends AListBuilder
         menuContainer.getMenuAddArticle().setDisable(!enable);
     }
     
-    public void enableToAddRole(boolean enable){
+    public void enableRoleInteractions(boolean enable){
         menuContainer.getItemAddRole().setDisable(!enable);
+        menuContainer.getItemShowRoleMember().setDisable(!enable);
+        menuContainer.getItemHideRoleMember().setDisable(!enable);
     }
 }

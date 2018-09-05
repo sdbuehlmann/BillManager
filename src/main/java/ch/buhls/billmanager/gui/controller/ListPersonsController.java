@@ -42,7 +42,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
         }
 
         builder.enableToAddArticle(dataHandler.getMarkedArticleProperty().get() != null);
-        builder.enableToAddRole(dataHandler.getMarkedRole().get() != null);
+        builder.enableRoleInteractions(dataHandler.getMarkedRole().get() != null);
     }
 
     @Override
@@ -121,6 +121,18 @@ public class ListPersonsController extends AController implements IListPersonsLi
                 new ShowPersonController(data, framework);
             }
         });
+    }
+
+    @Override
+    public void showMarkedRoleMembers() {
+        dataHandler.reloadPersonsBuffer();
+        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void hideMarkedRoleMembers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

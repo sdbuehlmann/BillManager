@@ -4,6 +4,7 @@ package ch.buhls.billmanager.gui.view.elements;
 import java.time.LocalDate;
 import javafx.beans.property.Property;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -14,19 +15,20 @@ import javafx.scene.layout.VBox;
 /**
  *
  * @author simon
+ * @param <T>
  */
-public class LabeledControlContainer<T extends Control>
+public class LabeledNodeContainer<T extends Node>
 {
     private final VBox view;
 
-    private final T control;
+    private final T node;
     private final Label label;
     
-    public LabeledControlContainer(String labeltext, T control){
-        this.control = control;
+    public LabeledNodeContainer(String labeltext, T node){
+        this.node = node;
         this.label = new Label(labeltext);
 
-        view = new VBox(label, control);
+        view = new VBox(label, node);
         view.setPadding(new Insets(5));
     }
 
@@ -35,26 +37,26 @@ public class LabeledControlContainer<T extends Control>
     }
 
     public T getControl() {
-        return control;
+        return node;
     }
 
     public Label getLabel() {
         return label;
     }
 
-    static public void bindTextfield(LabeledControlContainer<TextField> cont, Property<String> prop){
+    static public void bindTextfield(LabeledNodeContainer<TextField> cont, Property<String> prop){
         cont.getControl().textProperty().bindBidirectional(prop);
     }
     
-    static public void bindTextarea(LabeledControlContainer<TextArea> cont, Property<String> prop){
+    static public void bindTextarea(LabeledNodeContainer<TextArea> cont, Property<String> prop){
         cont.getControl().textProperty().bindBidirectional(prop);
     }
 
-    static public void bindNumberfield(LabeledControlContainer<NumberField> cont, Property<Number> prop){
+    static public void bindNumberfield(LabeledNodeContainer<NumberField> cont, Property<Number> prop){
         cont.getControl().getValueProperty().bindBidirectional(prop);
     }
 
-    static public void bindDatePicker(LabeledControlContainer<DatePicker> cont, Property<LocalDate> prop){
+    static public void bindDatePicker(LabeledNodeContainer<DatePicker> cont, Property<LocalDate> prop){
         cont.getControl().valueProperty().bindBidirectional(prop);
     }
 }

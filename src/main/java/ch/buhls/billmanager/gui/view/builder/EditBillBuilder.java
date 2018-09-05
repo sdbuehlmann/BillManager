@@ -4,7 +4,7 @@ import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
 import ch.buhls.billmanager.gui.view.container.form.EditBillFormContainer;
-import ch.buhls.billmanager.gui.view.elements.LabeledControlContainer;
+import ch.buhls.billmanager.gui.view.elements.LabeledNodeContainer;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -35,8 +35,8 @@ public class EditBillBuilder
     }
 
     private final void bindProperties() {
-        LabeledControlContainer.bindTextarea(form.getTaComment(), data.getComment());
-        LabeledControlContainer.bindDatePicker(form.getDpDateClosed(), data.getClosedDate());
+        LabeledNodeContainer.bindTextarea(form.getTaComment(), data.getComment());
+        LabeledNodeContainer.bindDatePicker(form.getDpDateClosed(), data.getClosedDate());
         form.getCbState().getControl().valueProperty().bindBidirectional(data.getState());
     }
 

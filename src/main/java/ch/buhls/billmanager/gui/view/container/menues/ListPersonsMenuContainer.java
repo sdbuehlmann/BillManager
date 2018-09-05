@@ -25,6 +25,10 @@ public class ListPersonsMenuContainer
     private final MenuItem itemShowRoles;
 
     private final MenuItem itemShowVersions;
+    
+    private final Menu menuFilter;
+    private final MenuItem itemShowRoleMember;
+    private final MenuItem itemHideRoleMember;
 
     public ListPersonsMenuContainer() {
         itemNew = new MenuItem(GUIStringCollection.NEW);
@@ -52,6 +56,10 @@ public class ListPersonsMenuContainer
         itemShowRoles = new MenuItem(GUIStringCollection.PERSON_SHOW_ROLES);
 
         itemShowVersions = new MenuItem(GUIStringCollection.SHOW_VERSIONS);
+        
+        itemShowRoleMember = new MenuItem(GUIStringCollection.PERSON_ADD_FILTER_SHOW_ROLE_MEMBER);
+        itemHideRoleMember = new MenuItem(GUIStringCollection.PERSON_ADD_FILTER_HIDE_ROLE_MEMBER);
+        menuFilter = new Menu(GUIStringCollection.PERSON_FILTER, null, itemShowRoleMember, itemHideRoleMember);
 
         contextMenu = new ContextMenu(
                 itemNew,
@@ -65,7 +73,9 @@ public class ListPersonsMenuContainer
                 itemAddRole,
                 itemShowRoles,
                 new SeparatorMenuItem(),
-                itemShowVersions);
+                itemShowVersions,
+                new SeparatorMenuItem(),
+                menuFilter);
     }
 
     public ContextMenu getContextMenu() {
@@ -126,6 +136,18 @@ public class ListPersonsMenuContainer
 
     public MenuItem getItemShowRoles() {
         return itemShowRoles;
+    }
+
+    public Menu getMenuFilter() {
+        return menuFilter;
+    }
+
+    public MenuItem getItemShowRoleMember() {
+        return itemShowRoleMember;
+    }
+
+    public MenuItem getItemHideRoleMember() {
+        return itemHideRoleMember;
     }
 
     

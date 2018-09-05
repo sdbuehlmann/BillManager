@@ -53,6 +53,9 @@ public class GUIStringCollection
     public static final String PERSON_ADD_5 = "5 hinzufügen";
     public static final String PERSON_SHOW_BUSKET = "Warenkorb anzeigen";
     public static final String PERSON_SHOW_ROLES = "Rollen anzeigen";
+    public static final String PERSON_FILTER = "Filtern";
+    public static final String PERSON_ADD_FILTER_SHOW_ROLE_MEMBER = "Rolleninhaber anzeigen";
+    public static final String PERSON_ADD_FILTER_HIDE_ROLE_MEMBER = "Rolleninhaber ausblenden";
     
     public static final String POSITION_AMOUNT = "Menge";
     public static final String POSITION_POS = "Position";
