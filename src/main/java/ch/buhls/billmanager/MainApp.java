@@ -2,7 +2,7 @@ package ch.buhls.billmanager;
 
 import ch.buhls.billmanager.gui.framework.GUIFramework;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
-import ch.buhls.billmanager.gui.controller.StartUpAppController;
+import ch.buhls.billmanager.gui.controller.MainMaskController;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -26,7 +26,7 @@ public class MainApp extends Application {
         IGUIFramework framework = new GUIFramework(primaryStage);
 
         try {
-            new StartUpAppController(framework);
+            new MainMaskController(framework);
         }
         catch (Exception ex) {
             framework.showExceptionDialoque(ex);

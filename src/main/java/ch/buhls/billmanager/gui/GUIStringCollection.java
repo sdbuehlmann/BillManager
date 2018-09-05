@@ -1,9 +1,11 @@
 
 package ch.buhls.billmanager.gui;
 
+import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
+import ch.buhls.billmanager.gui.data.GUIRole;
 
 /**
  *
@@ -154,5 +156,12 @@ public class GUIStringCollection
     
     public static String getTitle_editBill(GUIBill bill){
         return String.format("Rechnung %s-%d bearbeiten", bill.getYear().getPrefix().get(), bill.getDb_id().get());
+    }
+    
+    public static String getHintTxt_artMarked(GUIArticle art){
+        return String.format("Artikel \"%s; %s\" markiert", art.getTitle().get(), art.getDescription().get());
+    }
+    public static String getHintTxt_roleMarked(GUIRole role){
+        return String.format("Rolle \"%s\" markiert", role.getName().get());
     }
 }

@@ -48,14 +48,6 @@ public class XMLHandler
         return new History();
     }
 
-    public ProjectInfo loadProjectInfo(File file) {
-        return JAXB.unmarshal(file, ProjectInfo.class);
-    }
-
-    public void storeProjectInfo(File file, ProjectInfo projectInfo) {
-        JAXB.marshal(projectInfo, file);
-    }
-
     public File getHistoryFile() {
         File jarFile = new File(XMLHandler.class.getProtectionDomain().getCodeSource().getLocation().getPath());
         //File historyFile = new File(jarFile.getParent() + "/history.xml");

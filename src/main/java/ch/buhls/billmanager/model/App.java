@@ -43,6 +43,7 @@ public class App
     
     public void removeFromRecentOpenedProjects(String path){
         history.getRecentProjects().remove(path);
+        xmlHandler.store(history);
     }
     
     public void addRecentOpenedProject(String path){

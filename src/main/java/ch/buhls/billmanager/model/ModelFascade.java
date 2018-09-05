@@ -3,20 +3,14 @@ package ch.buhls.billmanager.model;
 import ch.buhls.billmanager.model.converter.ConverterException;
 import ch.buhls.billmanager.model.converter.SVGToPDFConverter;
 import ch.buhls.billmanager.model.data.TemplateData;
-import ch.buhls.billmanager.model.svgHandling.SVGException;
 import ch.buhls.billmanager.model.templates.Template;
 import ch.buhls.billmanager.model.templates.TemplateLoader;
 import ch.buhls.billmanager.model.templates.TemplateWriter;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
-import ch.buhls.billmanager.persistance.files.ProjectInfo;
-import ch.buhls.billmanager.persistance.files.XMLHandler;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -107,25 +101,19 @@ public class ModelFascade
 
         File locationTemp = new File(location, "temp");
         locationTemp.mkdir();
-
-        ProjectInfo info = new ProjectInfo();
-        info.setVersion("0.2");
-
-        //XMLHandler.INSTANCE.storeProjectInfo(new File(location, location.getName() + FILE_ENDING), info);
-
+        
         return new Project(
                 location,
                 locationTemplates,
                 locationBills,
                 locationTemp,
-                new PersistanceFascade(new File(location, "data.db")),
-                info);
+                new PersistanceFascade(new File(location, location.getName() + FILE_ENDING)));
     }
 
     public Project loadProject(File projectFile) throws ModelException {
         if (projectFile == null
                 || !projectFile.isFile()) {
-            throw new ModelException("Can not create project.");
+            throw new ModelException("Can not load project.");
         }
 
         //ProjectInfo projectInfo = XMLHandler.INSTANCE.loadProjectInfo(projectFile);
@@ -135,16 +123,12 @@ public class ModelFascade
         File locationTemplates = new File(projectDir, "templates");
         File locationBills = new File(projectDir, "bills");
         File locationTemp = new File(projectDir, "temp");
-
-        ProjectInfo info = new ProjectInfo();
-        info.setVersion("0.2");
-
+        
         return new Project(
                 projectDir,
                 locationTemplates,
                 locationBills,
                 locationTemp,
-                new PersistanceFascade(new File(projectDir, "data.db")),
-                info);
+                new PersistanceFascade(projectFile));
     }
 }

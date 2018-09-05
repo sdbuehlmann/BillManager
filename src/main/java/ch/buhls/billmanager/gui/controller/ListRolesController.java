@@ -1,11 +1,15 @@
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.data.GUIRole;
+import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.view.builder.ListRolesBuilder;
+import ch.buhls.billmanager.gui.view.container.HintContainer;
 import ch.buhls.billmanager.gui.view.listener.IListRolesListener;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
 
 /**
  *
@@ -15,6 +19,8 @@ public class ListRolesController extends AController implements IListRolesListen
 {
 
     private final ListRolesBuilder builder;
+    
+    private IHintHandle roleMarkedHintHandle;
 
     public ListRolesController(IGUIFramework containerManager, DataHandler dataHandler) {
         super(containerManager, dataHandler, "Rollen");
@@ -50,14 +56,28 @@ public class ListRolesController extends AController implements IListRolesListen
             return;
         }
         
+        // remove old mark
         if (dataHandler.getMarkedRole().get() != null) {
-            // remove old mark
             dataHandler.getMarkedRole().get().getMarked().set(false);
+        }
+        
+        // remove old hint
+        if(roleMarkedHintHandle != null){
+            roleMarkedHintHandle.close();
+            roleMarkedHintHandle = null;
         }
 
         // mark new
         dataHandler.getMarkedRole().set(selected);
         selected.getMarked().set(true);
+        
+        roleMarkedHintHandle = framework.displayHint(new HintContainer(new Label(GUIStringCollection.getHintTxt_roleMarked(selected)), () -> {
+                // close hint
+                dataHandler.getMarkedRole().get().getMarked().set(false);
+                dataHandler.getMarkedRole().set(null);
+                roleMarkedHintHandle.close();
+                roleMarkedHintHandle = null;
+            }));
     }
 
     @Override

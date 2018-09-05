@@ -1,13 +1,15 @@
 package ch.buhls.billmanager.gui.view.builder;
 
+import ch.buhls.billmanager.gui.view.container.HintBarContainer;
 import ch.buhls.billmanager.gui.view.container.SplitScreen;
 import ch.buhls.billmanager.gui.view.container.menues.MainMenuBarContainer;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.BorderPane;
 import ch.buhls.billmanager.gui.view.listener.IMainViewListener;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -15,7 +17,8 @@ import javafx.scene.control.MenuItem;
  */
 public class MainViewBuilder
 {
-
+    private final HintBarContainer hintBarContainer;
+    
     private final BorderPane view;
     private final SplitScreen splitScreen;
     private final MainMenuBarContainer menuBarContainer;
@@ -28,31 +31,18 @@ public class MainViewBuilder
         view = new BorderPane();
         splitScreen = new SplitScreen();
         menuBarContainer = new MainMenuBarContainer();
+        hintBarContainer = new HintBarContainer();
 
         view.setTop(menuBarContainer.getMenuBar());
-        view.setCenter(splitScreen);
+        VBox.setVgrow(splitScreen, Priority.ALWAYS);
+        view.setCenter(new VBox(hintBarContainer.getView(), splitScreen));
         
         setRecentOpenedProjects(null);
 
         bindListener(listener);
     }
 
-    private void bindListener(IMainViewListener listener) {
-        menuBarContainer.getMiBills().setOnAction((ActionEvent event)
-                -> {
-            listener.showBillsTable();
-        });
-
-        menuBarContainer.getMiComponents().setOnAction((ActionEvent event)
-                -> {
-            listener.showComponentsTable();
-        });
-
-        menuBarContainer.getMiMembers().setOnAction((ActionEvent event)
-                -> {
-            listener.showMembersTable();
-        });
-
+    private void bindListener(IMainViewListener listener) { 
         menuBarContainer.getMiNew().setOnAction((ActionEvent event)
                 -> {
             listener.create();
@@ -61,16 +51,6 @@ public class MainViewBuilder
         menuBarContainer.getMiOpen().setOnAction((ActionEvent event)
                 -> {
             listener.open();
-        });
-
-        menuBarContainer.getMiSave().setOnAction((ActionEvent event)
-                -> {
-            listener.save();
-        });
-
-        menuBarContainer.getMiSaveAs().setOnAction((ActionEvent event)
-                -> {
-            listener.saveAs();
         });
 
         menuBarContainer.getMiImportMembers().setOnAction((ActionEvent event)
@@ -129,6 +109,8 @@ public class MainViewBuilder
                 item.setText(project);
                 item.setVisible(true);
                 menuBarContainer.getmOpenRecent().setDisable(false);
+                
+                cnt++;
             }else{
                 break;
             }
@@ -155,14 +137,7 @@ public class MainViewBuilder
     public void disableProjectDependentItems() {
         menuBarContainer.getMiNew().setDisable(false);
         menuBarContainer.getMiOpen().setDisable(false);
-        menuBarContainer.getMiSave().setDisable(true);
-        menuBarContainer.getMiSaveAs().setDisable(true);
         menuBarContainer.getMiImportMembers().setDisable(true);
-        menuBarContainer.getMiImportArticles().setDisable(true);
-        menuBarContainer.getMiExportArticles().setDisable(true);
-        menuBarContainer.getMiMembers().setDisable(true);
-        menuBarContainer.getMiBills().setDisable(true);
-        menuBarContainer.getMiComponents().setDisable(true);
         menuBarContainer.getMiSettings().setDisable(true);
         menuBarContainer.getMiGlobalSettings().setDisable(false);
     }
@@ -170,14 +145,7 @@ public class MainViewBuilder
     public void enableProjectDependentItems() {
         menuBarContainer.getMiNew().setDisable(false);
         menuBarContainer.getMiOpen().setDisable(false);
-        menuBarContainer.getMiSave().setDisable(false);
-        menuBarContainer.getMiSaveAs().setDisable(false);
         menuBarContainer.getMiImportMembers().setDisable(false);
-        menuBarContainer.getMiImportArticles().setDisable(false);
-        menuBarContainer.getMiExportArticles().setDisable(false);
-        menuBarContainer.getMiMembers().setDisable(false);
-        menuBarContainer.getMiBills().setDisable(false);
-        menuBarContainer.getMiComponents().setDisable(false);
         menuBarContainer.getMiSettings().setDisable(false);
         menuBarContainer.getMiGlobalSettings().setDisable(false);
     }
@@ -191,6 +159,10 @@ public class MainViewBuilder
         return splitScreen;
     }
 
+    public HintBarContainer getHintBarContainer() {
+        return hintBarContainer;
+    }
+    
     public MainMenuBarContainer getMasterMenuBarContainer() {
         return menuBarContainer;
     }

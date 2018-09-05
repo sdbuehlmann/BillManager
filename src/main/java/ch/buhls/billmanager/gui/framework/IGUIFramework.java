@@ -1,6 +1,8 @@
 
 package ch.buhls.billmanager.gui.framework;
 
+import ch.buhls.billmanager.gui.view.container.HintBarContainer;
+import ch.buhls.billmanager.gui.view.container.HintContainer;
 import ch.buhls.billmanager.gui.view.container.SplitScreen;
 import java.io.File;
 import javafx.scene.Node;
@@ -12,13 +14,18 @@ import javafx.scene.Parent;
  */
 public interface IGUIFramework
 {
-    public void displayMainMask(Parent parent, SplitScreen splitScreen);
+    public void setAppTitle(String title);
     
+    // masks
+    public void displayMainMask(Parent parent, SplitScreen splitScreen, HintBarContainer hintBarContainer);
     public ITabHandle displayMask(Node node, String title, Area area);
+    public void closeAllMasks();
+    public IHintHandle displayHint(HintContainer hintContainer);
+    
+    // dialoques
     public File openPathChooser(String title, File lastDirectory);
     public File openFileChooser(String title, File lastDirectory);
     
-    // dialoques
     public File openFileSaveDialoque(String title, File lastDirectory);
     
     public void showExceptionDialoque(Exception ex);

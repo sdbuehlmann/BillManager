@@ -1,7 +1,7 @@
 package ch.buhls.billmanager.model;
 
+import ch.buhls.billmanager.gui.DataHandler;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
-import ch.buhls.billmanager.persistance.files.ProjectInfo;
 import java.io.File;
 
 /**
@@ -15,15 +15,17 @@ public class Project
     private File locationBills;
     private File locationTemp;
     private PersistanceFascade db;
-    private ProjectInfo info;
+    
+    private DataHandler dataHandler;
 
-    public Project(File location, File locationTemplates, File locationBills, File locationTemp, PersistanceFascade db, ProjectInfo info) {
+    public Project(File location, File locationTemplates, File locationBills, File locationTemp, PersistanceFascade db) {
         this.location = location;
         this.locationTemplates = locationTemplates;
         this.locationBills = locationBills;
         this.locationTemp = locationTemp;
         this.db = db;
-        this.info = info;
+        
+        this.dataHandler = new DataHandler(this);
     }
 
     public File getLocation() {
@@ -46,11 +48,11 @@ public class Project
         return db;
     }
 
-    public ProjectInfo getInfo() {
-        return info;
-    }
-
     public String createTemplateName(int id){
         return "template_" + id + ".svg";
+    }
+
+    public DataHandler getDataHandler() {
+        return dataHandler;
     }
 }

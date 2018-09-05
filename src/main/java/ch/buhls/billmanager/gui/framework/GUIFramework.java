@@ -1,5 +1,7 @@
 package ch.buhls.billmanager.gui.framework;
 
+import ch.buhls.billmanager.gui.view.container.HintBarContainer;
+import ch.buhls.billmanager.gui.view.container.HintContainer;
 import ch.buhls.billmanager.gui.view.container.SplitScreen;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -33,6 +35,7 @@ public class GUIFramework implements IGUIFramework
 
     private final Stage mainStage;
     private SplitScreen splitScreen;
+    private HintBarContainer hintBarContainer;
 
     public GUIFramework(Stage mainStage) {
         this.mainStage = mainStage;
@@ -114,7 +117,8 @@ public class GUIFramework implements IGUIFramework
         alert.showAndWait();
     }
 
-    public void setTitle(String title) {
+    @Override
+    public void setAppTitle(String title) {
         this.mainStage.setTitle(title);
     }
 
@@ -134,6 +138,11 @@ public class GUIFramework implements IGUIFramework
     }
 
     @Override
+    public void closeAllMasks() {
+        splitScreen.getMainTabPane().getTabs().clear();
+    }
+    
+    @Override
     public boolean showConfirmationDialoque(String title, String header, String content) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(title);
@@ -145,8 +154,9 @@ public class GUIFramework implements IGUIFramework
     }
 
     @Override
-    public void displayMainMask(Parent parent, SplitScreen splitScreen) {
+    public void displayMainMask(Parent parent, SplitScreen splitScreen, HintBarContainer hintBarContainer) {
         this.splitScreen = splitScreen;
+        this.hintBarContainer = hintBarContainer;
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         Scene scene = new Scene(parent, 500, 500);
@@ -201,5 +211,14 @@ public class GUIFramework implements IGUIFramework
         alert.setHeaderText("Öffnen fehlgeschlagen");
         alert.setContentText("Das Projekt kann nicht geöffnet werden.");
         alert.showAndWait();
+    }
+
+    @Override
+    public IHintHandle displayHint(HintContainer hintContainer) {
+        hintBarContainer.addHint(hintContainer);
+        
+        return () -> {
+            hintBarContainer.removeHint(hintContainer);
+        };
     }
 }
