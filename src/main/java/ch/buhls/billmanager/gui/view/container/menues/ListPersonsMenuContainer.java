@@ -60,7 +60,7 @@ public class ListPersonsMenuContainer
         itemShowRoleMember = new MenuItem(GUIStringCollection.PERSON_ADD_FILTER_SHOW_ROLE_MEMBER);
         itemHideRoleMember = new MenuItem(GUIStringCollection.PERSON_ADD_FILTER_HIDE_ROLE_MEMBER);
         menuFilter = new Menu(GUIStringCollection.PERSON_FILTER, null, itemShowRoleMember, itemHideRoleMember);
-
+        
         contextMenu = new ContextMenu(
                 itemNew,
                 itemEdit,

@@ -4,6 +4,7 @@ import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.data.GUICreateBillsData;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
+import ch.buhls.billmanager.gui.data.GUIImportedPerson;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIPosition;
@@ -226,6 +227,8 @@ public class DataHandler
         return busket;
     }
 
+    
+    
     // positions
     public GUIPosition createPosition(GUIArticle guiArticle) {
         Position pos = persistanceFascade.createPosition(guiArticle.getData());
@@ -520,5 +523,10 @@ public class DataHandler
                             new GUIFinancialYear(bill.getFinancialYear()),
                             new GUIPersonBaseData(bill.getPersonBaseData())));
         }
+    }
+    
+    // getter
+    public PersonsDataHandler getPersonsDataHandler(){
+        return new PersonsDataHandler(project);
     }
 }

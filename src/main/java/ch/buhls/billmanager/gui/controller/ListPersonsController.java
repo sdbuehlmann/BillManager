@@ -2,13 +2,14 @@ package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
 import ch.buhls.billmanager.gui.GUIStringCollection;
+import ch.buhls.billmanager.gui.PersonsDataHandler;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIPosition;
 import ch.buhls.billmanager.gui.data.GUIRole;
-import ch.buhls.billmanager.gui.view.builder.AListBuilder;
+import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.view.builder.ListPersonsBuilder;
 import ch.buhls.billmanager.gui.view.listener.IListPersonsListener;
 import ch.buhls.billmanager.gui.view.listener.IListVersionsListener;
@@ -24,21 +25,29 @@ public class ListPersonsController extends AController implements IListPersonsLi
 {
 
     private final ListPersonsBuilder builder;
+    
+    private final PersonsDataHandler personsDataHandler;
+    
+    private IHintHandle showRoleFilterHint;
+    private IHintHandle hideRoleFilterHint;
 
     public ListPersonsController(IGUIFramework framework, DataHandler dataHandler) {
         super(framework, dataHandler, "Mitglieder");
-
-        builder = new ListPersonsBuilder(this, dataHandler.getPersonsBuffer());
+        
+        personsDataHandler = dataHandler.getPersonsDataHandler();
+        personsDataHandler.reloadPersonsBuffer();
+        builder = new ListPersonsBuilder(this, personsDataHandler.getPersonsBuffer());
+        
         framework.displayMask(builder.getView(), tabName, IGUIFramework.Area.LEFT).focus();
     }
 
     @Override
     public void contextMenuOpened(ObservableList<GUIPerson> selected) {
         if (selected.size() > 1) {
-            builder.setMenuSelectionMode(AListBuilder.MenuSelectionMode.MULTIPLE);
+            builder.enableMultiplePersonsSelectedInteractions();
         }
         else {
-            builder.setMenuSelectionMode(AListBuilder.MenuSelectionMode.SINGLE);
+            builder.enableSinglePersonSelectedInteractions();
         }
 
         builder.enableToAddArticle(dataHandler.getMarkedArticleProperty().get() != null);
@@ -125,14 +134,35 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
     @Override
     public void showMarkedRoleMembers() {
-        dataHandler.reloadPersonsBuffer();
+        if(showRoleFilterHint != null){
+            showRoleFilterHint.close();
+        }
         
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        showRoleFilterHint = builder.displayHint(GUIStringCollection.getHintTxt_showRoleFilter(dataHandler.getMarkedRole().get()), () -> {
+            showRoleFilterHint.close();
+            personsDataHandler.setRoleToShow(null);
+            personsDataHandler.reloadPersonsBuffer();
+        });
+        
+        personsDataHandler.setRoleToShow(dataHandler.getMarkedRole().get());
+        personsDataHandler.reloadPersonsBuffer();
     }
 
     @Override
     public void hideMarkedRoleMembers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(hideRoleFilterHint != null){
+            hideRoleFilterHint.close();
+        }
+        
+        
+        hideRoleFilterHint = builder.displayHint(GUIStringCollection.getHintTxt_hideRoleFilter(dataHandler.getMarkedRole().get()), () -> {
+            hideRoleFilterHint.close();
+            personsDataHandler.setRoleToHide(null);
+            personsDataHandler.reloadPersonsBuffer();
+        });
+        
+        personsDataHandler.setRoleToHide(dataHandler.getMarkedRole().get());
+        personsDataHandler.reloadPersonsBuffer();
     }
 
 }

@@ -2,7 +2,9 @@
 package ch.buhls.billmanager.persistance.database.container;
 
 import ch.buhls.billmanager.persistance.database.entities.PersonBaseData;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -15,4 +17,10 @@ public class PersonBaseDataContainer extends AContainer<PersonBaseData>
         super(PersonBaseData.class, "PersonBaseData", em);
     }
     
+    
+    public List<PersonBaseData> findByPrename(String prename){
+        TypedQuery<PersonBaseData> query = this.em.createQuery("SELECT p From PersonBaseData p WHERE p.prename LIKE " + prename, PersonBaseData.class);
+        List<PersonBaseData> temp = query.getResultList();
+        return temp;
+    }
 }

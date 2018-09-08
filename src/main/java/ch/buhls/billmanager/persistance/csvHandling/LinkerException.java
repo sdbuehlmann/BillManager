@@ -1,5 +1,5 @@
 
-package ch.buhls.billmanager.persistance.csvHandling.csv;
+package ch.buhls.billmanager.persistance.csvHandling;
 
 /**
  *

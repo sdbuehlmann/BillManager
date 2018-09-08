@@ -1,14 +1,13 @@
 
-package ch.buhls.billmanager.persistance.csvHandling.csv;
+package ch.buhls.billmanager.persistance.csvHandling;
 
 /**
  *
  * @author simon
  */
-public class CSVMember
+public class CSVPerson
 {
-    public static final int NUMMER = 0;
-    public static final int NAME = NUMMER + 1;
+    public static final int NAME = 0;
     public static final int VORNAME = NAME + 1;
     public static final int FIRMA = VORNAME + 1;
     
@@ -24,19 +23,33 @@ public class CSVMember
     public static final int TEL_MOBILE = TEL_FESTNETZ + 1;
     public static final int MAIL = TEL_MOBILE + 1;
     
-    public static final int TEAM = MAIL + 1;
-    public static final int ROLLE = TEAM + 1;
+    public static final int BEGRUESSUNG = MAIL + 1;
+    public static final int TITEL = BEGRUESSUNG + 1;
     
-    private int  nr,plz,birthday_day,birthday_month,birthday_year;
-    private String prename, name, company, street, city,phone_landline,phone_mobile,mail,team,role;
+    public static final String IMPORT_PERSONS_FILE_FORMAT = "Name;Vornamen;Firma;Geburtstag;Geburtsmonat;Geburtsjahr;Strasse;PLZ;Ort;TelP;TelM;E-Mail;Begrüssung;Titel";
+    
+    private int  plz,birthday_day,birthday_month,birthday_year;
+    private String prename, name, company, street, city,phone_landline,phone_mobile,mail, salutation, title;
 
-    public CSVMember()
+    public CSVPerson()
     {
     }
     
-    public CSVMember(int nr, int plz, int birthday_day, int birthday_month, int birthday_year, String prename, String name, String company, String street, String city, String phone_landline, String phone_mobile, String mail, String team, String role)
+    public CSVPerson(int plz, 
+            int birthday_day, 
+            int birthday_month, 
+            int birthday_year, 
+            String prename, 
+            String name, 
+            String company, 
+            String street, 
+            String city, 
+            String phone_landline, 
+            String phone_mobile, 
+            String mail, 
+            String salutation, 
+            String title)
     {
-        this.nr = nr;
         this.plz = plz;
         this.birthday_day = birthday_day;
         this.birthday_month = birthday_month;
@@ -49,18 +62,8 @@ public class CSVMember
         this.phone_landline = phone_landline;
         this.phone_mobile = phone_mobile;
         this.mail = mail;
-        this.team = team;
-        this.role = role;
-    }
-
-    public int getNr()
-    {
-        return nr;
-    }
-
-    public void setNr(int nr)
-    {
-        this.nr = nr;
+        this.salutation = salutation;
+        this.title = title;
     }
 
     public int getPlz()
@@ -183,25 +186,21 @@ public class CSVMember
         this.mail = mail;
     }
 
-    public String getTeam()
-    {
-        return team;
+    public String getSalutation() {
+        return salutation;
     }
 
-    public void setTeam(String team)
-    {
-        this.team = team;
+    public void setSalutation(String salutation) {
+        this.salutation = salutation;
     }
 
-    public String getRole()
-    {
-        return role;
+    public String getTitle() {
+        return title;
     }
 
-    public void setRole(String role)
-    {
-        this.role = role;
+    public void setTitle(String title) {
+        this.title = title;
     }
-    
+
     
 }

@@ -1,7 +1,7 @@
 
-package ch.buhls.billmanager.persistance.csvHandling.csv.parser;
+package ch.buhls.billmanager.persistance.csvHandling;
 
-import ch.buhls.billmanager.persistance.csvHandling.csv.Line;
+import ch.buhls.billmanager.persistance.csvHandling.Line;
 
 
 /**

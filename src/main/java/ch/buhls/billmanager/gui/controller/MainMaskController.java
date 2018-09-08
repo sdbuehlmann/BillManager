@@ -1,6 +1,5 @@
 package ch.buhls.billmanager.gui.controller;
 
-import ch.buhls.billmanager.gui.DataHandler;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.MainViewBuilder;
 import ch.buhls.billmanager.model.ModelException;
@@ -116,7 +115,7 @@ public class MainMaskController implements IMainViewListener
 
     @Override
     public void importMembers() {
-        throw new RuntimeException("Not possible to call \"import member\" in start up mode");
+        new ImportPersonsController(framework, project.getDataHandler());
     }
 
     // private methods

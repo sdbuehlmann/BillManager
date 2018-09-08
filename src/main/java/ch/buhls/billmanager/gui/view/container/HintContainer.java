@@ -2,6 +2,7 @@
 package ch.buhls.billmanager.gui.view.container;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.ColumnConstraints;
@@ -22,6 +23,7 @@ public class HintContainer
         this.content = content;
         
         view = new GridPane();
+        view.setPadding(new Insets(5));
         ColumnConstraints column1 = new ColumnConstraints(100,100,Double.MAX_VALUE);
         column1.setHgrow(Priority.ALWAYS);
         ColumnConstraints column2 = new ColumnConstraints(100);

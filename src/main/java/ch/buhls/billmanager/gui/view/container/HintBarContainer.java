@@ -1,14 +1,8 @@
 
 package ch.buhls.billmanager.gui.view.container;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.control.Hyperlink;
+import ch.buhls.billmanager.gui.framework.IHintHandle;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
@@ -25,6 +19,15 @@ public class HintBarContainer
     
     public void addHint(HintContainer hintContainer){
         view.getChildren().add(hintContainer.getView());
+    }
+    
+    public IHintHandle addHint(String text, IHintListener listener) {
+        HintContainer hc = new HintContainer(new Label(text), listener);
+        addHint(hc);
+        
+        return () -> {
+            removeHint(hc);
+        };
     }
     
     public void removeHint(HintContainer hintContainer){

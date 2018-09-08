@@ -128,6 +128,12 @@ public class GUIStringCollection
     
     public static final String DIFFERENT_DATA = "<diff>";
     
+    public static final String IMPORT_PERS_READ_FILE = "CSV-Datei einlesen";
+    public static final String IMPORT_PERS_STORE_DATA = "Daten übernehmen";
+    public static final String IMPORT_PERSONS_TAB_NAME = "Personen von CSV-Datei importieren";
+    public static final String IMPORT_PERSONS_FILE_CHOOSER_TXT = "CSV-Datei auswählen";
+    public static final String IMPORT_PERSONS_FILE_FORMAT = "Name;Vornamen;Firma;Geburtstag;Geburtsmonat;Geburtsjahr;Strasse;PLZ;Ort;TelP;TelM;E-Mail;Begrüssung;Titel";
+    
     public static String getTitleForCreatePerson(){
         return "Mitglied erfassen";
     }
@@ -166,5 +172,11 @@ public class GUIStringCollection
     }
     public static String getHintTxt_roleMarked(GUIRole role){
         return String.format("Rolle \"%s\" markiert", role.getName().get());
+    }
+    public static String getHintTxt_showRoleFilter(GUIRole role){
+        return String.format("Inhaber der Rolle \"%s\" angezeigt", role.getName().get());
+    }
+    public static String getHintTxt_hideRoleFilter(GUIRole role){
+        return String.format("Inhaber der Rolle \"%s\" ausgeblendet", role.getName().get());
     }
 }

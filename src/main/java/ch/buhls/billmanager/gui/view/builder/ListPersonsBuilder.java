@@ -1,7 +1,9 @@
 package ch.buhls.billmanager.gui.view.builder;
 
 import ch.buhls.billmanager.gui.data.GUIPerson;
-import ch.buhls.billmanager.gui.view.container.FilterPersonsFormContainer;
+import ch.buhls.billmanager.gui.framework.IHintHandle;
+import ch.buhls.billmanager.gui.view.container.HintBarContainer;
+import ch.buhls.billmanager.gui.view.container.IHintListener;
 import ch.buhls.billmanager.gui.view.container.menues.ListPersonsMenuContainer;
 import ch.buhls.billmanager.gui.view.container.table.PersonTableContainer;
 import ch.buhls.billmanager.gui.view.listener.IListPersonsListener;
@@ -9,25 +11,27 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 /**
  *
  * @author simon
  */
-public class ListPersonsBuilder extends AListBuilder
+public class ListPersonsBuilder
 {
-
+    private final VBox view;
+    
     private final IListPersonsListener listener;
 
-    private final FilterPersonsFormContainer filterFormContainer;
+    private final HintBarContainer hintBarContainer;
     private final PersonTableContainer tableContainer;
     private final ListPersonsMenuContainer menuContainer;
 
     public ListPersonsBuilder(IListPersonsListener listener, ObservableList<GUIPerson> personsToDisplay) {
         this.listener = listener;
 
-        // init view containers
-        filterFormContainer = new FilterPersonsFormContainer();
+        view = new VBox();
+        hintBarContainer = new HintBarContainer();
         menuContainer = new ListPersonsMenuContainer();
 
         tableContainer = new PersonTableContainer();
@@ -36,15 +40,13 @@ public class ListPersonsBuilder extends AListBuilder
         view.setVgrow(tableContainer.getTable(), Priority.ALWAYS);
         tableContainer.getTable().setContextMenu(menuContainer.getContextMenu());
 
-        //view.getChildren().add(filterFormContainer.getView());
+        view.getChildren().add(hintBarContainer.getView());
         view.getChildren().add(tableContainer.getTable());
 
-        this.connectListenerToContextMenu();
+        this.bindListener();
     }
 
-    // methods to connect all listeners
-    @Override
-    protected void connectListenerToContextMenu() {
+    protected void bindListener() {
         menuContainer.getContextMenu().setOnShowing((event) -> {
             listener.contextMenuOpened(tableContainer.getTable().getSelectionModel().getSelectedItems());
         });
@@ -105,32 +107,15 @@ public class ListPersonsBuilder extends AListBuilder
                 -> {
             listener.showVersions(tableContainer.getTable().getSelectionModel().getSelectedItems());
         });
-    }
-
-    // methods to enable/disable functions from the view
-    @Override
-    public void setMenuSelectionMode(MenuSelectionMode mode) {
-        menuContainer.getItemNew().setDisable(false);
-        menuContainer.getItemNewBill().setDisable(false);
-        menuContainer.getMenuAddArticle().setDisable(false);
-        menuContainer.getItemAddRole().setDisable(false);
         
-        switch (mode) {
-            case MULTIPLE:
-                menuContainer.getItemEdit().setDisable(true);
-                menuContainer.getItemShow().setDisable(true);
-                menuContainer.getItemShowBusket().setDisable(true);
-                menuContainer.getItemShowRoles().setDisable(true);
-                menuContainer.getItemShowVersions().setDisable(true);
-                break;
-            case SINGLE:
-                menuContainer.getItemEdit().setDisable(false);
-                menuContainer.getItemShow().setDisable(false);
-                menuContainer.getItemShowBusket().setDisable(false);
-                menuContainer.getItemShowRoles().setDisable(false);
-                menuContainer.getItemShowVersions().setDisable(false);
-                break;
-        }
+        menuContainer.getItemShowRoleMember().setOnAction((ActionEvent event)
+                -> {
+            listener.showMarkedRoleMembers();
+        });
+        menuContainer.getItemHideRoleMember().setOnAction((ActionEvent event)
+                -> {
+            listener.hideMarkedRoleMembers();
+        });
     }
     
     public void enableToAddArticle(boolean enable){
@@ -142,4 +127,41 @@ public class ListPersonsBuilder extends AListBuilder
         menuContainer.getItemShowRoleMember().setDisable(!enable);
         menuContainer.getItemHideRoleMember().setDisable(!enable);
     }
+    
+    public void enableMultiplePersonsSelectedInteractions(){
+        menuContainer.getItemNew().setDisable(false);
+        menuContainer.getItemNewBill().setDisable(false);
+        menuContainer.getMenuAddArticle().setDisable(false);
+        menuContainer.getItemAddRole().setDisable(false);
+        
+        menuContainer.getItemEdit().setDisable(true);
+        menuContainer.getItemShow().setDisable(true);
+        menuContainer.getItemShowBusket().setDisable(true);
+        menuContainer.getItemShowRoles().setDisable(true);
+        menuContainer.getItemShowVersions().setDisable(true);
+    }
+    
+    public void enableSinglePersonSelectedInteractions(){
+        menuContainer.getItemNew().setDisable(false);
+        menuContainer.getItemNewBill().setDisable(false);
+        menuContainer.getMenuAddArticle().setDisable(false);
+        menuContainer.getItemAddRole().setDisable(false);
+        
+        menuContainer.getItemEdit().setDisable(false);
+        menuContainer.getItemShow().setDisable(false);
+        menuContainer.getItemShowBusket().setDisable(false);
+        menuContainer.getItemShowRoles().setDisable(false);
+        menuContainer.getItemShowVersions().setDisable(false);
+    }
+    
+    public IHintHandle displayHint(String text, IHintListener listener) {
+        return hintBarContainer.addHint(text, listener);
+    }
+    
+    // getter
+
+    public VBox getView() {
+        return view;
+    }
+    
 }

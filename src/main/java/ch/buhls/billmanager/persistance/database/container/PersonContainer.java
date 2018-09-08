@@ -2,7 +2,6 @@
 package ch.buhls.billmanager.persistance.database.container;
 
 import ch.buhls.billmanager.persistance.database.entities.Person;
-import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
