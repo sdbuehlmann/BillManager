@@ -7,12 +7,10 @@ import ch.buhls.billmanager.gui.framework.ITabHandle;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.view.builder.ListArticlesBuilder;
-import ch.buhls.billmanager.gui.view.container.HintContainer;
 import ch.buhls.billmanager.gui.view.listener.IListArticlesListener;
 import ch.buhls.billmanager.gui.view.listener.IListVersionsListener;
 import java.util.List;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
 
 /**
  *
@@ -73,13 +71,13 @@ public class ListArticlesController implements IListArticlesListener
             dataHandler.getMarkedArticleProperty().set(selected.get(0));
             selected.get(0).getMarked().set(true);
 
-            artMarkedHintHandle = framework.displayHint(new HintContainer(new Label(GUIStringCollection.getHintTxt_artMarked(selected.get(0))), () -> {
+            artMarkedHintHandle = framework.displayMarkedHint(GUIStringCollection.getHintTxt_artMarked(selected.get(0)), () -> {
                 // close hint
-                dataHandler.getMarkedArticleProperty().get().getMarked().set(false);
-                dataHandler.getMarkedArticleProperty().set(null);
+                dataHandler.getMarkedRole().get().getMarked().set(false);
+                dataHandler.getMarkedRole().set(null);
                 artMarkedHintHandle.close();
                 artMarkedHintHandle = null;
-            }));
+            });
         }
     }
 

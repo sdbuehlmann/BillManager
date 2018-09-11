@@ -19,7 +19,7 @@ public class ListPersonsMenuContainer
     private final MenuItem itemNewBill;
 
     private final Menu menuAddArticle;
-    private final MenuItem itemAdd1, itemAdd2, itemAdd3, itemAdd4, itemAdd5;
+    private final MenuItem itemAdd1, itemAdd2, itemAdd3, itemAdd4, itemAdd5, itemAddCustom;
     private final MenuItem itemShowBusket;
     private final MenuItem itemAddRole;
     private final MenuItem itemShowRoles;
@@ -42,6 +42,7 @@ public class ListPersonsMenuContainer
         itemAdd3 = new MenuItem(GUIStringCollection.PERSON_ADD_3);
         itemAdd4 = new MenuItem(GUIStringCollection.PERSON_ADD_4);
         itemAdd5 = new MenuItem(GUIStringCollection.PERSON_ADD_5);
+        itemAddCustom = new MenuItem(GUIStringCollection.PERSON_ADD_CUSTOM);
         menuAddArticle = new Menu(
                 GUIStringCollection.PERSON_ADD_ART_TO_BILL,
                 null,
@@ -49,7 +50,8 @@ public class ListPersonsMenuContainer
                 itemAdd2,
                 itemAdd3,
                 itemAdd4,
-                itemAdd5);
+                itemAdd5,
+                itemAddCustom);
         itemShowBusket = new MenuItem(GUIStringCollection.PERSON_SHOW_BUSKET);
 
         itemAddRole = new MenuItem(GUIStringCollection.PERSON_ADD_ROLE);
@@ -108,6 +110,10 @@ public class ListPersonsMenuContainer
 
     public MenuItem getItemAdd5() {
         return itemAdd5;
+    }
+
+    public MenuItem getItemAddCustom() {
+        return itemAddCustom;
     }
 
     public MenuItem getItemNewBill() {

@@ -1,6 +1,7 @@
 package ch.buhls.billmanager.gui.view.container.table;
 
 import ch.buhls.billmanager.gui.GUIStringCollection;
+import ch.buhls.billmanager.gui.framework.GUIStyle;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.value.ObservableValue;
@@ -59,11 +60,11 @@ public class TablesUtils
                     TableRow currentRow = getTableRow();
                     if (currentRow != null && item != null) {
                         if (item) {
-                            currentRow.setStyle("-fx-background-color: yellow");
+                            currentRow.getStyleClass().add(GUIStyle.STYLECLASS_MARKED_HINT);
                             setText("x");
                         }
                         else {
-                            currentRow.setStyle("");
+                            currentRow.getStyleClass().remove(GUIStyle.STYLECLASS_MARKED_HINT);
                             setText("");
                         }
                     }

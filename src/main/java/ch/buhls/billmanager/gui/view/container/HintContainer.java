@@ -1,6 +1,7 @@
 
 package ch.buhls.billmanager.gui.view.container;
 
+import ch.buhls.billmanager.gui.framework.IHintListener;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Node;

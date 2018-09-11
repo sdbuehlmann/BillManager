@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -15,9 +17,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
@@ -35,7 +39,9 @@ public class GUIFramework implements IGUIFramework
 
     private final Stage mainStage;
     private SplitScreen splitScreen;
+
     private HintBarContainer hintBarContainer;
+    private HintContainer infoHintContainer;
 
     public GUIFramework(Stage mainStage) {
         this.mainStage = mainStage;
@@ -141,7 +147,7 @@ public class GUIFramework implements IGUIFramework
     public void closeAllMasks() {
         splitScreen.getMainTabPane().getTabs().clear();
     }
-    
+
     @Override
     public boolean showConfirmationDialoque(String title, String header, String content) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -160,9 +166,11 @@ public class GUIFramework implements IGUIFramework
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         Scene scene = new Scene(parent, 500, 500);
+        scene.getStylesheets().add("styles/Styles.css");
+        
         mainStage.setTitle("HBC Münsingen Manager");
         mainStage.setScene(scene);
-        
+
         mainStage.show();
     }
 
@@ -174,24 +182,24 @@ public class GUIFramework implements IGUIFramework
     @Override
     public boolean confirmToAddRole() {
         return showConfirmationDialoque(
-                "Bestätigung erforderlich", 
-                "Rolle hinzufügen", 
+                "Bestätigung erforderlich",
+                "Rolle hinzufügen",
                 "Sind Sie sicher, dass Sie die markierte Rolle hinzufügen wollen? (Die Änderungen werden direkt gespeichert.)");
     }
 
     @Override
     public boolean confirmToRemoveRole() {
         return showConfirmationDialoque(
-                "Bestätigung erforderlich", 
-                "Rolle entfernen", 
+                "Bestätigung erforderlich",
+                "Rolle entfernen",
                 "Sind Sie sicher, dass Sie die Rolle entfernen wollen? (Die Änderungen werden direkt gespeichert.)");
     }
 
     @Override
     public boolean confirmToAddArticle() {
         return showConfirmationDialoque(
-                "Bestätigung erforderlich", 
-                "Artikel hinzufügen", 
+                "Bestätigung erforderlich",
+                "Artikel hinzufügen",
                 "Sind Sie sicher, dass Sie den Artikel hinzufügen wollen? (Die Änderungen werden direkt gespeichert.)");
     }
 
@@ -214,11 +222,53 @@ public class GUIFramework implements IGUIFramework
     }
 
     @Override
-    public IHintHandle displayHint(HintContainer hintContainer) {
-        hintBarContainer.addHint(hintContainer);
+    public void displayInfoHint(String text) {
+        // handle old
+        if (infoHintContainer != null) {
+            hintBarContainer.removeHint(infoHintContainer);
+            infoHintContainer = null;
+        }
         
+        // create new
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");  
+        LocalDateTime now = LocalDateTime.now();  
+
+        infoHintContainer = new HintContainer(new Label(String.format("%s Uhr: %s", dtf.format(now), text)), () -> {
+            hintBarContainer.removeHint(infoHintContainer);
+            infoHintContainer = null;
+        });
+        infoHintContainer.getView().getStyleClass().add(GUIStyle.STYLECLASS_INFO_HINT);
+
+        hintBarContainer.addHintOnTop(infoHintContainer);
+    }
+
+    @Override
+    public String showTextInputDialoque(String title, String headerTxt, String labelTextField) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(title);
+        dialog.setHeaderText(headerTxt);
+        dialog.setContentText(labelTextField);
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            return result.get();
+        }
+        return null;
+    }
+
+    @Override
+    public IHintHandle displayMarkedHint(String text, IHintListener listener) {
+        // create new
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");  
+        LocalDateTime now = LocalDateTime.now();  
+
+        HintContainer hintCont  = new HintContainer(new Label(String.format("%s Uhr: %s", dtf.format(now), text)), listener);
+        hintCont.getView().getStyleClass().add(GUIStyle.STYLECLASS_MARKED_HINT);
+        
+        hintBarContainer.addHint(hintCont);
+
         return () -> {
-            hintBarContainer.removeHint(hintContainer);
+            hintBarContainer.removeHint(hintCont);
         };
     }
 }

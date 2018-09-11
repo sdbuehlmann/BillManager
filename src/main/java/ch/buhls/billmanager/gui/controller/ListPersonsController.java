@@ -25,19 +25,19 @@ public class ListPersonsController extends AController implements IListPersonsLi
 {
 
     private final ListPersonsBuilder builder;
-    
+
     private final PersonsDataHandler personsDataHandler;
-    
+
     private IHintHandle showRoleFilterHint;
     private IHintHandle hideRoleFilterHint;
 
     public ListPersonsController(IGUIFramework framework, DataHandler dataHandler) {
         super(framework, dataHandler, "Mitglieder");
-        
+
         personsDataHandler = dataHandler.getPersonsDataHandler();
         personsDataHandler.reloadPersonsBuffer();
         builder = new ListPersonsBuilder(this, personsDataHandler.getPersonsBuffer());
-        
+
         framework.displayMask(builder.getView(), tabName, IGUIFramework.Area.LEFT).focus();
     }
 
@@ -81,6 +81,20 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
     @Override
     public void addArticleToBusket(ObservableList<GUIPerson> persons, int nr) {
+        if (nr == -1) {
+            try {
+                String nrAsString = framework.showTextInputDialoque(GUIStringCollection.PERSON_ADD_ART_TO_BILL, "Beliebige Anzahl ARtikel spezifizieren.", "Anzahl Artikel");
+                if(nrAsString == null){
+                    return;
+                }
+                nr = Integer.parseInt(nrAsString);
+            }
+            catch (Exception ex) {
+                framework.showExceptionDialoque(ex);
+                return;
+            }
+        }
+
         if (framework.confirmToAddArticle()) {
             GUIArticle marked = dataHandler.getMarkedArticleProperty().get();
 
@@ -93,6 +107,8 @@ public class ListPersonsController extends AController implements IListPersonsLi
                     framework.showExceptionDialoque(ex);
                 }
             }
+
+            framework.displayInfoHint(GUIStringCollection.getHintTxt_artAdded(marked, persons.size(), nr));
         }
     }
 
@@ -109,6 +125,8 @@ public class ListPersonsController extends AController implements IListPersonsLi
                     framework.showExceptionDialoque(ex);
                 }
             }
+
+            framework.displayInfoHint(GUIStringCollection.getHintTxt_roleAdded(markedRole, persons.size()));
         }
     }
 
@@ -134,33 +152,32 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
     @Override
     public void showMarkedRoleMembers() {
-        if(showRoleFilterHint != null){
+        if (showRoleFilterHint != null) {
             showRoleFilterHint.close();
         }
-        
+
         showRoleFilterHint = builder.displayHint(GUIStringCollection.getHintTxt_showRoleFilter(dataHandler.getMarkedRole().get()), () -> {
             showRoleFilterHint.close();
             personsDataHandler.setRoleToShow(null);
             personsDataHandler.reloadPersonsBuffer();
         });
-        
+
         personsDataHandler.setRoleToShow(dataHandler.getMarkedRole().get());
         personsDataHandler.reloadPersonsBuffer();
     }
 
     @Override
     public void hideMarkedRoleMembers() {
-        if(hideRoleFilterHint != null){
+        if (hideRoleFilterHint != null) {
             hideRoleFilterHint.close();
         }
-        
-        
+
         hideRoleFilterHint = builder.displayHint(GUIStringCollection.getHintTxt_hideRoleFilter(dataHandler.getMarkedRole().get()), () -> {
             hideRoleFilterHint.close();
             personsDataHandler.setRoleToHide(null);
             personsDataHandler.reloadPersonsBuffer();
         });
-        
+
         personsDataHandler.setRoleToHide(dataHandler.getMarkedRole().get());
         personsDataHandler.reloadPersonsBuffer();
     }

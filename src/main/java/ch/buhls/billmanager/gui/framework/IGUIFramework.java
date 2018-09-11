@@ -20,7 +20,11 @@ public interface IGUIFramework
     public void displayMainMask(Parent parent, SplitScreen splitScreen, HintBarContainer hintBarContainer);
     public ITabHandle displayMask(Node node, String title, Area area);
     public void closeAllMasks();
-    public IHintHandle displayHint(HintContainer hintContainer);
+    
+    // hints
+    //public IHintHandle displayHint(HintContainer hintContainer);
+    public void displayInfoHint(String text);
+    public IHintHandle displayMarkedHint(String text, IHintListener listener);
     
     // dialoques
     public File openPathChooser(String title, File lastDirectory);
@@ -37,6 +41,8 @@ public interface IGUIFramework
     public boolean confirmToAddRole();
     public boolean confirmToRemoveRole();
     public boolean confirmToAddArticle();
+    
+    public String showTextInputDialoque(String title, String headerTxt, String labelTextField);
     
     public enum Area
     {

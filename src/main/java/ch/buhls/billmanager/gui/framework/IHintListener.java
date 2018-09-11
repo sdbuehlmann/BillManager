@@ -1,5 +1,5 @@
 
-package ch.buhls.billmanager.gui.view.container;
+package ch.buhls.billmanager.gui.framework;
 
 /**
  *

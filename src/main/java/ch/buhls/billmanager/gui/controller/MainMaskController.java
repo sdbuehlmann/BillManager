@@ -1,5 +1,6 @@
 package ch.buhls.billmanager.gui.controller;
 
+import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.MainViewBuilder;
 import ch.buhls.billmanager.model.ModelException;
@@ -31,6 +32,7 @@ public class MainMaskController implements IMainViewListener
         this.viewBuilder.setRecentOpenedProjects(App.INSTANCE.getRecentOpenedProjects());
 
         framework.displayMainMask(viewBuilder.getView(), viewBuilder.getSplitScreen(), viewBuilder.getHintBarContainer());
+        framework.displayInfoHint(GUIStringCollection.getHintTxt_welcome());
     }
 
     @Override
@@ -47,7 +49,8 @@ public class MainMaskController implements IMainViewListener
 
                 App.INSTANCE.addRecentOpenedProject(projectFile.getPath());
                 this.viewBuilder.setRecentOpenedProjects(App.INSTANCE.getRecentOpenedProjects());
-
+                
+                framework.displayInfoHint(GUIStringCollection.getHintTxt_projectOpened(projectFile));
             }
             catch (ModelException ex) {
                 framework.showExceptionDialoque(ex);
@@ -67,8 +70,9 @@ public class MainMaskController implements IMainViewListener
                 maskResetForNewProject(project);
 
                 App.INSTANCE.addRecentOpenedProject(projectFile.getPath());
-                this.viewBuilder.setRecentOpenedProjects(App.INSTANCE.getRecentOpenedProjects());
-
+                viewBuilder.setRecentOpenedProjects(App.INSTANCE.getRecentOpenedProjects());
+                
+                framework.displayInfoHint(GUIStringCollection.getHintTxt_projectOpened(projectFile));
             }
             catch (ModelException ex) {
                 framework.showExceptionDialoque(ex);
@@ -94,7 +98,8 @@ public class MainMaskController implements IMainViewListener
 
             App.INSTANCE.addRecentOpenedProject(projectFile.getPath());
             this.viewBuilder.setRecentOpenedProjects(App.INSTANCE.getRecentOpenedProjects());
-
+            
+            framework.displayInfoHint(GUIStringCollection.getHintTxt_projectOpened(projectFile));
         }
         catch (ModelException ex) {
             App.INSTANCE.removeFromRecentOpenedProjects(desc);

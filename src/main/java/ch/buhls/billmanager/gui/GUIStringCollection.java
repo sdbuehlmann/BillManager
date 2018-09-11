@@ -6,6 +6,7 @@ import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIRole;
+import java.io.File;
 
 /**
  *
@@ -51,6 +52,7 @@ public class GUIStringCollection
     public static final String PERSON_ADD_3 = "3 hinzufügen";
     public static final String PERSON_ADD_4 = "4 hinzufügen";
     public static final String PERSON_ADD_5 = "5 hinzufügen";
+    public static final String PERSON_ADD_CUSTOM = "andere Anzahl hinzufügen";
     public static final String PERSON_SHOW_BUSKET = "Warenkorb anzeigen";
     public static final String PERSON_SHOW_ROLES = "Rollen anzeigen";
     public static final String PERSON_FILTER = "Filtern";
@@ -178,5 +180,17 @@ public class GUIStringCollection
     }
     public static String getHintTxt_hideRoleFilter(GUIRole role){
         return String.format("Inhaber der Rolle \"%s\" ausgeblendet", role.getName().get());
+    }
+    public static String getHintTxt_roleAdded(GUIRole role, int nrAdded){
+        return String.format("Rolle \"%s\" zu %d Personen hinzugefügt", role.getName().get(), nrAdded);
+    }
+    public static String getHintTxt_artAdded(GUIArticle art, int nrPers, int nrArt){
+        return String.format("Artikel \"%s; %s\" zu %d Personen jeweils %d mal hinzugefügt", art.getTitle().get(), art.getDescription().get(), nrPers, nrArt);
+    }
+    public static String getHintTxt_welcome(){
+        return "Willkommen beim ClubManager. Erzeuge ein Projekt oder öffne ein Existierendes.";
+    }
+    public static String getHintTxt_projectOpened(File projectFile){
+        return String.format("Projekt \"%s\" geöffnet", projectFile.getPath());
     }
 }

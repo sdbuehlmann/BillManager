@@ -23,6 +23,7 @@ public class MainApp extends Application {
         Logger.getAnonymousLogger().addHandler(consoleHandler);*/
 
         this.primaryStage = primaryStage;
+        
         IGUIFramework framework = new GUIFramework(primaryStage);
 
         try {

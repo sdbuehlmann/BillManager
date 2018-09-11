@@ -1,3 +1,12 @@
-.button {
-    -fx-font-weight: bold;
+* {
+   -fx-info-color: rgb(160, 255, 255);
+   -fx-marked-color: rgb(255, 255, 160);
+}
+
+.info-hint{
+    -fx-background-color: -fx-info-color;
+}
+
+.marked-hint{
+    -fx-background-color: -fx-marked-color;
 }

@@ -2,6 +2,7 @@
 package ch.buhls.billmanager.gui.view.container;
 
 import ch.buhls.billmanager.gui.framework.IHintHandle;
+import ch.buhls.billmanager.gui.framework.IHintListener;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
@@ -19,6 +20,10 @@ public class HintBarContainer
     
     public void addHint(HintContainer hintContainer){
         view.getChildren().add(hintContainer.getView());
+    }
+    
+    public void addHintOnTop(HintContainer hintContainer){
+        view.getChildren().add(0,hintContainer.getView());
     }
     
     public IHintHandle addHint(String text, IHintListener listener) {

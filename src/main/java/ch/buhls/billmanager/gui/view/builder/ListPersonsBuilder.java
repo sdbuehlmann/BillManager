@@ -2,8 +2,8 @@ package ch.buhls.billmanager.gui.view.builder;
 
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
+import ch.buhls.billmanager.gui.framework.IHintListener;
 import ch.buhls.billmanager.gui.view.container.HintBarContainer;
-import ch.buhls.billmanager.gui.view.container.IHintListener;
 import ch.buhls.billmanager.gui.view.container.menues.ListPersonsMenuContainer;
 import ch.buhls.billmanager.gui.view.container.table.PersonTableContainer;
 import ch.buhls.billmanager.gui.view.listener.IListPersonsListener;
@@ -88,6 +88,10 @@ public class ListPersonsBuilder
         menuContainer.getItemAdd5().setOnAction((ActionEvent event)
                 -> {
             listener.addArticleToBusket(tableContainer.getTable().getSelectionModel().getSelectedItems(), 5);
+        });
+        menuContainer.getItemAddCustom().setOnAction((ActionEvent event)
+                -> {
+            listener.addArticleToBusket(tableContainer.getTable().getSelectionModel().getSelectedItems(), -1);
         });
         menuContainer.getItemShowBusket().setOnAction((ActionEvent event)
                 -> {

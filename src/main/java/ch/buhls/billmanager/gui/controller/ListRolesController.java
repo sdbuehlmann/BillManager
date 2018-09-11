@@ -6,10 +6,8 @@ import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.data.GUIRole;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.view.builder.ListRolesBuilder;
-import ch.buhls.billmanager.gui.view.container.HintContainer;
 import ch.buhls.billmanager.gui.view.listener.IListRolesListener;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
 
 /**
  *
@@ -71,13 +69,13 @@ public class ListRolesController extends AController implements IListRolesListen
         dataHandler.getMarkedRole().set(selected);
         selected.getMarked().set(true);
         
-        roleMarkedHintHandle = framework.displayHint(new HintContainer(new Label(GUIStringCollection.getHintTxt_roleMarked(selected)), () -> {
-                // close hint
+        roleMarkedHintHandle = framework.displayMarkedHint(GUIStringCollection.getHintTxt_roleMarked(selected), () -> {
+            // close hint
                 dataHandler.getMarkedRole().get().getMarked().set(false);
                 dataHandler.getMarkedRole().set(null);
                 roleMarkedHintHandle.close();
                 roleMarkedHintHandle = null;
-            }));
+        });
     }
 
     @Override
