@@ -20,8 +20,6 @@ public class GUIArticle extends AGUITrackedData<Article>
     private final StringProperty title, description, internalCategorie;
     private final IntegerProperty costs;
     
-    private final BooleanProperty marked;
-    
     public GUIArticle(Article t) {
         super(t);
         
@@ -116,8 +114,6 @@ public class GUIArticle extends AGUITrackedData<Article>
                 return "Kosten";
             }
         });
-        
-        marked = new SimpleBooleanProperty(false);
     }
 
     public StringProperty getTitle() {
@@ -135,10 +131,4 @@ public class GUIArticle extends AGUITrackedData<Article>
     public IntegerProperty getCosts() {
         return costs;
     }
-
-    public BooleanProperty getMarked() {
-        return marked;
-    }
-    
-    
 }

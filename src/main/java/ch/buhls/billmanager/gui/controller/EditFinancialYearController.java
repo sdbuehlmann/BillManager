@@ -13,25 +13,26 @@ import ch.buhls.billmanager.persistance.PersistanceException;
  *
  * @author simon
  */
-public class EditFinancialYearController extends AController implements IDefaultMaskListener<GUIFinancialYear>
+public class EditFinancialYearController extends AFormController<GUIFinancialYear> implements IDefaultMaskListener<GUIFinancialYear>
 {
     private final FinancialYearMaskBuilder builder;
     
     public EditFinancialYearController(IGUIFramework framework, DataHandler dataHandler, GUIFinancialYear year) {
-        super(framework, dataHandler, GUIStringCollection.getTitleForEditFinancialYear(year));
+        super(framework, dataHandler, framework.getStringCollections().getFinancialYearStringCollection());
         
         builder = new FinancialYearMaskBuilder(dataHandler.editFinancialYear(year), this);
         builder.changeToEditMode();
         
-        display(builder.getView(), IGUIFramework.Area.RIGHT);
+        displayEditMask(builder.getView(), year);
     }
 
     @Override
     public void save(GUIFinancialYear entity) {
         try {
-            if (framework.confirmToStore()) {
+            if (displayConfirmToStoreDialoque(entity)) {
                 this.dataHandler.storeFinancialYear(entity);
-                tabHandle.close();
+                closeMask();
+                displayEditedInfoHint(entity);
             }
         }
         catch (PersistanceException ex) {

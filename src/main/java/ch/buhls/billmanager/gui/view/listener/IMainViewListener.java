@@ -12,7 +12,6 @@ public interface IMainViewListener
     public void openRecent(String desc);
     
     public void importMembers();
-    
-    public void showSettings();
+
     public void showGlobalSettings();
 }

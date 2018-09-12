@@ -58,11 +58,6 @@ public class MainViewBuilder
             listener.importMembers();
         });
 
-        menuBarContainer.getMiSettings().setOnAction((ActionEvent event)
-                -> {
-            listener.showSettings();
-        });
-
         menuBarContainer.getMiGlobalSettings().setOnAction((ActionEvent event)
                 -> {
             listener.showGlobalSettings();
@@ -138,7 +133,6 @@ public class MainViewBuilder
         menuBarContainer.getMiNew().setDisable(false);
         menuBarContainer.getMiOpen().setDisable(false);
         menuBarContainer.getMiImportMembers().setDisable(true);
-        menuBarContainer.getMiSettings().setDisable(true);
         menuBarContainer.getMiGlobalSettings().setDisable(false);
     }
 
@@ -146,7 +140,6 @@ public class MainViewBuilder
         menuBarContainer.getMiNew().setDisable(false);
         menuBarContainer.getMiOpen().setDisable(false);
         menuBarContainer.getMiImportMembers().setDisable(false);
-        menuBarContainer.getMiSettings().setDisable(false);
         menuBarContainer.getMiGlobalSettings().setDisable(false);
     }
 

@@ -2,43 +2,39 @@ package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
 import ch.buhls.billmanager.gui.GUIStringCollection;
-import ch.buhls.billmanager.gui.data.AppSettingsData;
+import ch.buhls.billmanager.gui.data.GUIAppSettings;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.AppSettingsBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.IAppSettingsMaskListener;
 import ch.buhls.billmanager.model.App;
-import ch.buhls.billmanager.model.AppException;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author simon
  */
-public class EditAppSettingsController extends AController implements IAppSettingsMaskListener
+public class EditAppSettingsController extends AFormController<GUIAppSettings> implements IAppSettingsMaskListener
 {
 
     private final AppSettingsBuilder builder;
 
-    private final AppSettingsData data;
+    private final GUIAppSettings data;
 
     public EditAppSettingsController(IGUIFramework framework, DataHandler dataHandler) {
-        super(framework, dataHandler, GUIStringCollection.getTitleForEditAppSettings());
+        super(framework, dataHandler, framework.getStringCollections().getAppSettingsStringCollection());
 
         data = dataHandler.getAppSettingsData();
         builder = new AppSettingsBuilder(this, data);
 
-        display(builder.getView(), IGUIFramework.Area.RIGHT);
+        displayEditMask(builder.getView(), data);
     }
 
     @Override
-    public void save(AppSettingsData data) {
-        if (framework.confirmToStore()) {
+    public void save(GUIAppSettings data) {
+        if (displayConfirmToStoreDialoque(data)) {
             dataHandler.storeAppSettingsData(data);
-
-            framework.displayInfoHint(GUIStringCollection.getHintTxt_appSettingsStored());
-            close();
+            closeMask();
+            displayEditedInfoHint(data);
         }
     }
 
@@ -46,10 +42,10 @@ public class EditAppSettingsController extends AController implements IAppSettin
     public void selectPathToInkscape() {
         File file;
         if (data.getInkscapePathProperty().get() == null) {
-            file = framework.openFileChooser(tabName, App.INSTANCE.getLastPath());
+            file = framework.openFileChooser(stringCollection.getTabTitle_Edit(data), App.INSTANCE.getLastPath());
         }
         else {
-            file = framework.openFileChooser(tabName, null);
+            file = framework.openFileChooser(stringCollection.getTabTitle_Edit(data), null);
         }
 
         if (file != null) {

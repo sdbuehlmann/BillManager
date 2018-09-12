@@ -1,7 +1,7 @@
 
 package ch.buhls.billmanager.gui.view.builder;
 
-import ch.buhls.billmanager.gui.data.AppSettingsData;
+import ch.buhls.billmanager.gui.data.GUIAppSettings;
 import ch.buhls.billmanager.gui.view.builder.listener.IAppSettingsMaskListener;
 import ch.buhls.billmanager.gui.view.container.form.AppSettingsFormContainer;
 import javafx.event.ActionEvent;
@@ -17,9 +17,9 @@ public class AppSettingsBuilder
     
     private final AppSettingsFormContainer formContainer;
     
-    private final AppSettingsData data;
+    private final GUIAppSettings data;
 
-    public AppSettingsBuilder(IAppSettingsMaskListener listener, AppSettingsData data) {
+    public AppSettingsBuilder(IAppSettingsMaskListener listener, GUIAppSettings data) {
         this.listener = listener;
         this.data = data;
         

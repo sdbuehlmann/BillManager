@@ -1,7 +1,7 @@
 
 package ch.buhls.billmanager.gui.view.builder.listener;
 
-import ch.buhls.billmanager.gui.data.AppSettingsData;
+import ch.buhls.billmanager.gui.data.GUIAppSettings;
 
 /**
  *
@@ -9,6 +9,6 @@ import ch.buhls.billmanager.gui.data.AppSettingsData;
  */
 public interface IAppSettingsMaskListener
 {
-    public void save(AppSettingsData data);
+    public void save(GUIAppSettings data);
     public void selectPathToInkscape();
 }

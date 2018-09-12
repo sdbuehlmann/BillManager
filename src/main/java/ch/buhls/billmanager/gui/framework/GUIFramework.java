@@ -1,5 +1,6 @@
 package ch.buhls.billmanager.gui.framework;
 
+import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.view.container.HintBarContainer;
 import ch.buhls.billmanager.gui.view.container.HintContainer;
 import ch.buhls.billmanager.gui.view.container.SplitScreen;
@@ -18,6 +19,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -42,10 +44,14 @@ public class GUIFramework implements IGUIFramework
 
     private HintBarContainer hintBarContainer;
     private HintContainer infoHintContainer;
+    
+    private final StringCollections stringCollections;
 
     public GUIFramework(Stage mainStage) {
         this.mainStage = mainStage;
         INSTANCE = this;
+        
+        stringCollections = new StringCollections();
     }
 
     @Override
@@ -125,7 +131,7 @@ public class GUIFramework implements IGUIFramework
 
     @Override
     public void setAppTitle(String title) {
-        this.mainStage.setTitle(title);
+        this.mainStage.setTitle(GUIStringCollection.APPLICATION_TITLE + " - " + title);
     }
 
     @Override
@@ -136,7 +142,11 @@ public class GUIFramework implements IGUIFramework
             tabPane = splitScreen.getDetailTabPane();
         }
 
-        Tab tab = new Tab(title, node);
+        ScrollPane scrollPane = new ScrollPane(node);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+
+        Tab tab = new Tab(title, scrollPane);
         tabPane.getTabs().add(tab);
         tabPane.requestFocus();
 
@@ -149,9 +159,10 @@ public class GUIFramework implements IGUIFramework
     }
 
     @Override
-    public boolean showConfirmationDialoque(String title, String header, String content) {
+    public boolean showConfirmDialoque(String header, String content) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle(title);
+        alert.setResizable(true);
+        alert.setTitle(stringCollections.getAppStringCollection().getAppTitle());
         alert.setHeaderText(header);
         alert.setContentText(content);
 
@@ -160,6 +171,11 @@ public class GUIFramework implements IGUIFramework
     }
 
     @Override
+    public boolean showConfirmDialoque(DialoquesStringsTO to) {
+        return showConfirmDialoque(to.getHeader(), to.getText());
+    }
+    
+    @Override
     public void displayMainMask(Parent parent, SplitScreen splitScreen, HintBarContainer hintBarContainer) {
         this.splitScreen = splitScreen;
         this.hintBarContainer = hintBarContainer;
@@ -167,40 +183,16 @@ public class GUIFramework implements IGUIFramework
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         Scene scene = new Scene(parent, 500, 500);
         scene.getStylesheets().add("styles/Styles.css");
-        
-        mainStage.setTitle("HBC Münsingen Manager");
+
+        mainStage.setTitle(GUIStringCollection.APPLICATION_TITLE);
         mainStage.setScene(scene);
 
         mainStage.show();
     }
 
     @Override
-    public boolean confirmToStore() {
-        return showConfirmationDialoque("Bestätigung erforderlich", "Bestätigung erforderlich", "Sind Sie sicher, dass Sie Speichern wollen?");
-    }
-
-    @Override
-    public boolean confirmToAddRole() {
-        return showConfirmationDialoque(
-                "Bestätigung erforderlich",
-                "Rolle hinzufügen",
-                "Sind Sie sicher, dass Sie die markierte Rolle hinzufügen wollen? (Die Änderungen werden direkt gespeichert.)");
-    }
-
-    @Override
-    public boolean confirmToRemoveRole() {
-        return showConfirmationDialoque(
-                "Bestätigung erforderlich",
-                "Rolle entfernen",
-                "Sind Sie sicher, dass Sie die Rolle entfernen wollen? (Die Änderungen werden direkt gespeichert.)");
-    }
-
-    @Override
-    public boolean confirmToAddArticle() {
-        return showConfirmationDialoque(
-                "Bestätigung erforderlich",
-                "Artikel hinzufügen",
-                "Sind Sie sicher, dass Sie den Artikel hinzufügen wollen? (Die Änderungen werden direkt gespeichert.)");
+    public boolean showConfirmToStoreDialoque(String content) {
+        return showConfirmDialoque(stringCollections.getAppStringCollection().getConfirmToStoreDialoqueHeader(), content);
     }
 
     @Override
@@ -228,10 +220,10 @@ public class GUIFramework implements IGUIFramework
             hintBarContainer.removeHint(infoHintContainer);
             infoHintContainer = null;
         }
-        
+
         // create new
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");  
-        LocalDateTime now = LocalDateTime.now();  
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDateTime now = LocalDateTime.now();
 
         infoHintContainer = new HintContainer(new Label(String.format("%s Uhr: %s", dtf.format(now), text)), () -> {
             hintBarContainer.removeHint(infoHintContainer);
@@ -243,9 +235,9 @@ public class GUIFramework implements IGUIFramework
     }
 
     @Override
-    public String showTextInputDialoque(String title, String headerTxt, String labelTextField) {
+    public String showTextInputDialoque(String headerTxt, String labelTextField) {
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle(title);
+        dialog.setTitle(stringCollections.getAppStringCollection().getAppTitle());
         dialog.setHeaderText(headerTxt);
         dialog.setContentText(labelTextField);
 
@@ -255,20 +247,34 @@ public class GUIFramework implements IGUIFramework
         }
         return null;
     }
+    
+    @Override
+    public String showTextInputDialoque(DialoquesStringsTO to) {
+        return showTextInputDialoque(to.getHeader(), to.getText());
+    }
+
 
     @Override
     public IHintHandle displayMarkedHint(String text, IHintListener listener) {
         // create new
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");  
-        LocalDateTime now = LocalDateTime.now();  
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDateTime now = LocalDateTime.now();
 
-        HintContainer hintCont  = new HintContainer(new Label(String.format("%s Uhr: %s", dtf.format(now), text)), listener);
+        HintContainer hintCont = new HintContainer(new Label(String.format("%s Uhr: %s", dtf.format(now), text)), listener);
         hintCont.getView().getStyleClass().add(GUIStyle.STYLECLASS_MARKED_HINT);
-        
+
         hintBarContainer.addHint(hintCont);
 
         return () -> {
             hintBarContainer.removeHint(hintCont);
         };
     }
+
+    @Override
+    public StringCollections getStringCollections() {
+        return stringCollections;
+    }
+
+    
+    
 }

@@ -14,29 +14,28 @@ import ch.buhls.billmanager.persistance.PersistanceException;
  *
  * @author simon
  */
-public class CreatePersonController extends AController implements IDefaultMaskListener<GUIPersonBaseData>
+public class CreatePersonController extends AFormController<GUIPerson> implements IDefaultMaskListener<GUIPersonBaseData>
 {
     private final PersonMaskBuilder builder;
     
     private final GUIPerson person;
     
     public CreatePersonController(IGUIFramework framework, DataHandler dataHandler) {
-        super(framework, dataHandler, GUIStringCollection.getTitleForCreatePerson());
+        super(framework, dataHandler, framework.getStringCollections().getPersonStringCollection());
         
-        this.person = dataHandler.getPersonsDataHandler().createPerson();
+        person = dataHandler.getPersonsDataHandler().createPerson();
+        builder = new PersonMaskBuilder(person.getBaseData(), this);
         
-        this.builder = new PersonMaskBuilder(person.getBaseData(), this);
-        
-        this.display(builder.getView(), IGUIFramework.Area.RIGHT);
+        displayCreateMask(builder.getView());
     }
 
     @Override
     public void save(GUIPersonBaseData entity) {
         try {
-            if (framework.confirmToStore()) {
+            if (displayConfirmToStoreDialoque(person)) {
                 this.dataHandler.getPersonsDataHandler().storePersonBaseDataAndPerson(person);
-                
-                tabHandle.close();
+                closeMask();
+                displayCreatedInfoHint(person);
             }
         }
         catch (PersistanceException ex) {

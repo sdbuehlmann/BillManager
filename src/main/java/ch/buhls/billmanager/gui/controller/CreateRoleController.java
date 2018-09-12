@@ -12,25 +12,26 @@ import ch.buhls.billmanager.persistance.PersistanceException;
  *
  * @author simon
  */
-public class CreateRoleController extends AController implements IDefaultMaskListener<GUIRole>
+public class CreateRoleController extends AFormController<GUIRole> implements IDefaultMaskListener<GUIRole>
 {
     private final RoleMaskBuilder builder;
     
     public CreateRoleController(IGUIFramework framework, DataHandler dataHandler) {
-        super(framework, dataHandler, "Rolle erfassen");
+        super(framework, dataHandler, framework.getStringCollections().getRoleStringCollection());
         
         builder = new RoleMaskBuilder(dataHandler.createRole(), this);
         builder.changeToCreateMode();
         
-        display(builder.getView(), IGUIFramework.Area.RIGHT);
+        displayCreateMask(builder.getView());
     }
 
     @Override
     public void save(GUIRole entity) {
         try {
-            if (framework.confirmToStore()) {
+            if (displayConfirmToStoreDialoque(entity)) {
                 this.dataHandler.storeRole(entity);
-                tabHandle.close();
+                closeMask();
+                displayCreatedInfoHint(entity);
             }
         }
         catch (PersistanceException ex) {

@@ -13,7 +13,6 @@ import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
  */
 public class ArticleMaskBuilder
 {
-    
     // data
     private final GUIArticle article;
     

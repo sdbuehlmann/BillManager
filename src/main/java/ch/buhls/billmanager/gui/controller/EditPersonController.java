@@ -2,7 +2,6 @@
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
-import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
@@ -14,31 +13,30 @@ import ch.buhls.billmanager.persistance.PersistanceException;
  *
  * @author simon
  */
-public class EditPersonController extends AController implements IDefaultMaskListener<GUIPersonBaseData>
+public class EditPersonController extends AFormController<GUIPerson> implements IDefaultMaskListener<GUIPersonBaseData>
 {
     private final PersonMaskBuilder builder;
     
     private final GUIPerson person;
     
     public EditPersonController(IGUIFramework framework, DataHandler dataHandler, GUIPerson person) {
-        super(framework, dataHandler, GUIStringCollection.getTitleForEditPerson(person.getBaseData()));
+        super(framework, dataHandler, framework.getStringCollections().getPersonStringCollection());
         
         this.person = dataHandler.getPersonsDataHandler().editPerson(person);
         
         this.builder = new PersonMaskBuilder(this.person.getBaseData(), this);
         this.builder.changeToEditMode();
         
-        this.display(builder.getView(), IGUIFramework.Area.RIGHT);
+        displayEditMask(builder.getView(), person);
     }
 
     @Override
     public void save(GUIPersonBaseData entity) {
         try {
-            if (framework.confirmToStore()) {
+            if (displayConfirmToStoreDialoque(person)) {
                 this.dataHandler.getPersonsDataHandler().storePersonBaseDataAndPerson(person);
-                //this.dataHandler.storePerson(entity);
-                
-                tabHandle.close();
+                closeMask();
+                displayEditedInfoHint(person);
             }
         }
         catch (PersistanceException ex) {

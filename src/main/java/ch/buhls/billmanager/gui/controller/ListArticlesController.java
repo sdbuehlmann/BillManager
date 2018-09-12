@@ -3,7 +3,6 @@ package ch.buhls.billmanager.gui.controller;
 import ch.buhls.billmanager.gui.DataHandler;
 import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
-import ch.buhls.billmanager.gui.framework.ITabHandle;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.view.builder.ListArticlesBuilder;
@@ -53,11 +52,6 @@ public class ListArticlesController extends AController implements IListArticles
     @Override
     public void mark(List<GUIArticle> selected) {
         if (selected.get(0) != null) {
-            // remove old mark
-            if (dataHandler.getMarkedArticleProperty().get() != null) {
-                dataHandler.getMarkedArticleProperty().get().getMarked().set(false);
-            }
-
             // remove old hint
             if (artMarkedHintHandle != null) {
                 artMarkedHintHandle.close();
@@ -66,11 +60,9 @@ public class ListArticlesController extends AController implements IListArticles
 
             // mark new
             dataHandler.getMarkedArticleProperty().set(selected.get(0));
-            selected.get(0).getMarked().set(true);
 
             artMarkedHintHandle = framework.displayMarkedHint(GUIStringCollection.getHintTxt_artMarked(selected.get(0)), () -> {
                 // close hint
-                dataHandler.getMarkedRole().get().getMarked().set(false);
                 dataHandler.getMarkedRole().set(null);
                 artMarkedHintHandle.close();
                 artMarkedHintHandle = null;

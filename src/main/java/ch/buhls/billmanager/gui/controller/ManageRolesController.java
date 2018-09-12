@@ -39,9 +39,9 @@ public class ManageRolesController extends AController implements IManageRolesLi
 
     @Override
     public void addMarkedRole() {
-        if (framework.confirmToAddRole()) {
-            GUIRole markedRole = dataHandler.getMarkedRole().get();
-
+        GUIRole markedRole = dataHandler.getMarkedRole().get();
+        
+        if (framework.showConfirmDialoque(framework.getStringCollections().getPersonStringCollection().getConfirmTxt_AddRole(markedRole, 1))) {
             try {
                 person.getData().getRoles().add(markedRole.getData());
                 dataHandler.getPersonsDataHandler().storePerson(person);
@@ -55,7 +55,7 @@ public class ManageRolesController extends AController implements IManageRolesLi
 
     @Override
     public void removeRole(GUIRole role) {
-        if (framework.confirmToRemoveRole()) {
+        if (framework.showConfirmDialoque(framework.getStringCollections().getPersonStringCollection().getConfirmTxt_RemoveRole(role))) {
             try {
                 person.getData().getRoles().remove(role.getData());
                 dataHandler.getPersonsDataHandler().storePerson(person);

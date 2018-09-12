@@ -13,11 +13,12 @@ import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIPosition;
 import ch.buhls.billmanager.gui.data.GUIRole;
-import ch.buhls.billmanager.gui.framework.IHintHandle;
+import ch.buhls.billmanager.gui.framework.DEPersonStringCollection;
 import ch.buhls.billmanager.gui.view.builder.ListPersonsBuilder;
 import ch.buhls.billmanager.gui.view.listener.IListPersonsListener;
 import ch.buhls.billmanager.gui.view.listener.IListVersionsListener;
 import ch.buhls.billmanager.persistance.PersistanceException;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
 
@@ -31,13 +32,14 @@ public class ListPersonsController extends AController implements IListPersonsLi
     private final ListPersonsBuilder builder;
 
     private final PersonsDataHandler personsDataHandler;
-
-    private IHintHandle showRoleFilterHint;
-    private IHintHandle hideRoleFilterHint;
+    
+    private final DEPersonStringCollection stringCollection;
 
     public ListPersonsController(IGUIFramework framework, DataHandler dataHandler) {
-        super(framework, dataHandler, "Mitglieder");
+        super(framework, dataHandler, framework.getStringCollections().getPersonStringCollection().getTabTitle_ListPersons());
 
+        stringCollection = framework.getStringCollections().getPersonStringCollection();
+        
         personsDataHandler = dataHandler.getPersonsDataHandler();
         personsDataHandler.reloadPersonsBuffer();
 
@@ -73,7 +75,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
     @Override
     public void show(List<GUIPerson> persons) {
-        new ShowPersonController(persons.get(0).getBaseData(), framework);
+        new ShowPersonController(persons.get(0).getBaseData(), framework, dataHandler);
     }
 
     @Override
@@ -87,10 +89,13 @@ public class ListPersonsController extends AController implements IListPersonsLi
     }
 
     @Override
-    public void addArticleToBusket(ObservableList<GUIPerson> persons, int nr) {
+    public void addArticleToBusket(ObservableList<GUIPerson> selected, int nr) {
+        List<GUIPerson> persons = new ArrayList<>(selected);
+        GUIArticle marked = dataHandler.getMarkedArticleProperty().get();
+        
         if (nr == -1) {
             try {
-                String nrAsString = framework.showTextInputDialoque(GUIStringCollection.PERSON_ADD_ART_TO_BILL, "Beliebige Anzahl Artikel spezifizieren.", "Anzahl Artikel");
+                String nrAsString = framework.showTextInputDialoque(stringCollection.getDialoqueTxt_NrArticlesToAdd(marked));
                 if (nrAsString == null) {
                     return;
                 }
@@ -101,10 +106,8 @@ public class ListPersonsController extends AController implements IListPersonsLi
                 return;
             }
         }
-
-        if (framework.confirmToAddArticle()) {
-            GUIArticle marked = dataHandler.getMarkedArticleProperty().get();
-
+        
+        if (framework.showConfirmDialoque(stringCollection.getConfirmTxt_AddArticle(marked, persons.size(), nr))) {
             for (GUIPerson person : persons) {
                 try {
                     GUIPosition guiPosition = dataHandler.createPosition(marked, dataHandler.getNextPositionNr(person), nr);
@@ -115,15 +118,17 @@ public class ListPersonsController extends AController implements IListPersonsLi
                 }
             }
 
-            framework.displayInfoHint(GUIStringCollection.getHintTxt_artAdded(marked, persons.size(), nr));
+            personsDataHandler.reloadPersonsBuffer();
+            framework.displayInfoHint(stringCollection.getHintTxt_artAdded(marked, persons.size(), nr));
         }
     }
 
     @Override
-    public void addRole(ObservableList<GUIPerson> persons) {
-        if (framework.confirmToAddRole()) {
-            GUIRole markedRole = dataHandler.getMarkedRole().get();
-
+    public void addRole(ObservableList<GUIPerson> selected) {
+        List<GUIPerson> persons = new ArrayList<>(selected);
+        GUIRole markedRole = dataHandler.getMarkedRole().get();
+        
+        if (framework.showConfirmDialoque(stringCollection.getConfirmTxt_AddRole(markedRole, persons.size()))) {
             for (GUIPerson person : persons) {
                 try {
                     dataHandler.getPersonsDataHandler().addRoleToPerson(person, markedRole);
@@ -133,6 +138,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
                 }
             }
 
+            personsDataHandler.reloadPersonsBuffer();
             framework.displayInfoHint(GUIStringCollection.getHintTxt_roleAdded(markedRole, persons.size()));
         }
     }
@@ -153,7 +159,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
         {
             @Override
             public void show(GUIPersonBaseData data) {
-                new ShowPersonController(data, framework);
+                new ShowPersonController(data, framework, dataHandler);
             }
         });
     }
@@ -181,7 +187,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
     @Override
     public void filterMembersByAge(AgeFilterType ageFilterType) {      
         try {
-            String ageAsString = framework.showTextInputDialoque(GUIStringCollection.PERSON_AGE_FILTER, "Bitte spezifiziere das Alter für den Filter.", "Alter");
+            String ageAsString = framework.showTextInputDialoque(stringCollection.getDialoqueTxt_AgeFilter());
             if (ageAsString == null) {
                 return;
             }

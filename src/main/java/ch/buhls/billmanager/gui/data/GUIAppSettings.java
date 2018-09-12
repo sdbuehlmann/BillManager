@@ -10,12 +10,12 @@ import javafx.beans.property.StringProperty;
  *
  * @author simon
  */
-public class AppSettingsData
+public class GUIAppSettings
 {
     private final StringProperty inkscapePathProperty;
     private final BooleanProperty showDBInfosProperty;
 
-    public AppSettingsData() {
+    public GUIAppSettings() {
         inkscapePathProperty = new SimpleStringProperty();
         showDBInfosProperty = new SimpleBooleanProperty();
     }

@@ -19,8 +19,6 @@ public class ArticleTableContainer extends ATableContainer<GUIArticle>
     private final TableColumn<GUIArticle, String> descriptionColumn;
     private final TableColumn<GUIArticle, Number> prizeColumn;
 
-    private final TableColumn<GUIArticle, Boolean> markedColumn;
-
     public ArticleTableContainer() {
         dbIdColumn = new TableColumn(GUIStringCollection.DB_ID);
         dbIdColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_id());
@@ -51,11 +49,6 @@ public class ArticleTableContainer extends ATableContainer<GUIArticle>
         prizeColumn = new TableColumn(GUIStringCollection.ART_PRICE);
         prizeColumn.setCellValueFactory(cellData -> cellData.getValue().getCosts());
         this.addColumn(prizeColumn);
-
-        markedColumn = TablesUtils.createMarkedColumn((TableColumn.CellDataFeatures<GUIArticle, Boolean> cellData) -> {
-            return cellData.getValue().getMarked();
-        });
-        this.addColumn(markedColumn);
     }
     
     public TableColumn<GUIArticle, Number> getDbIdColumn() {
@@ -85,9 +78,4 @@ public class ArticleTableContainer extends ATableContainer<GUIArticle>
     public TableColumn<GUIArticle, Number> getPrizeColumn() {
         return prizeColumn;
     }
-
-    public TableColumn<GUIArticle, Boolean> getMarkedColumn() {
-        return markedColumn;
-    }
-
 }

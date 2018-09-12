@@ -15,6 +15,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class GUIStringCollection
 {
+    public final static String APPLICATION_TITLE = "Club Manager 0.3";
+    
     public static final String DB_ID = "DB_ID";
     public static final String DB_VERSION = "DB_Version";
     
@@ -149,15 +151,6 @@ public class GUIStringCollection
     public static final String APP_SETTINGS_INKSCAPE_PATH = "Pfad zu Inkscape";
     public static final String APP_SETTINGS_SHOW_DB_INFOS = "Datenbank Informationen anzeigen";
     
-    public static String getTitleForCreatePerson(){
-        return "Mitglied erfassen";
-    }
-    public static String getTitleForEditPerson(GUIPersonBaseData person){
-        return String.format("Bearbeite Mitglied %d", person.getPersonalId().get());
-    }
-    public static String getTitleForShowPerson(GUIPersonBaseData person){
-        return String.format("Anzeigen Mitglied %d V%d", person.getPersonalId().get(), person.getVersionNr().get());
-    }
     public static String getTitleForListPersonVersions(GUIPersonBaseData person){
         return String.format("Versionen Mitglied %d", person.getPersonalId().get());
     }

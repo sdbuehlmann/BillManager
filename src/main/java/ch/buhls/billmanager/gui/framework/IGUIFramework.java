@@ -2,7 +2,6 @@
 package ch.buhls.billmanager.gui.framework;
 
 import ch.buhls.billmanager.gui.view.container.HintBarContainer;
-import ch.buhls.billmanager.gui.view.container.HintContainer;
 import ch.buhls.billmanager.gui.view.container.SplitScreen;
 import java.io.File;
 import javafx.scene.Node;
@@ -36,17 +35,18 @@ public interface IGUIFramework
     public void showInfoDialoque(String header, String content);
     public void showInfo_canNotOpenProject();
     
-    public boolean showConfirmationDialoque(String title, String header, String content);
-    public boolean confirmToStore();
-    public boolean confirmToAddRole();
-    public boolean confirmToRemoveRole();
-    public boolean confirmToAddArticle();
+    public boolean showConfirmDialoque(DialoquesStringsTO to);
+    public boolean showConfirmDialoque(String header, String content);
+    public boolean showConfirmToStoreDialoque(String content);
     
-    public String showTextInputDialoque(String title, String headerTxt, String labelTextField);
+    public String showTextInputDialoque(String headerTxt, String labelTextField);
+    public String showTextInputDialoque(DialoquesStringsTO to);
     
     public enum Area
     {
         LEFT,
         RIGHT
     }
+    
+    public StringCollections getStringCollections();
 }

@@ -43,7 +43,7 @@ public class ListPersonsBuilder extends AListBuilder<GUIPerson> implements IHint
         menuContainer = new ListPersonsMenuContainer();
         
         tableContainer.getTable().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        view.setVgrow(tableContainer.getTable(), Priority.ALWAYS);
+        VBox.setVgrow(tableContainer.getTable(), Priority.ALWAYS);
         tableContainer.getTable().setContextMenu(menuContainer.getContextMenu());
 
         view.getChildren().add(hintBarContainer.getView());

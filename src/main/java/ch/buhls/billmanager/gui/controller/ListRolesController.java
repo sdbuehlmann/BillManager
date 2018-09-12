@@ -55,11 +55,6 @@ public class ListRolesController extends AController implements IListRolesListen
             return;
         }
         
-        // remove old mark
-        if (dataHandler.getMarkedRole().get() != null) {
-            dataHandler.getMarkedRole().get().getMarked().set(false);
-        }
-        
         // remove old hint
         if(roleMarkedHintHandle != null){
             roleMarkedHintHandle.close();
@@ -68,11 +63,9 @@ public class ListRolesController extends AController implements IListRolesListen
 
         // mark new
         dataHandler.getMarkedRole().set(selected);
-        selected.getMarked().set(true);
         
         roleMarkedHintHandle = framework.displayMarkedHint(GUIStringCollection.getHintTxt_roleMarked(selected), () -> {
             // close hint
-                dataHandler.getMarkedRole().get().getMarked().set(false);
                 dataHandler.getMarkedRole().set(null);
                 roleMarkedHintHandle.close();
                 roleMarkedHintHandle = null;

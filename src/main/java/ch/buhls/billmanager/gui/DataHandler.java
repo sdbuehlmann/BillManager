@@ -1,6 +1,6 @@
 package ch.buhls.billmanager.gui;
 
-import ch.buhls.billmanager.gui.data.AppSettingsData;
+import ch.buhls.billmanager.gui.data.GUIAppSettings;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.data.GUICreateBillsData;
@@ -464,8 +464,8 @@ public class DataHandler
     }
     
     // app settings
-    public AppSettingsData getAppSettingsData(){
-        AppSettingsData data = new AppSettingsData();
+    public GUIAppSettings getAppSettingsData(){
+        GUIAppSettings data = new GUIAppSettings();
         try {
             data.getInkscapePathProperty().set(App.INSTANCE.getInkscapePath().getPath());
         }
@@ -477,7 +477,7 @@ public class DataHandler
         return data;
     }
     
-    public void storeAppSettingsData(AppSettingsData data){
+    public void storeAppSettingsData(GUIAppSettings data){
         App.INSTANCE.setInkscapePath(data.getInkscapePathProperty().get());
         App.INSTANCE.setShowDBInfos(data.getShowDBInfosProperty().get());
         

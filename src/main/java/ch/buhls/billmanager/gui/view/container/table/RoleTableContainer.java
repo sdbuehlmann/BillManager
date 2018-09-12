@@ -15,7 +15,6 @@ public class RoleTableContainer extends ATableContainer<GUIRole>
     private final TableColumn<GUIRole, Number> dbVersionColumn;
     
     private final TableColumn<GUIRole, String> nameColumn;
-    private final TableColumn<GUIRole, Boolean> markedColumn;
 
     public RoleTableContainer() {
 
@@ -32,11 +31,6 @@ public class RoleTableContainer extends ATableContainer<GUIRole>
             nameColumn = new TableColumn(GUIStringCollection.ROLE_NAME);
             nameColumn.setCellValueFactory(cellData -> cellData.getValue().getName());
             addColumn(nameColumn);
-
-            markedColumn = TablesUtils.createMarkedColumn((TableColumn.CellDataFeatures<GUIRole, Boolean> cellData) -> {
-                return cellData.getValue().getMarked();
-            });
-            addColumn(markedColumn);
     }
 
     public TableColumn<GUIRole, Number> getDbIDColumn() {
@@ -51,9 +45,4 @@ public class RoleTableContainer extends ATableContainer<GUIRole>
         return nameColumn;
     }
 
-    public TableColumn<GUIRole, Boolean> getMarkedColumn() {
-        return markedColumn;
-    }
-
-    
 }

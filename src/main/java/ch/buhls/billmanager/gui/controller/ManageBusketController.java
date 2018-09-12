@@ -47,7 +47,7 @@ public class ManageBusketController extends AController implements IManagePositi
     @Override
     public void save() {
         try {
-            if (framework.confirmToStore()) {
+            if (framework.showConfirmToStoreDialoque("Bearbeiteter Warenkorb")) {
                 dataHandler.mergeAndStoreBusket(person, busket);
             }
 

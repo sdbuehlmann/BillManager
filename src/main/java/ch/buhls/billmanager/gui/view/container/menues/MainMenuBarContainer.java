@@ -30,7 +30,6 @@ public class MainMenuBarContainer
     
     
     private final Menu mView;
-    private final MenuItem miSettings;
     private final MenuItem miGlobalSettings;
     
     public MainMenuBarContainer()
@@ -44,10 +43,9 @@ public class MainMenuBarContainer
         miOpenRecent5 = new MenuItem();
         mOpenRecent = new Menu("Kürzlich verwendet", null, miOpenRecent1, miOpenRecent2, miOpenRecent3, miOpenRecent4, miOpenRecent5);
         miImportMembers = new MenuItem("Mitglieder importieren");
-        miSettings = new MenuItem("Einstellungen");
         miGlobalSettings = new MenuItem("Globale Einstellungen");
         
-        mView = new Menu("Anzeigen", null, miSettings, miGlobalSettings);
+        mView = new Menu("Anzeigen", null, miGlobalSettings);
         mEdit = new Menu("Datei", null, miNew, miOpen, mOpenRecent, new SeparatorMenuItem(), miImportMembers);
        
         menuBar = new MenuBar();
@@ -101,10 +99,6 @@ public class MainMenuBarContainer
 
     public Menu getmView() {
         return mView;
-    }
-
-    public MenuItem getMiSettings() {
-        return miSettings;
     }
 
     public MenuItem getMiGlobalSettings() {

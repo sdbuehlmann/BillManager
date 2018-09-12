@@ -8,32 +8,34 @@ import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.CreateBillMaskBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.ICreateBillMaskListener;
+import ch.buhls.billmanager.persistance.PersistanceException;
 import java.util.List;
 
 /**
  *
  * @author simon
  */
-public class CreateBillController extends AController implements ICreateBillMaskListener
+public class CreateBillController extends AFormController implements ICreateBillMaskListener
 {
     private final CreateBillMaskBuilder builder;
     
     public CreateBillController(IGUIFramework framework, DataHandler dataHandler, List<GUIPerson> persons) {
-        super(framework, dataHandler, GUIStringCollection.getTitleForCreateBill());
+        super(framework, dataHandler, framework.getStringCollections().getBillStringCollection());
         
         GUICreateBillsData data = dataHandler.createBills(persons);
         
         builder = new CreateBillMaskBuilder(data, this);
-        display(builder.getView(), IGUIFramework.Area.RIGHT);
+        displayCreateMask(builder.getView());
     }
 
     @Override
     public void create(GUICreateBillsData billsData) {
-        framework.confirmToAddArticle(); // TEMP! Not "add article"
-        
         try {
-            dataHandler.storeBills(billsData);
-            tabHandle.close();
+            if (displayConfirmToStoreDialoque(billsData)) {
+                dataHandler.storeBills(billsData);
+                tabHandle.close();
+                displayCreatedInfoHint(billsData);
+            }
         }
         catch (Exception ex) {
             framework.showExceptionDialoque(ex);

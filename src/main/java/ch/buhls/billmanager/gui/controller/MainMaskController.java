@@ -109,11 +109,6 @@ public class MainMaskController implements IMainViewListener
     }
 
     @Override
-    public void showSettings() {
-        throw new RuntimeException("Not possible to call \"show settings\" in start up mode");
-    }
-
-    @Override
     public void showGlobalSettings() {
         new EditAppSettingsController(framework, project.getDataHandler());
     }
