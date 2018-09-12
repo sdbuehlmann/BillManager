@@ -21,8 +21,9 @@ public class ListBillsController extends AController implements IListBillsBuilde
         super(framework, dataHandler, GUIStringCollection.BILLS);
         
         builder = new ListBillsBuilder(this, dataHandler.getBillsBuffer());
+        this.bindBuilder(builder);
         
-        display(builder.getView(), IGUIFramework.Area.LEFT);
+        this.display(builder.getView(), IGUIFramework.Area.LEFT);
     }
 
     

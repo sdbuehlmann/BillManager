@@ -17,13 +17,13 @@ public class GUIStringCollection
     public static final String DB_ID = "DB_ID";
     public static final String DB_VERSION = "DB_Version";
     
-    public static final String TRACKED_ENRITY_VERSION_NR = "Versionsnummer";
+    public static final String TRACKED_ENRITY_VERSION_NR = "Vers.";
     public static final String TRACKED_ENRITY_CHANGE_TXT = "Änderungstext";
     public static final String TRACKED_ENRITY_DATE = "Erstelldatum";
     
     public static final String PERSON_BASE_DATA_DB_ID = "Daten DB_ID";
     public static final String PERSON_BASE_DATA_DB_VERSION = "Daten DB_Version";
-    public static final String PERSONAL_ID = "Mitgliedernummer";
+    public static final String PERSONAL_ID = "ID";
     public static final String NAME = "Namen";
     public static final String PRENAME = "Vornamen";
     public static final String STREET = "Strasse";
@@ -37,9 +37,9 @@ public class GUIStringCollection
     public static final String SALUTATION = "Begrüssung";
     public static final String TITLE = "Titel";
     
-    public static final String PERSON_NR_OF_ART = "Artikel in Warenkorb";
-    public static final String PERSON_NR_OF_ROLES = "Anzahl Rollen";
-    public static final String PERSON_NR_OF_BILLS = "Anzahl Rechnungen";
+    public static final String PERSON_NR_OF_ART = "Anz. WK";
+    public static final String PERSON_NR_OF_ROLES = "Anz. Rollen";
+    public static final String PERSON_NR_OF_BILLS = "Anz. Rechnungen";
     
     
     public static final String PERSON_NEW_BILL = "Rechnung eröffnen";
@@ -136,6 +136,9 @@ public class GUIStringCollection
     public static final String IMPORT_PERSONS_FILE_CHOOSER_TXT = "CSV-Datei auswählen";
     public static final String IMPORT_PERSONS_FILE_FORMAT = "Name;Vornamen;Firma;Geburtstag;Geburtsmonat;Geburtsjahr;Strasse;PLZ;Ort;TelP;TelM;E-Mail;Begrüssung;Titel";
     
+    public static final String APP_SETTINGS_INKSCAPE_PATH = "Pfad zu Inkscape";
+    public static final String APP_SETTINGS_SHOW_DB_INFOS = "Datenbank Informationen anzeigen";
+    
     public static String getTitleForCreatePerson(){
         return "Mitglied erfassen";
     }
@@ -154,6 +157,10 @@ public class GUIStringCollection
     public static String getTitleForCreateBill(){
         return "Rechnung erstellen";
     }
+    public static String getTitleForEditAppSettings(){
+        return "App Einstellungen bearbeiten";
+    }
+    
     
     public static String getTitleForListFinancialYears(){
         return "Vereinsjahre";
@@ -167,6 +174,10 @@ public class GUIStringCollection
     
     public static String getTitle_editBill(GUIBill bill){
         return String.format("Rechnung %s-%d bearbeiten", bill.getYear().getPrefix().get(), bill.getDb_id().get());
+    }
+    
+    public static String getTabTitle_listArticles(){
+        return "Artikel";
     }
     
     public static String getHintTxt_artMarked(GUIArticle art){
@@ -192,5 +203,8 @@ public class GUIStringCollection
     }
     public static String getHintTxt_projectOpened(File projectFile){
         return String.format("Projekt \"%s\" geöffnet", projectFile.getPath());
+    }
+    public static String getHintTxt_appSettingsStored(){
+        return "App Einstellungen gespeichert";
     }
 }

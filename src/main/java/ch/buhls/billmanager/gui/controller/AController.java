@@ -2,9 +2,12 @@
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.framework.IGUIFramework.Area;
 import ch.buhls.billmanager.gui.framework.ITabHandle;
+import ch.buhls.billmanager.gui.view.builder.AListBuilder;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 
 /**
@@ -34,5 +37,12 @@ public abstract class AController
     
     protected final void close(){
         tabHandle.close();
+    }
+    
+    protected final void bindBuilder(AListBuilder builder){
+        builder.enableDBInfos(dataHandler.getShowDBInfosProperty().get());
+        dataHandler.getShowDBInfosProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            builder.enableDBInfos(newValue);
+        });
     }
 }

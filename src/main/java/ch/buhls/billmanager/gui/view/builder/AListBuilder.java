@@ -1,29 +1,33 @@
 
 package ch.buhls.billmanager.gui.view.builder;
 
-import javafx.scene.layout.VBox;
+import ch.buhls.billmanager.gui.view.container.table.ATableContainer;
+import javafx.scene.Node;
+import javafx.scene.control.TableColumn;
 
 /**
  *
  * @author simon
  */
-public abstract class AListBuilder
+public abstract class AListBuilder<T>
 {
-    protected final VBox view;
+    protected final ATableContainer<T> tableContainer;
     
-    public AListBuilder() {
-        view = new VBox();
+    
+    public AListBuilder(ATableContainer<T> tableContainer) {
+        this.tableContainer = tableContainer;
     }
     
-    protected abstract void connectListenerToContextMenu();
-    public abstract void setMenuSelectionMode(MenuSelectionMode mode);
-    
-    public VBox getView() {
-        return view;
+    public final void enableDBInfos(boolean enable) {
+        for (TableColumn<T, ?> techCol : tableContainer.getTechnicalColumns()) {
+            if (enable) {
+                tableContainer.addColumn(techCol);
+            }
+            else {
+                tableContainer.removeColumn(techCol);
+            }
+        }
     }
     
-    public enum MenuSelectionMode{
-        MULTIPLE,
-        SINGLE
-    }
+    public abstract Node getView();
 }

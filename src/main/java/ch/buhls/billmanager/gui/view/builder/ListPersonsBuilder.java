@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
  *
  * @author simon
  */
-public class ListPersonsBuilder
+public class ListPersonsBuilder extends AListBuilder<GUIPerson>
 {
     private final VBox view;
     
@@ -26,16 +26,20 @@ public class ListPersonsBuilder
     private final HintBarContainer hintBarContainer;
     private final PersonTableContainer tableContainer;
     private final ListPersonsMenuContainer menuContainer;
+    
+    private final ObservableList<GUIPerson> personsToDisplay;
 
     public ListPersonsBuilder(IListPersonsListener listener, ObservableList<GUIPerson> personsToDisplay) {
+        super(new PersonTableContainer());
+        tableContainer = (PersonTableContainer)super.tableContainer;
+        
         this.listener = listener;
+        this.personsToDisplay = personsToDisplay;
 
         view = new VBox();
         hintBarContainer = new HintBarContainer();
         menuContainer = new ListPersonsMenuContainer();
-
-        tableContainer = new PersonTableContainer();
-        tableContainer.getTable().setItems(personsToDisplay);
+        
         tableContainer.getTable().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         view.setVgrow(tableContainer.getTable(), Priority.ALWAYS);
         tableContainer.getTable().setContextMenu(menuContainer.getContextMenu());
@@ -43,10 +47,15 @@ public class ListPersonsBuilder
         view.getChildren().add(hintBarContainer.getView());
         view.getChildren().add(tableContainer.getTable());
 
+        this.bindProperties();
         this.bindListener();
     }
+    
+    private void bindProperties(){
+        tableContainer.getTable().setItems(personsToDisplay);
+    }
 
-    protected void bindListener() {
+    private void bindListener() {
         menuContainer.getContextMenu().setOnShowing((event) -> {
             listener.contextMenuOpened(tableContainer.getTable().getSelectionModel().getSelectedItems());
         });

@@ -15,6 +15,7 @@ import ch.buhls.billmanager.gui.view.listener.IListPersonsListener;
 import ch.buhls.billmanager.gui.view.listener.IListVersionsListener;
 import ch.buhls.billmanager.persistance.PersistanceException;
 import java.util.List;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 
 /**
@@ -36,9 +37,14 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
         personsDataHandler = dataHandler.getPersonsDataHandler();
         personsDataHandler.reloadPersonsBuffer();
+        
         builder = new ListPersonsBuilder(this, personsDataHandler.getPersonsBuffer());
+        builder.enableDBInfos(dataHandler.getShowDBInfosProperty().get());
+        dataHandler.getShowDBInfosProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            builder.enableDBInfos(newValue);
+        });
 
-        framework.displayMask(builder.getView(), tabName, IGUIFramework.Area.LEFT).focus();
+        this.display(builder.getView(), IGUIFramework.Area.LEFT);
     }
 
     @Override
@@ -139,8 +145,9 @@ public class ListPersonsController extends AController implements IListPersonsLi
     public void showVersions(ObservableList<GUIPerson> persons) {
         new ListVersionsController<GUIPersonBaseData>(
                 framework,
-                dataHandler.getPersonVersions(persons.get(0)),
+                dataHandler,
                 GUIStringCollection.getTitleForListPersonVersions(persons.get(0).getBaseData()),
+                dataHandler.getPersonVersions(persons.get(0)),
                 new IListVersionsListener<GUIPersonBaseData>()
         {
             @Override

@@ -24,11 +24,34 @@ public class App
         xmlHandler = new XMLHandler();
         history = xmlHandler.load();
     }
-
-    public File getInkscapePath() {
-        return new File(history.getInkscapeExe());
+    
+    public boolean isShowDBInfos(){
+        return history.isShowDBInfos();
     }
-
+    
+    public void setShowDBInfos(boolean showDBInfos){
+        history.setShowDBInfos(showDBInfos);
+        xmlHandler.store(history);
+    }
+    
+    public File getInkscapePath() throws AppException {
+        String tempPath = history.getInkscapeExe();
+        if(tempPath != null){
+            File tempFile = new File(tempPath);
+            if(tempFile.exists() &&
+                    tempFile.canExecute()){
+                return tempFile;
+            }
+        }
+        
+        throw new AppException("No valid Inkscape-path in history.xml file");
+    }
+    
+    public void setInkscapePath(String path){
+        history.setInkscapeExe(path);
+        xmlHandler.store(history);
+    }
+    
     public int getLastPaymentDeadlineInDays() {
         return lastPaymentDeadlineInDays;
     }

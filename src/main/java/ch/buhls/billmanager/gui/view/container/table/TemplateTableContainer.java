@@ -1,4 +1,3 @@
-
 package ch.buhls.billmanager.gui.view.container.table;
 
 import ch.buhls.billmanager.gui.GUIStringCollection;
@@ -10,39 +9,49 @@ import javafx.scene.control.TableView;
  *
  * @author simon
  */
-public class TemplateTableContainer
+public class TemplateTableContainer extends ATableContainer<GUITemplate>
 {
-    private final TableView<GUITemplate> table;
 
-    public TemplateTableContainer()
-    {
-        table = new TableView<>();
+    private final TableColumn<GUITemplate, Number> dbIDColumn;
+    private final TableColumn<GUITemplate, Number> dbVersionColumn;
 
-        {
-            TableColumn<GUITemplate, Number> column = new TableColumn(GUIStringCollection.DB_ID);
-            column.setCellValueFactory(cellData -> cellData.getValue().getDb_id());
-            table.getColumns().add(column);
-        }
-        {
-            TableColumn<GUITemplate, Number> column = new TableColumn(GUIStringCollection.DB_VERSION);
-            column.setCellValueFactory(cellData -> cellData.getValue().getDb_version());
-            table.getColumns().add(column);
-        }
-        {
-            TableColumn<GUITemplate, String> column = new TableColumn(GUIStringCollection.TEMPLATE_NAME);
-            column.setCellValueFactory(cellData -> cellData.getValue().getName());
-            table.getColumns().add(column);
-        }
-        {
-            TableColumn<GUITemplate, Number> column = new TableColumn(GUIStringCollection.TEMPLATE_MAX_POS);
-            column.setCellValueFactory(cellData -> cellData.getValue().getMaxNrPositions());
-            table.getColumns().add(column);
-        }
+    private final TableColumn<GUITemplate, String> nameColumn;
+    private final TableColumn<GUITemplate, Number> maxNrPositionsColumn;
+
+    public TemplateTableContainer() {
+        dbIDColumn = new TableColumn(GUIStringCollection.DB_ID);
+        dbIDColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_id());
+        this.addColumn(dbIDColumn);
+        this.getTechnicalColumns().add(dbIDColumn);
+
+        dbVersionColumn = new TableColumn(GUIStringCollection.DB_VERSION);
+        dbVersionColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_version());
+        this.addColumn(dbVersionColumn);
+        this.getTechnicalColumns().add(dbVersionColumn);
+
+        nameColumn = new TableColumn(GUIStringCollection.TEMPLATE_NAME);
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().getName());
+        this.addColumn(nameColumn);
+
+        maxNrPositionsColumn = new TableColumn(GUIStringCollection.TEMPLATE_MAX_POS);
+        maxNrPositionsColumn.setCellValueFactory(cellData -> cellData.getValue().getMaxNrPositions());
+        this.addColumn(maxNrPositionsColumn);
     }
 
-    public TableView<GUITemplate> getTable()
-    {
-        return table;
+    public TableColumn<GUITemplate, Number> getDbIDColumn() {
+        return dbIDColumn;
     }
-    
+
+    public TableColumn<GUITemplate, Number> getDbVersionColumn() {
+        return dbVersionColumn;
+    }
+
+    public TableColumn<GUITemplate, String> getNameColumn() {
+        return nameColumn;
+    }
+
+    public TableColumn<GUITemplate, Number> getMaxNrPositionsColumn() {
+        return maxNrPositionsColumn;
+    }
+
 }

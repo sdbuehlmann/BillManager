@@ -115,7 +115,7 @@ public class MainMaskController implements IMainViewListener
 
     @Override
     public void showGlobalSettings() {
-        //new EditGlobalSettingsController(framework, framework);
+        new EditAppSettingsController(framework, project.getDataHandler());
     }
 
     @Override

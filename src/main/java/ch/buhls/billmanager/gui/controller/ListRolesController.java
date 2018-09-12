@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
  */
 public class ListRolesController extends AController implements IListRolesListener
 {
-
+    
     private final ListRolesBuilder builder;
     
     private IHintHandle roleMarkedHintHandle;
@@ -24,8 +24,9 @@ public class ListRolesController extends AController implements IListRolesListen
         super(containerManager, dataHandler, "Rollen");
 
         this.builder = new ListRolesBuilder(this, dataHandler.getRolesBuffer());
+        this.bindBuilder(builder);
 
-        containerManager.displayMask(builder.getView(), tabName, IGUIFramework.Area.LEFT).focus();
+        this.display(builder.getView(), IGUIFramework.Area.LEFT);
     }
 
     @Override

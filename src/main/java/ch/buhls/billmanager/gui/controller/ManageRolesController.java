@@ -28,6 +28,7 @@ public class ManageRolesController extends AController implements IManageRolesLi
         this.person = person;
         roles = dataHandler.getPersonRoles(person);
         builder = new ManageRolesMaskBuilder(this, roles, dataHandler.getMarkedRole());
+        
         display(builder.getView(), IGUIFramework.Area.RIGHT);
     }
     

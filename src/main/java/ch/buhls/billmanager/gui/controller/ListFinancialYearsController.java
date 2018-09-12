@@ -20,8 +20,9 @@ public class ListFinancialYearsController  extends AController implements IListF
         super(framework, dataHandler, GUIStringCollection.getTitleForListFinancialYears());
         
         builder = new ListFinancialYearsBuilder(this, dataHandler.getFinancialYearsBuffer());
+        this.bindBuilder(builder);
         
-        display(builder.getView(), IGUIFramework.Area.LEFT);
+        this.display(builder.getView(), IGUIFramework.Area.LEFT);
     }
 
     @Override

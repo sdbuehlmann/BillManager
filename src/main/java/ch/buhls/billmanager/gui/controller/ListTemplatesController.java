@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
@@ -11,7 +7,6 @@ import ch.buhls.billmanager.gui.data.GUITemplate;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.ListTemplatesBuilder;
 import ch.buhls.billmanager.gui.view.listener.IListTemplatesListener;
-import ch.buhls.billmanager.model.Project;
 import javafx.collections.ObservableList;
 
 /**
@@ -26,8 +21,9 @@ public class ListTemplatesController extends AController implements IListTemplat
         super(framework, dataHandler, GUIStringCollection.TEMPLATE);
         
         this.builder = new ListTemplatesBuilder(this, dataHandler.getTemplatesBuffer());
+        this.bindBuilder(builder);
         
-        framework.displayMask(builder.getView(), tabName, IGUIFramework.Area.LEFT).focus();
+        this.display(builder.getView(), IGUIFramework.Area.LEFT);
     }
 
     @Override

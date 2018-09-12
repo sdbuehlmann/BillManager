@@ -15,7 +15,7 @@ import javafx.scene.control.SelectionMode;
  * @author simon
  * @param <T>
  */
-public class ListVersionsBuilder<T extends AGUITrackedData>
+public class ListVersionsBuilder<T extends AGUITrackedData> extends AListBuilder<T>
 {
     private final IListVersionsListener<T> listener;
     
@@ -24,26 +24,29 @@ public class ListVersionsBuilder<T extends AGUITrackedData>
     private final ListVersionsMenuContainer contextMenuContainer;
 
     public ListVersionsBuilder(IListVersionsListener<T> listener, ObservableList<T> entitiesToDisplay) {
+        super(new VersionsTableContainer());
+        tableContainer = (VersionsTableContainer)super.tableContainer;
+        
         this.listener = listener;
         
         // init view containers
         contextMenuContainer = new ListVersionsMenuContainer();
         
-        tableContainer = new VersionsTableContainer<>();
         tableContainer.getTable().setItems(entitiesToDisplay);
         tableContainer.getTable().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tableContainer.getTable().setContextMenu(contextMenuContainer.getContextMenu());
         
-        this.connectListenerToContextMenu();
+        this.bindListener();
     }
     
-    private void connectListenerToContextMenu()
+    private void bindListener()
     {
         contextMenuContainer.getItemShow().setOnAction((ActionEvent event) -> {
             listener.show(tableContainer.getTable().getSelectionModel().getSelectedItem());
         });
     }
     
+    @Override
     public Node getView() {
         return tableContainer.getTable();
     }

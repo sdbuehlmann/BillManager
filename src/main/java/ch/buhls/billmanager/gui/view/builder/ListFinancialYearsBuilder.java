@@ -3,7 +3,8 @@ package ch.buhls.billmanager.gui.view.builder;
 
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.view.builder.listener.IListFinancialYearsBuilderListener;
-import ch.buhls.billmanager.gui.view.container.form.ListFinancialYearsFormContainer;
+import ch.buhls.billmanager.gui.view.container.menues.ListFinancialYearsMenuContainer;
+import ch.buhls.billmanager.gui.view.container.table.FinancialYearTableContainer;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -12,42 +13,50 @@ import javafx.scene.Node;
  *
  * @author simon
  */
-public class ListFinancialYearsBuilder
+public class ListFinancialYearsBuilder extends AListBuilder<GUIFinancialYear>
 {
     private final IListFinancialYearsBuilderListener listener;
     
     // containers
-    private final ListFinancialYearsFormContainer formContainer;
+    private final FinancialYearTableContainer tableContainer;
+    private final ListFinancialYearsMenuContainer menuContainer;
     
     // data
     private final ObservableList<GUIFinancialYear> entites;
 
 
     public ListFinancialYearsBuilder(IListFinancialYearsBuilderListener listener, ObservableList<GUIFinancialYear> entites) {
+        super(new FinancialYearTableContainer());
+        tableContainer = (FinancialYearTableContainer)super.tableContainer;
+        
         this.listener = listener;
         this.entites = entites;
         
-        formContainer = new ListFinancialYearsFormContainer();
+        menuContainer = new ListFinancialYearsMenuContainer();
+        tableContainer.getTable().setContextMenu(menuContainer.getContextMenu());
         
         bindData();
         bindListener();
     }
     
     private void bindData(){
-        formContainer.getTableContainer().getTable().setItems(entites);
+        tableContainer.getTable().setItems(entites);
     }
     
     private void bindListener(){
-        formContainer.getItemNew().setOnAction((ActionEvent event) -> {
+        menuContainer.getItemNew().setOnAction((ActionEvent event) -> {
             listener.create();
         });
         
-        formContainer.getItemEdit().setOnAction((ActionEvent event) -> {
-            listener.edit(formContainer.getTableContainer().getTable().getSelectionModel().getSelectedItem());
+        menuContainer.getItemEdit().setOnAction((ActionEvent event) -> {
+            listener.edit(tableContainer.getTable().getSelectionModel().getSelectedItem());
         });
     }
-    
+
+    @Override
     public Node getView() {
-        return formContainer.getView();
+        return tableContainer.getTable();
     }
+    
+    
 }

@@ -13,11 +13,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class History
 {
+    private boolean showDBInfos;
+    
     private String lastPath;
     private String inkscapeExe;
     
     private List<String> recentProjects;
 
+    @XmlElement
+    public boolean isShowDBInfos() {
+        return showDBInfos;
+    }
+
+    public void setShowDBInfos(boolean showDBInfos) {
+        this.showDBInfos = showDBInfos;
+    }
+    
     @XmlElement
     public String getLastPath()
     {

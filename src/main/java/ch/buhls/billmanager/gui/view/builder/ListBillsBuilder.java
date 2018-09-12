@@ -1,10 +1,9 @@
-
 package ch.buhls.billmanager.gui.view.builder;
 
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.view.builder.listener.IListBillsBuilderListener;
-import ch.buhls.billmanager.gui.view.container.form.ListBillsFormContainer;
-import java.util.List;
+import ch.buhls.billmanager.gui.view.container.menues.ListBillsMenuContainer;
+import ch.buhls.billmanager.gui.view.container.table.BillsTableContainer;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -14,67 +13,78 @@ import javafx.scene.control.SelectionMode;
  *
  * @author simon
  */
-public class ListBillsBuilder
+public class ListBillsBuilder extends AListBuilder<GUIBill>
 {
+
     private final IListBillsBuilderListener listener;
-    
+
     // containers
-    private final ListBillsFormContainer formContainer;
-    
+    private final ListBillsMenuContainer menuContainer;
+    private final BillsTableContainer tableContainer;
+
     // data
     private final ObservableList<GUIBill> entites;
 
-
     public ListBillsBuilder(IListBillsBuilderListener listener, ObservableList<GUIBill> entites) {
+        super(new BillsTableContainer());
+        this.tableContainer = (BillsTableContainer) super.tableContainer;
+
         this.listener = listener;
         this.entites = entites;
-        
-        formContainer = new ListBillsFormContainer();
-        formContainer.getTableContainer().getTable().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        
+
+        menuContainer = new ListBillsMenuContainer();
+        tableContainer.getTable().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tableContainer.getTable().setContextMenu(menuContainer.getContextMenu());
+
         bindData();
         bindListener();
     }
-    
-    private void bindData(){
-        formContainer.getTableContainer().getTable().setItems(entites);
+
+    private void bindData() {
+        tableContainer.getTable().setItems(entites);
     }
-    
-    private void bindListener(){        
-        formContainer.getItemEdit().setOnAction((ActionEvent event) -> {
-            listener.edit(formContainer.getTableContainer().getTable().getSelectionModel().getSelectedItem());
+
+    private void bindListener() {
+        menuContainer.getItemEdit().setOnAction((ActionEvent event) -> {
+            listener.edit(tableContainer.getTable().getSelectionModel().getSelectedItem());
         });
-        
-        formContainer.getItemShowPDF().setOnAction((ActionEvent event) -> {
-            listener.showPDF(formContainer.getTableContainer().getTable().getSelectionModel().getSelectedItem());
+
+        menuContainer.getItemShowPDF().setOnAction((ActionEvent event) -> {
+            listener.showPDF(tableContainer.getTable().getSelectionModel().getSelectedItem());
         });
-        
-        formContainer.getItemPrint().setOnAction((ActionEvent event) -> {
-            listener.printPDFs(formContainer.getTableContainer().getTable().getSelectionModel().getSelectedItems());
+
+        menuContainer.getItemPrint().setOnAction((ActionEvent event) -> {
+            listener.printPDFs(tableContainer.getTable().getSelectionModel().getSelectedItems());
         });
-        
-        formContainer.getContextMenu().setOnShowing((event) -> {
-            handleMenuOpened(formContainer.getTableContainer().getTable().getSelectionModel().getSelectedItems());
+
+        menuContainer.getContextMenu().setOnShowing((event) -> {
+            handleMenuOpened(tableContainer.getTable().getSelectionModel().getSelectedItems().size());
         });
     }
-    
-    private void handleMenuOpened(List<GUIBill> selectedBills){
-        if(selectedBills.isEmpty()){
-            formContainer.getItemEdit().setDisable(true);
-            formContainer.getItemPrint().setDisable(true);
-            formContainer.getItemShowPDF().setDisable(true);
-        }else if(selectedBills.size() == 1){
-            formContainer.getItemEdit().setDisable(false);
-            formContainer.getItemPrint().setDisable(false);
-            formContainer.getItemShowPDF().setDisable(false);
-        }else{
-            formContainer.getItemEdit().setDisable(true);
-            formContainer.getItemPrint().setDisable(false);
-            formContainer.getItemShowPDF().setDisable(true);
+
+    private void handleMenuOpened(int nrSelectedBills) {
+        switch (nrSelectedBills) {
+            case 0:
+                menuContainer.getItemEdit().setDisable(true);
+                menuContainer.getItemPrint().setDisable(true);
+                menuContainer.getItemShowPDF().setDisable(true);
+                break;
+            case 1:
+                menuContainer.getItemEdit().setDisable(false);
+                menuContainer.getItemPrint().setDisable(false);
+                menuContainer.getItemShowPDF().setDisable(false);
+                break;
+            default:
+                menuContainer.getItemEdit().setDisable(true);
+                menuContainer.getItemPrint().setDisable(false);
+                menuContainer.getItemShowPDF().setDisable(true);
+                break;
         }
     }
-    
+
+    @Override
     public Node getView() {
-        return formContainer.getView();
+        return tableContainer.getTable();
     }
+
 }

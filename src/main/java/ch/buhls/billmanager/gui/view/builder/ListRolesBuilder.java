@@ -14,7 +14,7 @@ import javafx.scene.control.SelectionMode;
  *
  * @author simon
  */
-public class ListRolesBuilder
+public class ListRolesBuilder extends AListBuilder<GUIRole>
 {
     private final IListRolesListener listener;
     
@@ -23,19 +23,22 @@ public class ListRolesBuilder
     private final ListRolesMenuContainer menuContainer;
 
     public ListRolesBuilder(IListRolesListener listener, ObservableList<GUIRole> entites) {
+        super(new RoleTableContainer());
+        tableContainer = (RoleTableContainer)super.tableContainer;
+        
         this.listener = listener;
         
-        tableContainer = new RoleTableContainer();
+        
         menuContainer = new ListRolesMenuContainer();
         
         tableContainer.getTable().setItems(entites);
         tableContainer.getTable().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tableContainer.getTable().setContextMenu(menuContainer.getContextMenu());
         
-        connectListenerToMenu();
+        bindListener();
     }
     
-    private void connectListenerToMenu()
+    private void bindListener()
     {
         menuContainer.getItemNew().setOnAction((ActionEvent event) -> {
             listener.create();
@@ -62,6 +65,7 @@ public class ListRolesBuilder
         });
     }
     
+    @Override
     public Node getView() {
         return tableContainer.getTable();
     }

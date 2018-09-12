@@ -7,6 +7,7 @@ import ch.buhls.billmanager.gui.view.container.table.TemplateTableContainer;
 import ch.buhls.billmanager.gui.view.listener.IListTemplatesListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.Priority;
 
@@ -14,7 +15,7 @@ import javafx.scene.layout.Priority;
  *
  * @author simon
  */
-public class ListTemplatesBuilder extends AListBuilder
+public class ListTemplatesBuilder extends AListBuilder<GUITemplate>
 {
     private final IListTemplatesListener listener;
 
@@ -22,26 +23,22 @@ public class ListTemplatesBuilder extends AListBuilder
     private final ListTemplatesMenuContainer menuContainer;
 
     public ListTemplatesBuilder(IListTemplatesListener listener, ObservableList<GUITemplate> templates) {
+        super(new TemplateTableContainer());
+        tableContainer = (TemplateTableContainer)super.tableContainer;
+        
         this.listener = listener;
 
         // init view containers
         menuContainer = new ListTemplatesMenuContainer();
 
-        tableContainer = new TemplateTableContainer();
         tableContainer.getTable().setItems(templates);
         tableContainer.getTable().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        view.setVgrow(tableContainer.getTable(), Priority.ALWAYS);
         tableContainer.getTable().setContextMenu(menuContainer.getContextMenu());
 
-        //view.getChildren().add(filterFormContainer.getView());
-        view.getChildren().add(tableContainer.getTable());
-
-        this.connectListenerToContextMenu();
+        this.bindListener();
     }
 
-    // methods to connect all listeners
-    @Override
-    protected final void connectListenerToContextMenu() {
+    private void bindListener() {
         menuContainer.getContextMenu().setOnShowing((event) -> {
             listener.contextMenuOpened(tableContainer.getTable().getSelectionModel().getSelectedItems());
         });
@@ -59,18 +56,8 @@ public class ListTemplatesBuilder extends AListBuilder
             listener.show(tableContainer.getTable().getSelectionModel().getSelectedItem());
         });
     }
-
-    // methods to enable/disable functions from the view
-    @Override
-    public void setMenuSelectionMode(MenuSelectionMode mode) {
-        
-    }
     
-    public void enableToAddArticle(boolean enable){
-        
-    }
-    
-    public void enableToAddRole(boolean enable){
-        
+    public Node getView(){
+        return tableContainer.getTable();
     }
 }

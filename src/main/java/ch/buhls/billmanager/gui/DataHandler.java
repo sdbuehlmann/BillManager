@@ -1,16 +1,17 @@
 package ch.buhls.billmanager.gui;
 
+import ch.buhls.billmanager.gui.data.AppSettingsData;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.data.GUICreateBillsData;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
-import ch.buhls.billmanager.gui.data.GUIImportedPerson;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIPosition;
 import ch.buhls.billmanager.gui.data.GUIRole;
 import ch.buhls.billmanager.gui.data.GUITemplate;
 import ch.buhls.billmanager.model.App;
+import ch.buhls.billmanager.model.AppException;
 import ch.buhls.billmanager.model.ModelException;
 import ch.buhls.billmanager.model.ModelFascade;
 import ch.buhls.billmanager.model.Project;
@@ -34,7 +35,11 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,6 +66,8 @@ public class DataHandler
 
     private ObjectProperty<GUIArticle> markedArticleProperty;
     private ObjectProperty<GUIRole> markedRole;
+    
+    private final BooleanProperty showDBInfosProperty;
 
     public DataHandler(Project project) {
         this.project = project;
@@ -76,6 +83,8 @@ public class DataHandler
 
         markedArticleProperty = new SimpleObjectProperty<>();
         markedRole = new SimpleObjectProperty<>();
+        
+        showDBInfosProperty = new SimpleBooleanProperty(App.INSTANCE.isShowDBInfos());
     }
 
     // articles
@@ -378,7 +387,7 @@ public class DataHandler
         return data;
     }
     
-    private File createBillPDF(GUIPerson person, String location, String date, String billNr, File template) throws ModelException {
+    private File createBillPDF(GUIPerson person, String location, String date, String billNr, File template) throws ModelException, AppException {
         TemplateData templateData = new TemplateData()
                 .setPrename(person.getBaseData().getPrename().get())
                 .setName(person.getBaseData().getName().get())
@@ -523,6 +532,34 @@ public class DataHandler
                             new GUIFinancialYear(bill.getFinancialYear()),
                             new GUIPersonBaseData(bill.getPersonBaseData())));
         }
+    }
+    
+    // app settings
+    public AppSettingsData getAppSettingsData(){
+        AppSettingsData data = new AppSettingsData();
+        try {
+            data.getInkscapePathProperty().set(App.INSTANCE.getInkscapePath().getPath());
+        }
+        catch (AppException ex) {
+            Logger.getLogger(DataHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        data.getShowDBInfosProperty().set(App.INSTANCE.isShowDBInfos());
+        
+        return data;
+    }
+    
+    public void storeAppSettingsData(AppSettingsData data){
+        App.INSTANCE.setInkscapePath(data.getInkscapePathProperty().get());
+        App.INSTANCE.setShowDBInfos(data.getShowDBInfosProperty().get());
+        
+        if(data.getShowDBInfosProperty().get() != showDBInfosProperty.get()){
+            // update
+            showDBInfosProperty.set(data.getShowDBInfosProperty().get());
+        }
+    }
+
+    public BooleanProperty getShowDBInfosProperty() {
+        return showDBInfosProperty;
     }
     
     // getter

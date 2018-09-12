@@ -4,39 +4,66 @@ import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.data.AGUITrackedData;
 import java.time.LocalDate;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 
 /**
  *
  * @author simon
+ * @param <T>
  */
-public class VersionsTableContainer<T extends AGUITrackedData>
+public class VersionsTableContainer<T extends AGUITrackedData> extends ATableContainer<T>
 {
-    private final TableView<T> table;
+    private final TableColumn<T, Number> dbIDColumn;
+    private final TableColumn<T, Number> dbVersionColumn;
+
+    private final TableColumn<T, Number> versionColumn;
+    private final TableColumn<T, String> changeTxtColumn;
+    private final TableColumn<T, LocalDate> dateColumn;
 
     public VersionsTableContainer() {
-        table = new TableView<>();
+        dbIDColumn = new TableColumn(GUIStringCollection.DB_ID);
+        dbIDColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_id());
+        this.addColumn(dbIDColumn);
+        this.getTechnicalColumns().add(dbIDColumn);
 
-        {
-            TableColumn<T, Number> column = new TableColumn(GUIStringCollection.TRACKED_ENRITY_VERSION_NR);
-            column.setCellValueFactory(cellData -> cellData.getValue().getVersionNr());
-            table.getColumns().add(column);
-        }
-        {
-            TableColumn<T, String> column = new TableColumn(GUIStringCollection.TRACKED_ENRITY_CHANGE_TXT);
-            column.setCellValueFactory(cellData -> cellData.getValue().getChangeTxt());
-            table.getColumns().add(column);
-        }
-        {
-            TableColumn<T, LocalDate> column = TablesUtils.createDateColumn(
-                    (TableColumn.CellDataFeatures<T, LocalDate> cellData) -> {
-                        return cellData.getValue().getDateAdded();
-                    }, GUIStringCollection.TRACKED_ENRITY_DATE);
-            table.getColumns().add(column);
-        }
+        dbVersionColumn = new TableColumn(GUIStringCollection.DB_VERSION);
+        dbVersionColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_version());
+        this.addColumn(dbVersionColumn);
+        this.getTechnicalColumns().add(dbVersionColumn);
+
+        versionColumn = new TableColumn(GUIStringCollection.TRACKED_ENRITY_VERSION_NR);
+        versionColumn.setCellValueFactory(cellData -> cellData.getValue().getVersionNr());
+        addColumn(versionColumn);
+
+        changeTxtColumn = new TableColumn(GUIStringCollection.TRACKED_ENRITY_CHANGE_TXT);
+        changeTxtColumn.setCellValueFactory(cellData -> cellData.getValue().getChangeTxt());
+        addColumn(changeTxtColumn);
+
+        dateColumn = TablesUtils.createDateColumn(
+                (TableColumn.CellDataFeatures<T, LocalDate> cellData) -> {
+                    return cellData.getValue().getDateAdded();
+                }, GUIStringCollection.TRACKED_ENRITY_DATE);
+        addColumn(dateColumn);
     }
 
-    public TableView<T> getTable() {
-        return table;
+    public TableColumn<T, Number> getDbIDColumn() {
+        return dbIDColumn;
     }
+
+    public TableColumn<T, Number> getDbVersionColumn() {
+        return dbVersionColumn;
+    }
+
+    public TableColumn<T, Number> getVersionColumn() {
+        return versionColumn;
+    }
+
+    public TableColumn<T, String> getChangeTxtColumn() {
+        return changeTxtColumn;
+    }
+
+    public TableColumn<T, LocalDate> getDateColumn() {
+        return dateColumn;
+    }
+
+    
 }

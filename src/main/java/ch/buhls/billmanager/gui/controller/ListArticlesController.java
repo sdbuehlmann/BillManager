@@ -10,32 +10,29 @@ import ch.buhls.billmanager.gui.view.builder.ListArticlesBuilder;
 import ch.buhls.billmanager.gui.view.listener.IListArticlesListener;
 import ch.buhls.billmanager.gui.view.listener.IListVersionsListener;
 import java.util.List;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 
 /**
  *
  * @author simon
  */
-public class ListArticlesController implements IListArticlesListener
+public class ListArticlesController extends AController implements IListArticlesListener
 {
+    private final ListArticlesBuilder builder;
 
-    private final static String TAB_NAME = "Artikel";
-
-    private final ListArticlesBuilder builer;
-
-    private final DataHandler dataHandler;
-    private final IGUIFramework framework;
-    private final ITabHandle maskContainer;
     private IHintHandle artMarkedHintHandle;
 
-    public ListArticlesController(IGUIFramework containerManager, DataHandler dataHandler) {
-        this.dataHandler = dataHandler;
-        this.framework = containerManager;
+    public ListArticlesController(IGUIFramework framework, DataHandler dataHandler) {
+        super(framework, dataHandler, GUIStringCollection.getTabTitle_listArticles());
 
-        this.builer = new ListArticlesBuilder(this, dataHandler.getArticlesBuffer());
-
-        this.maskContainer = containerManager.displayMask(builer.getView(), TAB_NAME, IGUIFramework.Area.LEFT);
-        this.maskContainer.focus();
+        builder = new ListArticlesBuilder(this, dataHandler.getArticlesBuffer());
+        builder.enableDBInfos(dataHandler.getShowDBInfosProperty().get());
+        dataHandler.getShowDBInfosProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            builder.enableDBInfos(newValue);
+        });
+        
+        display(builder.getView(), IGUIFramework.Area.LEFT);
     }
 
     @Override
@@ -45,7 +42,7 @@ public class ListArticlesController implements IListArticlesListener
 
     @Override
     public void contextMenuOpened(ObservableList<GUIArticle> selected) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // ignore
     }
 
     @Override
@@ -83,7 +80,12 @@ public class ListArticlesController implements IListArticlesListener
 
     @Override
     public void showVersions(GUIArticle selected) {
-        new ListVersionsController(framework, dataHandler.getVersions(selected), "Versionen anzeigen", new IListVersionsListener<GUIArticle>()
+        new ListVersionsController(
+                framework, 
+                dataHandler, 
+                "Versionen anzeigen",
+                dataHandler.getVersions(selected),
+                new IListVersionsListener<GUIArticle>()
         {
             @Override
             public void show(GUIArticle data) {
