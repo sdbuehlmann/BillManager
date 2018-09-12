@@ -66,6 +66,7 @@ public class DataHandler
 
     private ObjectProperty<GUIArticle> markedArticleProperty;
     private ObjectProperty<GUIRole> markedRole;
+    private ObjectProperty<GUIFinancialYear> markedYearProperty;
     
     private final BooleanProperty showDBInfosProperty;
 
@@ -83,6 +84,7 @@ public class DataHandler
 
         markedArticleProperty = new SimpleObjectProperty<>();
         markedRole = new SimpleObjectProperty<>();
+        markedYearProperty = new SimpleObjectProperty<>();
         
         showDBInfosProperty = new SimpleBooleanProperty(App.INSTANCE.isShowDBInfos());
     }
@@ -378,6 +380,10 @@ public class DataHandler
         reloadFinancialYearsBuffer();
     }
 
+    public ObjectProperty<GUIFinancialYear> getMarkedYear() {
+        return markedYearProperty;
+    }
+    
     // bills
     public GUICreateBillsData createBills(List<GUIPerson> persons){
         GUICreateBillsData data = new GUICreateBillsData(templatesBuffer, financialYearsBuffer, persons);

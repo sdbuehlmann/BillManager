@@ -7,6 +7,7 @@ import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIRole;
 import java.io.File;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -52,12 +53,21 @@ public class GUIStringCollection
     public static final String PERSON_ADD_3 = "3 hinzufügen";
     public static final String PERSON_ADD_4 = "4 hinzufügen";
     public static final String PERSON_ADD_5 = "5 hinzufügen";
-    public static final String PERSON_ADD_CUSTOM = "andere Anzahl hinzufügen";
+    public static final String PERSON_ADD_CUSTOM = "Andere Anzahl...";
     public static final String PERSON_SHOW_BUSKET = "Warenkorb anzeigen";
     public static final String PERSON_SHOW_ROLES = "Rollen anzeigen";
+    
     public static final String PERSON_FILTER = "Filtern";
+    public static final String PERSON_ROLE_FILTER = "Rollenfilter";
     public static final String PERSON_ADD_FILTER_SHOW_ROLE_MEMBER = "Rolleninhaber anzeigen";
     public static final String PERSON_ADD_FILTER_HIDE_ROLE_MEMBER = "Rolleninhaber ausblenden";
+    public static final String PERSON_AGE_FILTER = "Altersfilter";
+    public static final String PERSON_AGE_FILTER_OLDER_EQUAL = "Älter oder gleich...";
+    public static final String PERSON_AGE_FILTER_OLDER = "Älter...";
+    public static final String PERSON_AGE_FILTER_YOUNGER_EQUAL = "Jünger oder gleich...";
+    public static final String PERSON_AGE_FILTER_YOUNGER = "Jünger...";
+    public static final String PERSON_AGE_FILTER_EQUAL = "Gleich...";
+    
     
     public static final String POSITION_AMOUNT = "Menge";
     public static final String POSITION_POS = "Position";
@@ -98,7 +108,7 @@ public class GUIStringCollection
     public static final String TEMPLATE_MAX_POS = "Max. Anzahl Positionen";
     
     public static final String YEAR_NAME = "Bezeichnung";
-    public static final String YEAR_PREFIX = "Rechnungsnummer Präfix";
+    public static final String YEAR_PREFIX = "Präfix";
     public static final String YEAR_FIRST_DAY = "Erster Tag";
     public static final String YEAR_LAST_DAY = "Letzter Tag";
     
@@ -180,6 +190,11 @@ public class GUIStringCollection
         return "Artikel";
     }
     
+    public static String getHintTxt_yearMarked(GUIFinancialYear year){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        return String.format("Saison \"%s\" (%s bis %s) markiert", year.getName().get(), dtf.format(year.getFirstDay().get()), dtf.format(year.getLastDay().get()));
+    }
     public static String getHintTxt_artMarked(GUIArticle art){
         return String.format("Artikel \"%s; %s\" markiert", art.getTitle().get(), art.getDescription().get());
     }
@@ -192,6 +207,7 @@ public class GUIStringCollection
     public static String getHintTxt_hideRoleFilter(GUIRole role){
         return String.format("Inhaber der Rolle \"%s\" ausgeblendet", role.getName().get());
     }
+    
     public static String getHintTxt_roleAdded(GUIRole role, int nrAdded){
         return String.format("Rolle \"%s\" zu %d Personen hinzugefügt", role.getName().get(), nrAdded);
     }
@@ -206,5 +222,22 @@ public class GUIStringCollection
     }
     public static String getHintTxt_appSettingsStored(){
         return "App Einstellungen gespeichert";
+    }
+    
+    
+    public static String getFilterHintTxt_OlderOrEqual(GUIFinancialYear year, int age){
+        return String.format("Personen, die in Saison \"%s\" ein Alter von >= %d Jahre haben werden angezeigt", year.getName().get(), age);
+    }
+    public static String getFilterHintTxt_Older(GUIFinancialYear year, int age){
+        return String.format("Personen, die in Saison \"%s\" ein Alter von > %d Jahre haben werden angezeigt", year.getName().get(), age);
+    }
+    public static String getFilterHintTxt_YoungerOrEqual(GUIFinancialYear year, int age){
+        return String.format("Personen, die in Saison \"%s\" ein Alter von <= %d Jahre haben werden angezeigt", year.getName().get(), age);
+    }
+    public static String getFilterHintTxt_Younger(GUIFinancialYear year, int age){
+        return String.format("Personen, die in Saison \"%s\" ein Alter von < %d Jahre haben werden angezeigt", year.getName().get(), age);
+    }
+    public static String getFilterHintTxt_Equal(GUIFinancialYear year, int age){
+        return String.format("Personen, die in Saison \"%s\" ein Alter von == %d Jahre haben werden angezeigt", year.getName().get(), age);
     }
 }

@@ -11,4 +11,5 @@ public interface IListFinancialYearsBuilderListener
 {
     public void create();
     public void edit(GUIFinancialYear selected);
+    public void mark(GUIFinancialYear selected);
 }

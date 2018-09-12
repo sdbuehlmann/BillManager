@@ -1,9 +1,13 @@
 package ch.buhls.billmanager.gui.controller;
 
+import ch.buhls.billmanager.gui.AgePersonFilter.AgeFilterType;
 import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.FilterHandle;
 import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.PersonsDataHandler;
+import ch.buhls.billmanager.gui.RolePersonFilter;
 import ch.buhls.billmanager.gui.data.GUIArticle;
+import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
@@ -15,7 +19,6 @@ import ch.buhls.billmanager.gui.view.listener.IListPersonsListener;
 import ch.buhls.billmanager.gui.view.listener.IListVersionsListener;
 import ch.buhls.billmanager.persistance.PersistanceException;
 import java.util.List;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 
 /**
@@ -37,12 +40,9 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
         personsDataHandler = dataHandler.getPersonsDataHandler();
         personsDataHandler.reloadPersonsBuffer();
-        
+
         builder = new ListPersonsBuilder(this, personsDataHandler.getPersonsBuffer());
-        builder.enableDBInfos(dataHandler.getShowDBInfosProperty().get());
-        dataHandler.getShowDBInfosProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            builder.enableDBInfos(newValue);
-        });
+        this.bindBuilder(builder);
 
         this.display(builder.getView(), IGUIFramework.Area.LEFT);
     }
@@ -58,6 +58,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
         builder.enableToAddArticle(dataHandler.getMarkedArticleProperty().get() != null);
         builder.enableRoleInteractions(dataHandler.getMarkedRole().get() != null);
+        builder.enableYearInteractions(dataHandler.getMarkedYear().get() != null);
     }
 
     @Override
@@ -89,8 +90,8 @@ public class ListPersonsController extends AController implements IListPersonsLi
     public void addArticleToBusket(ObservableList<GUIPerson> persons, int nr) {
         if (nr == -1) {
             try {
-                String nrAsString = framework.showTextInputDialoque(GUIStringCollection.PERSON_ADD_ART_TO_BILL, "Beliebige Anzahl ARtikel spezifizieren.", "Anzahl Artikel");
-                if(nrAsString == null){
+                String nrAsString = framework.showTextInputDialoque(GUIStringCollection.PERSON_ADD_ART_TO_BILL, "Beliebige Anzahl Artikel spezifizieren.", "Anzahl Artikel");
+                if (nrAsString == null) {
                     return;
                 }
                 nr = Integer.parseInt(nrAsString);
@@ -158,35 +159,61 @@ public class ListPersonsController extends AController implements IListPersonsLi
     }
 
     @Override
-    public void showMarkedRoleMembers() {
-        if (showRoleFilterHint != null) {
-            showRoleFilterHint.close();
-        }
-
-        showRoleFilterHint = builder.displayHint(GUIStringCollection.getHintTxt_showRoleFilter(dataHandler.getMarkedRole().get()), () -> {
-            showRoleFilterHint.close();
-            personsDataHandler.setRoleToShow(null);
-            personsDataHandler.reloadPersonsBuffer();
-        });
-
-        personsDataHandler.setRoleToShow(dataHandler.getMarkedRole().get());
+    public void filterMembersByMarkedRole() {
+        GUIRole role = dataHandler.getMarkedRole().get();
+        
+        FilterHandle filterHandle = personsDataHandler.addRoleFilter(RolePersonFilter.RoleFilterType.SHOW, role);
         personsDataHandler.reloadPersonsBuffer();
+        
+        new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getHintTxt_showRoleFilter(role));
     }
 
     @Override
     public void hideMarkedRoleMembers() {
-        if (hideRoleFilterHint != null) {
-            hideRoleFilterHint.close();
-        }
-
-        hideRoleFilterHint = builder.displayHint(GUIStringCollection.getHintTxt_hideRoleFilter(dataHandler.getMarkedRole().get()), () -> {
-            hideRoleFilterHint.close();
-            personsDataHandler.setRoleToHide(null);
-            personsDataHandler.reloadPersonsBuffer();
-        });
-
-        personsDataHandler.setRoleToHide(dataHandler.getMarkedRole().get());
+        GUIRole role = dataHandler.getMarkedRole().get();
+        
+        FilterHandle filterHandle = personsDataHandler.addRoleFilter(RolePersonFilter.RoleFilterType.HIDE, role);
         personsDataHandler.reloadPersonsBuffer();
+        
+        new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getHintTxt_showRoleFilter(role));
+    }
+
+    @Override
+    public void filterMembersByAge(AgeFilterType ageFilterType) {      
+        try {
+            String ageAsString = framework.showTextInputDialoque(GUIStringCollection.PERSON_AGE_FILTER, "Bitte spezifiziere das Alter für den Filter.", "Alter");
+            if (ageAsString == null) {
+                return;
+            }
+            int age = Integer.parseInt(ageAsString);
+            
+            GUIFinancialYear year = dataHandler.getMarkedYear().get();
+            
+            FilterHandle filterHandle = personsDataHandler.addAgeFilter(ageFilterType, year, age);
+            personsDataHandler.reloadPersonsBuffer();
+            
+            switch(ageFilterType){
+                case EQUAL:
+                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_Equal(year, age));
+                    break;
+                case OLDER:
+                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_Older(year, age));
+                    break;
+                case YOUNGER:
+                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_Younger(year, age));
+                    break;
+                case OLDER_OR_EQUAL:
+                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_OlderOrEqual(year, age));
+                    break;
+                case YOUNGER_OR_EQUAL:
+                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_YoungerOrEqual(year, age));
+                    break;
+            }
+        }
+        catch (Exception ex) {
+            framework.showExceptionDialoque(ex);
+            return;
+        }
     }
 
 }

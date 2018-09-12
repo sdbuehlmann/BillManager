@@ -2,7 +2,6 @@ package ch.buhls.billmanager.persistance;
 
 import ch.buhls.billmanager.persistance.csvHandling.CSVManager;
 import ch.buhls.billmanager.persistance.csvHandling.CSVPerson;
-import ch.buhls.billmanager.persistance.csvHandling.MatchException;
 import ch.buhls.billmanager.persistance.database.ContainerFactory;
 import ch.buhls.billmanager.persistance.database.container.BillContainer;
 import ch.buhls.billmanager.persistance.database.container.PersonBaseDataContainer;
@@ -26,12 +25,9 @@ import ch.buhls.billmanager.persistance.database.services.PositionService;
 import ch.buhls.billmanager.persistance.database.services.RoleService;
 import ch.buhls.billmanager.persistance.database.services.ServiceException;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

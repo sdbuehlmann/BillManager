@@ -1,7 +1,10 @@
 
 package ch.buhls.billmanager.gui;
 
+import ch.buhls.billmanager.gui.AgePersonFilter.AgeFilterType;
+import ch.buhls.billmanager.gui.RolePersonFilter.RoleFilterType;
 import ch.buhls.billmanager.gui.data.GUIArticle;
+import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUIImportedPerson;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
@@ -35,8 +38,7 @@ public class PersonsDataHandler
 
     private final ObservableList<GUIPerson> personsBuffer;
     
-    private GUIRole roleToShow;
-    private GUIRole roleToHide;
+    private final List<IPersonFilter> filters;
 
     public PersonsDataHandler(Project project) {
         this.project = project;
@@ -44,6 +46,22 @@ public class PersonsDataHandler
         modelFascade = new ModelFascade();
 
         personsBuffer = FXCollections.observableArrayList();
+        
+        filters = new ArrayList<>();
+    }
+    
+    public FilterHandle addRoleFilter(RoleFilterType type, GUIRole role){
+        RolePersonFilter filter = new RolePersonFilter(type, role.getData());
+        filters.add(filter);
+        
+        return new FilterHandle(filter, filters);
+    }
+    
+    public FilterHandle addAgeFilter(AgeFilterType type, GUIFinancialYear year, int age){
+        AgePersonFilter filter = new AgePersonFilter(type, year.getData(), age);
+        filters.add(filter);
+        
+        return new FilterHandle(filter, filters);
     }
     
     public ObservableList<GUIPerson> getPersonsBuffer() {
@@ -52,13 +70,15 @@ public class PersonsDataHandler
 
     public void reloadPersonsBuffer() {
         personsBuffer.clear();
-        for (Person pers : persistanceFascade.getAllPersons()) {
-            if(roleToShow != null && !pers.getRoles().contains(roleToShow.getData()) ||
-                    roleToHide != null && pers.getRoles().contains(roleToHide.getData())){
-                // ignore person
-            }else{
-                personsBuffer.add(new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData())));
-            }
+        
+        List<Person> persons = persistanceFascade.getAllPersons();
+        
+        for(IPersonFilter filter : filters){
+            persons = filter.filterList(persons);
+        }
+        
+        for(Person pers : persons){
+            personsBuffer.add(wrapPersonToGUIData(pers));
         }
     }
 
@@ -77,6 +97,10 @@ public class PersonsDataHandler
         return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
     }
 
+    public GUIPerson wrapPersonToGUIData(Person pers){
+        return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
+    }
+    
     public GUIPerson editPerson(GUIPerson guiPers) {
         Person pers = persistanceFascade.editPerson(guiPers.getData());
         return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
@@ -239,23 +263,6 @@ public class PersonsDataHandler
         storePersonBaseDataAndPerson(pers);
         
         return pers;
-    }
-    
-    // getter & setter
-    public GUIRole getRoleToShow() {
-        return roleToShow;
-    }
-
-    public void setRoleToShow(GUIRole roleToShow) {
-        this.roleToShow = roleToShow;
-    }
-
-    public GUIRole getRoleToHide() {
-        return roleToHide;
-    }
-
-    public void setRoleToHide(GUIRole roleToHide) {
-        this.roleToHide = roleToHide;
     }
     
 }

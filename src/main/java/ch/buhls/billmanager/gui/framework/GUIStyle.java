@@ -9,4 +9,5 @@ public class GUIStyle
 {
     public static final String STYLECLASS_INFO_HINT = "info-hint";
     public static final String STYLECLASS_MARKED_HINT = "marked-hint";
+    public static final String STYLECLASS_FILTER_HINT = "filter-hint";
 }

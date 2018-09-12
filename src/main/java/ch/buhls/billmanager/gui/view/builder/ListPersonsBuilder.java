@@ -1,9 +1,11 @@
 package ch.buhls.billmanager.gui.view.builder;
 
+import ch.buhls.billmanager.gui.AgePersonFilter.AgeFilterType;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.framework.IHintListener;
 import ch.buhls.billmanager.gui.view.container.HintBarContainer;
+import ch.buhls.billmanager.gui.view.container.IHintBar;
 import ch.buhls.billmanager.gui.view.container.menues.ListPersonsMenuContainer;
 import ch.buhls.billmanager.gui.view.container.table.PersonTableContainer;
 import ch.buhls.billmanager.gui.view.listener.IListPersonsListener;
@@ -17,7 +19,7 @@ import javafx.scene.layout.VBox;
  *
  * @author simon
  */
-public class ListPersonsBuilder extends AListBuilder<GUIPerson>
+public class ListPersonsBuilder extends AListBuilder<GUIPerson> implements IHintBar
 {
     private final VBox view;
     
@@ -121,13 +123,34 @@ public class ListPersonsBuilder extends AListBuilder<GUIPerson>
             listener.showVersions(tableContainer.getTable().getSelectionModel().getSelectedItems());
         });
         
+        // filter
         menuContainer.getItemShowRoleMember().setOnAction((ActionEvent event)
                 -> {
-            listener.showMarkedRoleMembers();
+            listener.filterMembersByMarkedRole();
         });
         menuContainer.getItemHideRoleMember().setOnAction((ActionEvent event)
                 -> {
             listener.hideMarkedRoleMembers();
+        });
+        menuContainer.getItemOlder().setOnAction((ActionEvent event)
+                -> {
+            listener.filterMembersByAge(AgeFilterType.OLDER);
+        });
+        menuContainer.getItemOlderOrEqual().setOnAction((ActionEvent event)
+                -> {
+            listener.filterMembersByAge(AgeFilterType.OLDER_OR_EQUAL);
+        });
+        menuContainer.getItemYounger().setOnAction((ActionEvent event)
+                -> {
+            listener.filterMembersByAge(AgeFilterType.YOUNGER);
+        });
+        menuContainer.getItemYoungerOrEqual().setOnAction((ActionEvent event)
+                -> {
+            listener.filterMembersByAge(AgeFilterType.YOUNGER_OR_EQUAL);
+        });
+        menuContainer.getItemEqual().setOnAction((ActionEvent event)
+                -> {
+            listener.filterMembersByAge(AgeFilterType.EQUAL);
         });
     }
     
@@ -139,6 +162,14 @@ public class ListPersonsBuilder extends AListBuilder<GUIPerson>
         menuContainer.getItemAddRole().setDisable(!enable);
         menuContainer.getItemShowRoleMember().setDisable(!enable);
         menuContainer.getItemHideRoleMember().setDisable(!enable);
+    }
+    
+    public void enableYearInteractions(boolean enable){
+        menuContainer.getItemOlder().setDisable(!enable);
+        menuContainer.getItemOlderOrEqual().setDisable(!enable);
+        menuContainer.getItemYounger().setDisable(!enable);
+        menuContainer.getItemYoungerOrEqual().setDisable(!enable);
+        menuContainer.getItemEqual().setDisable(!enable);
     }
     
     public void enableMultiplePersonsSelectedInteractions(){
@@ -167,8 +198,9 @@ public class ListPersonsBuilder extends AListBuilder<GUIPerson>
         menuContainer.getItemShowVersions().setDisable(false);
     }
     
-    public IHintHandle displayHint(String text, IHintListener listener) {
-        return hintBarContainer.addHint(text, listener);
+    @Override
+    public IHintHandle addHint(String text, IHintListener listener) {
+        return hintBarContainer.addFilterHint(text, listener);
     }
     
     // getter
@@ -176,5 +208,7 @@ public class ListPersonsBuilder extends AListBuilder<GUIPerson>
     public VBox getView() {
         return view;
     }
+
+    
     
 }

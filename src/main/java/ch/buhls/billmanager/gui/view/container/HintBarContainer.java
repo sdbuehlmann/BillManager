@@ -1,6 +1,7 @@
 
 package ch.buhls.billmanager.gui.view.container;
 
+import ch.buhls.billmanager.gui.framework.GUIStyle;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.framework.IHintListener;
 import javafx.scene.control.Label;
@@ -28,6 +29,17 @@ public class HintBarContainer
     
     public IHintHandle addHint(String text, IHintListener listener) {
         HintContainer hc = new HintContainer(new Label(text), listener);
+        addHint(hc);
+        
+        return () -> {
+            removeHint(hc);
+        };
+    }
+    
+    public IHintHandle addFilterHint(String text, IHintListener listener) {
+        HintContainer hc = new HintContainer(new Label(text), listener);
+        hc.getView().getStyleClass().add(GUIStyle.STYLECLASS_FILTER_HINT);
+        
         addHint(hc);
         
         return () -> {

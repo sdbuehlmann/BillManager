@@ -1,6 +1,7 @@
 
 package ch.buhls.billmanager.gui.view.listener;
 
+import ch.buhls.billmanager.gui.AgePersonFilter.AgeFilterType;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import java.util.List;
 import javafx.collections.ObservableList;
@@ -28,6 +29,7 @@ public interface IListPersonsListener
     
     public void showVersions(ObservableList<GUIPerson> persons);
     
-    public void showMarkedRoleMembers();
+    public void filterMembersByMarkedRole();
     public void hideMarkedRoleMembers();
+    public void filterMembersByAge(AgeFilterType ageFilterType);
 }

@@ -51,6 +51,10 @@ public class ListFinancialYearsBuilder extends AListBuilder<GUIFinancialYear>
         menuContainer.getItemEdit().setOnAction((ActionEvent event) -> {
             listener.edit(tableContainer.getTable().getSelectionModel().getSelectedItem());
         });
+        
+        menuContainer.getItemMark().setOnAction((ActionEvent event) -> {
+            listener.mark(tableContainer.getTable().getSelectionModel().getSelectedItem());
+        });
     }
 
     @Override

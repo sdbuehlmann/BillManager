@@ -27,9 +27,16 @@ public class ListPersonsMenuContainer
     private final MenuItem itemShowVersions;
     
     private final Menu menuFilter;
+    private final Menu menuRoleFilter;
     private final MenuItem itemShowRoleMember;
     private final MenuItem itemHideRoleMember;
-
+    private final Menu menuAgeFilter;
+    private final MenuItem itemOlderOrEqual;
+    private final MenuItem itemYoungerOrEqual;
+    private final MenuItem itemOlder;
+    private final MenuItem itemYounger;
+    private final MenuItem itemEqual;
+    
     public ListPersonsMenuContainer() {
         itemNew = new MenuItem(GUIStringCollection.NEW);
         itemEdit = new MenuItem(GUIStringCollection.EDIT);
@@ -59,9 +66,19 @@ public class ListPersonsMenuContainer
 
         itemShowVersions = new MenuItem(GUIStringCollection.SHOW_VERSIONS);
         
+        // filter
         itemShowRoleMember = new MenuItem(GUIStringCollection.PERSON_ADD_FILTER_SHOW_ROLE_MEMBER);
         itemHideRoleMember = new MenuItem(GUIStringCollection.PERSON_ADD_FILTER_HIDE_ROLE_MEMBER);
-        menuFilter = new Menu(GUIStringCollection.PERSON_FILTER, null, itemShowRoleMember, itemHideRoleMember);
+        menuRoleFilter = new Menu(GUIStringCollection.PERSON_ROLE_FILTER, null, itemShowRoleMember, itemHideRoleMember);
+        
+        itemOlderOrEqual = new MenuItem(GUIStringCollection.PERSON_AGE_FILTER_OLDER_EQUAL);
+        itemYoungerOrEqual = new MenuItem(GUIStringCollection.PERSON_AGE_FILTER_YOUNGER_EQUAL);
+        itemOlder   = new MenuItem(GUIStringCollection.PERSON_AGE_FILTER_OLDER);
+        itemYounger = new MenuItem(GUIStringCollection.PERSON_AGE_FILTER_YOUNGER);
+        itemEqual = new MenuItem(GUIStringCollection.PERSON_AGE_FILTER_EQUAL);
+        menuAgeFilter = new Menu(GUIStringCollection.PERSON_AGE_FILTER, null, itemOlderOrEqual, itemYoungerOrEqual, itemOlder, itemYounger, itemEqual);
+                
+        menuFilter = new Menu(GUIStringCollection.PERSON_FILTER, null, menuRoleFilter, menuAgeFilter);
         
         contextMenu = new ContextMenu(
                 itemNew,
@@ -154,6 +171,34 @@ public class ListPersonsMenuContainer
 
     public MenuItem getItemHideRoleMember() {
         return itemHideRoleMember;
+    }
+
+    public Menu getMenuRoleFilter() {
+        return menuRoleFilter;
+    }
+
+    public Menu getMenuAgeFilter() {
+        return menuAgeFilter;
+    }
+
+    public MenuItem getItemOlderOrEqual() {
+        return itemOlderOrEqual;
+    }
+
+    public MenuItem getItemYoungerOrEqual() {
+        return itemYoungerOrEqual;
+    }
+
+    public MenuItem getItemOlder() {
+        return itemOlder;
+    }
+
+    public MenuItem getItemYounger() {
+        return itemYounger;
+    }
+
+    public MenuItem getItemEqual() {
+        return itemEqual;
     }
 
     

@@ -1,6 +1,7 @@
 * {
    -fx-info-color: rgb(160, 255, 255);
    -fx-marked-color: rgb(255, 255, 160);
+   -fx-filter-color: rgb(255, 160, 255);
 }
 
 .info-hint{
@@ -9,4 +10,8 @@
 
 .marked-hint{
     -fx-background-color: -fx-marked-color;
+}
+
+.filter-hint{
+    -fx-background-color: -fx-filter-color;
 }
