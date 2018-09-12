@@ -31,7 +31,7 @@ public class ManageBusketController extends AController implements IManagePositi
 
         this.person = person;
 
-        busket = dataHandler.getCopyOfPersonBusket(person);
+        busket = dataHandler.getPersonsDataHandler().getCopyOfPersonBusket(person);
 
         emptyPosition = dataHandler.createPosition(dataHandler.createArticle()); // create empty position
         builder = new ManagePositionsMaskBuilder(this, busket, emptyPosition);

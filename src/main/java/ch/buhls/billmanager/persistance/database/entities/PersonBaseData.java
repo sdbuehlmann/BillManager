@@ -151,7 +151,10 @@ public class PersonBaseData extends ATrackedEntity<PersonBaseData>
         other.email = email;
         other.iban = iban;
         other.postalcode = postalcode;
-        other.birthday = new Date(birthday.getTime());
         other.personalID = personalID;
+        
+        if(birthday != null){
+            other.birthday = new Date(birthday.getTime());
+        }
     }
 }

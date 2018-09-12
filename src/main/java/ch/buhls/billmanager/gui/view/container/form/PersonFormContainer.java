@@ -66,6 +66,7 @@ public class PersonFormContainer extends TrackableEntityFormContainer
                 tfStreetContainer.getView(),
                 nfPostalCodeContainer.getView(),
                 tfCityContainer.getView(),
+                dpBirthdayContainer.getView(),
                 new Separator(),
                 tfPhonePContainer.getView(),
                 tfPhoneMContainer.getView(),

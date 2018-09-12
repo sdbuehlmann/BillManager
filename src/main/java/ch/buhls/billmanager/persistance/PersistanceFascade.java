@@ -259,8 +259,6 @@ public class PersistanceFascade
         persBaseData.setChangeTxt("neu erstellt");
         persBaseData.setVersionNr(0);
         
-        persBaseData.setBirthday(new Date());
-        
         Person pers = new Person();
         pers.setPersonBaseData(persBaseData);
 

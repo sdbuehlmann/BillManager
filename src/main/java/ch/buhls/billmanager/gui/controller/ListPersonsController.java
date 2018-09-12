@@ -126,7 +126,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
             for (GUIPerson person : persons) {
                 try {
-                    dataHandler.addRoleToPerson(person, markedRole);
+                    dataHandler.getPersonsDataHandler().addRoleToPerson(person, markedRole);
                 }
                 catch (PersistanceException ex) {
                     framework.showExceptionDialoque(ex);
@@ -148,7 +148,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
                 framework,
                 dataHandler,
                 GUIStringCollection.getTitleForListPersonVersions(persons.get(0).getBaseData()),
-                dataHandler.getPersonVersions(persons.get(0)),
+                dataHandler.getPersonsDataHandler().getPersonVersions(persons.get(0)),
                 new IListVersionsListener<GUIPersonBaseData>()
         {
             @Override

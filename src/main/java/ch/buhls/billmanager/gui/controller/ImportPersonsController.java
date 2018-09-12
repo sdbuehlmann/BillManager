@@ -65,7 +65,7 @@ public class ImportPersonsController extends AController implements IImportPerso
             }
         }
         
-        dataHandler.reloadPersonsBuffer();
+        dataHandler.getPersonsDataHandler().reloadPersonsBuffer();
     }
 
 }

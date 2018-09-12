@@ -23,7 +23,7 @@ public class CreatePersonController extends AController implements IDefaultMaskL
     public CreatePersonController(IGUIFramework framework, DataHandler dataHandler) {
         super(framework, dataHandler, GUIStringCollection.getTitleForCreatePerson());
         
-        this.person = dataHandler.createPerson();
+        this.person = dataHandler.getPersonsDataHandler().createPerson();
         
         this.builder = new PersonMaskBuilder(person.getBaseData(), this);
         
@@ -34,7 +34,7 @@ public class CreatePersonController extends AController implements IDefaultMaskL
     public void save(GUIPersonBaseData entity) {
         try {
             if (framework.confirmToStore()) {
-                this.dataHandler.storePersonBaseDataAndPerson(person);
+                this.dataHandler.getPersonsDataHandler().storePersonBaseDataAndPerson(person);
                 
                 tabHandle.close();
             }

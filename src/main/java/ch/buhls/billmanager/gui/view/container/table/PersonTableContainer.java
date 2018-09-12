@@ -88,7 +88,7 @@ public class PersonTableContainer extends ATableContainer<GUIPerson>
 
         birthdayColumn = TablesUtils.createDateColumn(
                 (TableColumn.CellDataFeatures<GUIPerson, LocalDate> cellData) -> {
-                    return cellData.getValue().getBaseData().getDateAdded();
+                    return cellData.getValue().getBaseData().getBirthday();
                 }, GUIStringCollection.BIRTHDAY);
         this.addColumn(birthdayColumn);
 

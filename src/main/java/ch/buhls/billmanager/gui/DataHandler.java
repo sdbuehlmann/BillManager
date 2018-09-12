@@ -58,17 +58,18 @@ public class DataHandler
     private ModelFascade modelFascade;
 
     private ObservableList<GUIRole> rolesBuffer;
-    private ObservableList<GUIPerson> personsBuffer;
     private ObservableList<GUIArticle> articlesBuffer;
     private ObservableList<GUIBill> billsBuffer;
     private ObservableList<GUITemplate> templatesBuffer;
     private ObservableList<GUIFinancialYear> financialYearsBuffer;
 
     private ObjectProperty<GUIArticle> markedArticleProperty;
-    private ObjectProperty<GUIRole> markedRole;
+    private ObjectProperty<GUIRole> markedRoleProperty;
     private ObjectProperty<GUIFinancialYear> markedYearProperty;
     
     private final BooleanProperty showDBInfosProperty;
+    
+    private final PersonsDataHandler personsDataHandler;
 
     public DataHandler(Project project) {
         this.project = project;
@@ -76,17 +77,18 @@ public class DataHandler
         modelFascade = new ModelFascade();
 
         rolesBuffer = FXCollections.observableArrayList();
-        personsBuffer = FXCollections.observableArrayList();
         articlesBuffer = FXCollections.observableArrayList();
         billsBuffer = FXCollections.observableArrayList();
         templatesBuffer = FXCollections.observableArrayList();
         financialYearsBuffer = FXCollections.observableArrayList();
 
         markedArticleProperty = new SimpleObjectProperty<>();
-        markedRole = new SimpleObjectProperty<>();
+        markedRoleProperty = new SimpleObjectProperty<>();
         markedYearProperty = new SimpleObjectProperty<>();
         
         showDBInfosProperty = new SimpleBooleanProperty(App.INSTANCE.isShowDBInfos());
+        
+        personsDataHandler = new PersonsDataHandler(project);
     }
 
     // articles
@@ -141,7 +143,7 @@ public class DataHandler
     }
 
     public ObjectProperty<GUIRole> getMarkedRole() {
-        return markedRole;
+        return markedRoleProperty;
     }
 
     public GUIRole createRole() {
@@ -161,85 +163,6 @@ public class DataHandler
         reloadRolesBuffer();
     }
 
-    // persons
-    public ObservableList<GUIPerson> getPersonsBuffer() {
-        return personsBuffer;
-    }
-
-    public void reloadPersonsBuffer() {
-        personsBuffer.clear();
-        for (Person pers : persistanceFascade.getAllPersons()) {
-            personsBuffer.add(new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData())));
-        }
-    }
-
-    public ObservableList<GUIPersonBaseData> getPersonBaseDataVersions(GUIPerson guiPerson) {
-        ObservableList<GUIPersonBaseData> versionsBuffer = FXCollections.observableArrayList();
-
-        for (PersonBaseData person : persistanceFascade.getAllPersonBaseDataVersions(guiPerson.getData().getPersonBaseData())) {
-            versionsBuffer.add(new GUIPersonBaseData(person));
-        }
-
-        return versionsBuffer;
-    }
-
-    public GUIPerson createPerson() {
-        Person pers = persistanceFascade.createPerson();
-        return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
-    }
-
-    public GUIPerson editPerson(GUIPerson guiPers) {
-        Person pers = persistanceFascade.editPerson(guiPers.getData());
-        return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
-    }
-
-    public void storePerson(GUIPerson pers) throws PersistanceException {
-        persistanceFascade.storePerson(pers.getData());
-        reloadPersonsBuffer();
-    }
-
-    public void storePersonBaseDataAndPerson(GUIPerson pers) throws PersistanceException {
-        persistanceFascade.storePersonBaseDataAndPerson(pers.getData());
-        reloadPersonsBuffer();
-    }
-
-    public ObservableList<GUIPersonBaseData> getPersonVersions(GUIPerson guiPerson) {
-        ObservableList<GUIPersonBaseData> versionsBuffer = FXCollections.observableArrayList();
-
-        for (PersonBaseData data : persistanceFascade.getAllVersions(guiPerson.getBaseData().getData())) {
-            versionsBuffer.add(new GUIPersonBaseData(data));
-        }
-
-        return versionsBuffer;
-    }
-
-    public ObservableList<GUIRole> getPersonRoles(GUIPerson guiPerson) {
-        ObservableList<GUIRole> roles = FXCollections.observableArrayList();
-
-        for (Role role : guiPerson.getData().getRoles()) {
-            roles.add(new GUIRole(role));
-        }
-
-        return roles;
-    }
-
-    public void addRoleToPerson(GUIPerson guiPerson, GUIRole guiRole) throws PersistanceException {
-        guiPerson.getData().getRoles().add(guiRole.getData());
-        storePerson(guiPerson);
-    }
-
-    public ObservableList<GUIPosition> getCopyOfPersonBusket(GUIPerson guiPerson) {
-        ObservableList<GUIPosition> busket = FXCollections.observableArrayList();
-
-        for (Position pos : guiPerson.getData().getBusket()) {
-            busket.add(new GUIPosition(new Position(pos), new GUIArticle(pos.getArticle())));
-        }
-
-        return busket;
-    }
-
-    
-    
     // positions
     public GUIPosition createPosition(GUIArticle guiArticle) {
         Position pos = persistanceFascade.createPosition(guiArticle.getData());
@@ -276,7 +199,7 @@ public class DataHandler
         guiPerson.getData().getBusket().add(guiPosition.getData());
 
         storePosition(guiPosition);
-        storePerson(guiPerson);
+        personsDataHandler.storePerson(guiPerson);
     }
 
     public void mergeAndStoreBusket(GUIPerson guiPerson,
@@ -512,7 +435,7 @@ public class DataHandler
         }
 
         reloadBillsBuffer();
-        reloadPersonsBuffer();
+        personsDataHandler.reloadPersonsBuffer();
     }
 
     public GUIBill editBill(GUIBill bill){
@@ -570,6 +493,6 @@ public class DataHandler
     
     // getter
     public PersonsDataHandler getPersonsDataHandler(){
-        return new PersonsDataHandler(project);
+        return personsDataHandler;
     }
 }

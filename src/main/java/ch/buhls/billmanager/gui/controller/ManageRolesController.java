@@ -26,7 +26,7 @@ public class ManageRolesController extends AController implements IManageRolesLi
         super(framework, dataHandler, GUIStringCollection.getTitleForManageRoles(person.getBaseData()));
 
         this.person = person;
-        roles = dataHandler.getPersonRoles(person);
+        roles = dataHandler.getPersonsDataHandler().getPersonRoles(person);
         builder = new ManageRolesMaskBuilder(this, roles, dataHandler.getMarkedRole());
         
         display(builder.getView(), IGUIFramework.Area.RIGHT);
@@ -44,7 +44,7 @@ public class ManageRolesController extends AController implements IManageRolesLi
 
             try {
                 person.getData().getRoles().add(markedRole.getData());
-                dataHandler.storePerson(person);
+                dataHandler.getPersonsDataHandler().storePerson(person);
                 roles.add(markedRole);
             }
             catch (PersistanceException ex) {
@@ -58,7 +58,7 @@ public class ManageRolesController extends AController implements IManageRolesLi
         if (framework.confirmToRemoveRole()) {
             try {
                 person.getData().getRoles().remove(role.getData());
-                dataHandler.storePerson(person);
+                dataHandler.getPersonsDataHandler().storePerson(person);
                 roles.remove(role);
             }
             catch (PersistanceException ex) {

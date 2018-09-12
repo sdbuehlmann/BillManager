@@ -305,12 +305,21 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
         {
             @Override
             public LocalDate get() {
+                if(data.getBirthday() == null){
+                    return null;
+                }
+                
                 return data.getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             }
 
             @Override
             public void set(LocalDate set) {
-                data.setDateAdded(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                if(set == null){
+                    data.setBirthday(null);
+                    return;
+                }
+                
+                data.setBirthday(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
             }
 
             @Override

@@ -1,4 +1,3 @@
-
 package ch.buhls.billmanager.gui;
 
 import ch.buhls.billmanager.persistance.database.entities.FinancialYear;
@@ -15,14 +14,16 @@ import java.util.List;
  */
 public class AgePersonFilter implements IPersonFilter
 {
-    public enum AgeFilterType{
+
+    public enum AgeFilterType
+    {
         EQUAL,
         OLDER,
         YOUNGER,
         OLDER_OR_EQUAL,
         YOUNGER_OR_EQUAL
     }
-    
+
     private final AgeFilterType ageFilterType;
     private final FinancialYear year;
     private final int age;
@@ -36,65 +37,66 @@ public class AgePersonFilter implements IPersonFilter
     @Override
     public List<Person> filterList(List<Person> persons) {
         List<Person> filteredPersons = new ArrayList<>();
-        for(Person pers : persons){
-            LocalDate tempBirthday = pers.getPersonBaseData().getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate tempFirstDay = year.getFirstDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate tempLastDay = year.getLastDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            
-            switch(ageFilterType){
-                case EQUAL:
-                    if(Period.between(tempBirthday, tempLastDay).getYears() == age){
-                        filteredPersons.add(pers);
-                    }
-                    break;
-                case OLDER:
-                    if(Period.between(tempBirthday, tempLastDay).getYears() < age){
-                        filteredPersons.add(pers);
-                    }
-                    break;
-                case YOUNGER:
-                    if(Period.between(tempBirthday, tempFirstDay).getYears() > age){
-                        filteredPersons.add(pers);
-                    }
-                    break;
-                case OLDER_OR_EQUAL:
-                    if(Period.between(tempBirthday, tempLastDay).getYears() >= age){
-                        filteredPersons.add(pers);
-                    }
-                    break;
-                case YOUNGER_OR_EQUAL:
-                    if(Period.between(tempBirthday, tempLastDay).getYears() <= age){
-                        filteredPersons.add(pers);
-                    }
-                    break;
+        for (Person pers : persons) {
+            if (pers.getPersonBaseData().getBirthday() != null) {
+                LocalDate tempBirthday = pers.getPersonBaseData().getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate tempFirstDay = year.getFirstDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate tempLastDay = year.getLastDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                switch (ageFilterType) {
+                    case EQUAL:
+                        if (Period.between(tempBirthday, tempLastDay).getYears() == age) {
+                            filteredPersons.add(pers);
+                        }
+                        break;
+                    case OLDER:
+                        if (Period.between(tempBirthday, tempLastDay).getYears() < age) {
+                            filteredPersons.add(pers);
+                        }
+                        break;
+                    case YOUNGER:
+                        if (Period.between(tempBirthday, tempFirstDay).getYears() > age) {
+                            filteredPersons.add(pers);
+                        }
+                        break;
+                    case OLDER_OR_EQUAL:
+                        if (Period.between(tempBirthday, tempLastDay).getYears() >= age) {
+                            filteredPersons.add(pers);
+                        }
+                        break;
+                    case YOUNGER_OR_EQUAL:
+                        if (Period.between(tempBirthday, tempLastDay).getYears() <= age) {
+                            filteredPersons.add(pers);
+                        }
+                        break;
+                }
             }
         }
         return filteredPersons;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if(obj == null){
+        if (obj == null) {
             return false;
         }
-        
-        if(!(obj instanceof AgePersonFilter)){
+
+        if (!(obj instanceof AgePersonFilter)) {
             return false;
         }
-        
-        AgePersonFilter other = (AgePersonFilter)obj;
-        
-        if(!this.getYear().equals(other.getYear()) ||
-                this.getAgeFilterType()!= other.getAgeFilterType() ||
-                this.getAge() != other.getAge()){
+
+        AgePersonFilter other = (AgePersonFilter) obj;
+
+        if (!this.getYear().equals(other.getYear())
+                || this.getAgeFilterType() != other.getAgeFilterType()
+                || this.getAge() != other.getAge()) {
             return false;
         }
-        
+
         return true;
     }
-    
-    // getter
 
+    // getter
     public AgeFilterType getAgeFilterType() {
         return ageFilterType;
     }
@@ -106,6 +108,5 @@ public class AgePersonFilter implements IPersonFilter
     public int getAge() {
         return age;
     }
-    
-    
+
 }

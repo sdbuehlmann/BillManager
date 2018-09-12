@@ -23,7 +23,7 @@ public class EditPersonController extends AController implements IDefaultMaskLis
     public EditPersonController(IGUIFramework framework, DataHandler dataHandler, GUIPerson person) {
         super(framework, dataHandler, GUIStringCollection.getTitleForEditPerson(person.getBaseData()));
         
-        this.person = dataHandler.editPerson(person);
+        this.person = dataHandler.getPersonsDataHandler().editPerson(person);
         
         this.builder = new PersonMaskBuilder(this.person.getBaseData(), this);
         this.builder.changeToEditMode();
@@ -35,7 +35,7 @@ public class EditPersonController extends AController implements IDefaultMaskLis
     public void save(GUIPersonBaseData entity) {
         try {
             if (framework.confirmToStore()) {
-                this.dataHandler.storePersonBaseDataAndPerson(person);
+                this.dataHandler.getPersonsDataHandler().storePersonBaseDataAndPerson(person);
                 //this.dataHandler.storePerson(entity);
                 
                 tabHandle.close();
