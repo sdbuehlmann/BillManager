@@ -429,9 +429,6 @@ public class PersistanceFascade
     }
     
     public void storePosition(Position position) throws PersistanceException{
-        position.setId(0);
-        position.setPosition(0);
-        
         try {
             positionService.add(position);
         }

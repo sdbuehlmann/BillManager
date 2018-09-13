@@ -9,5 +9,10 @@ import ch.buhls.billmanager.gui.data.GUIBill;
  */
 public class DEBillStringCollection extends DEDefaultStringCollection<GUIBill>
 {
+
+    @Override
+    public String getTabTitle_Edit(GUIBill data) {
+        return String.format("Rechnung %d bearbeiten",data.getDb_id().get());
+    }
     
 }

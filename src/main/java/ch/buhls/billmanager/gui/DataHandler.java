@@ -23,8 +23,6 @@ import ch.buhls.billmanager.persistance.database.entities.Article;
 import ch.buhls.billmanager.persistance.database.entities.Bill;
 import ch.buhls.billmanager.persistance.database.entities.BillTemplate;
 import ch.buhls.billmanager.persistance.database.entities.FinancialYear;
-import ch.buhls.billmanager.persistance.database.entities.Person;
-import ch.buhls.billmanager.persistance.database.entities.PersonBaseData;
 import ch.buhls.billmanager.persistance.database.entities.Position;
 import ch.buhls.billmanager.persistance.database.entities.Role;
 import java.io.File;
@@ -316,7 +314,7 @@ public class DataHandler
         return data;
     }
     
-    private File createBillPDF(GUIPerson person, String location, String date, String billNr, File template) throws ModelException, AppException {
+    private File createBillPDF(GUIPerson person, String location, String date, int billNr, File template) throws ModelException, AppException {
         TemplateData templateData = new TemplateData()
                 .setPrename(person.getBaseData().getPrename().get())
                 .setName(person.getBaseData().getName().get())
@@ -325,7 +323,7 @@ public class DataHandler
                 .setCity(person.getBaseData().getCity().get())
                 .setSalutation(person.getBaseData().getSalutation().get())
                 .setTitle(person.getBaseData().getTitle().get())
-                .setNumber(billNr)
+                .setNumber(billNr+"")
                 .setLocation(location)
                 .setDate(date)
                 .setTemplate(template.getAbsolutePath());
@@ -354,6 +352,16 @@ public class DataHandler
         return tempPDF;
     }
 
+    public void showPDF(GUIBill bill) throws ModelException{
+        try {
+            File pdfFile = ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getData().getId(), bill.getData().getPersonBaseData().getName());
+            modelFascade.openPDF(pdfFile);
+        }
+        catch (IOException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+    
     private String dateToString(Date date) {
         StringBuilder sb = new StringBuilder();
         sb.append(Integer.toString(date.getDay()));
@@ -419,14 +427,11 @@ public class DataHandler
 
             persistanceFascade.storeBill(bill);
 
-            // manage bill number
-            String fullBillNr = data.getSelectedYear().get().getData().getBillIdPrefix() + "-" + bill.getId();
-
             // manage template data
             File templateFile = getTemplateFile(data.getSelectedTemplate().get());
 
             // create file
-            File pdfFile = createBillPDF(person, data.getLocation().get(), dateToString(bill.getDateSendet()), fullBillNr, templateFile);
+            File pdfFile = createBillPDF(person, data.getLocation().get(), dateToString(bill.getDateSendet()), bill.getId(), templateFile);
             
             person.getData().getBills().add(bill);
             person.getData().getBusket().clear();

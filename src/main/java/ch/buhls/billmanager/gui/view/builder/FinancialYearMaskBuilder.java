@@ -40,7 +40,6 @@ public class FinancialYearMaskBuilder implements IMaskBuilder
         LabledSwitchableControlContainer.bindNumberfield(formContainer.getNfVersionDBContainer(), data.getDb_version(), true);
 
         LabledSwitchableControlContainer.bindTextfield(formContainer.getTfNameContainer(), data.getName(), true);
-        LabledSwitchableControlContainer.bindTextfield(formContainer.getTfBillNrPrefixContainer(), data.getPrefix(), true);
         
         LabledSwitchableControlContainer.bindDatePicker(formContainer.getDpFirstDayContainer(), data.getFirstDay(), true);
         LabledSwitchableControlContainer.bindDatePicker(formContainer.getDpLastDayContainer(), data.getLastDay(), true);

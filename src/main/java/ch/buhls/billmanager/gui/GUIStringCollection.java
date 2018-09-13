@@ -170,10 +170,6 @@ public class GUIStringCollection
         return String.format("Vereinsjahr \"%s\" bearbeiten", year.getName().get());
     }
     
-    public static String getTitle_editBill(GUIBill bill){
-        return String.format("Rechnung %s-%d bearbeiten", bill.getYear().getPrefix().get(), bill.getDb_id().get());
-    }
-    
     public static String getTabTitle_listArticles(){
         return "Artikel";
     }

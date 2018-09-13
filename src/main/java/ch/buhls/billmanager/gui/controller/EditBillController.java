@@ -2,7 +2,6 @@
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
-import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.EditBillBuilder;
@@ -18,7 +17,7 @@ public class EditBillController extends AController implements IDefaultMaskListe
     private final EditBillBuilder builder;
 
     public EditBillController(IGUIFramework framework, DataHandler dataHandler, GUIBill bill) {
-        super(framework, dataHandler, GUIStringCollection.getTitle_editBill(bill));
+        super(framework, dataHandler, framework.getStringCollections().getBillStringCollection().getTabTitle_Edit(bill));
         
         builder = new EditBillBuilder(dataHandler.editBill(bill), this);
         

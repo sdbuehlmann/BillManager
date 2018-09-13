@@ -18,7 +18,7 @@ import javafx.beans.property.StringProperty;
  */
 public class GUIFinancialYear extends AGUIData<FinancialYear>
 {
-    private final StringProperty name, prefix;
+    private final StringProperty name;
     private final ObjectProperty<LocalDate> firstDay, lastDay;
 
     public GUIFinancialYear(FinancialYear year) {
@@ -43,27 +43,6 @@ public class GUIFinancialYear extends AGUIData<FinancialYear>
             @Override
             public String getName() {
                 return GUIStringCollection.YEAR_NAME;
-            }
-        });
-        prefix = new StringAdapterProperty(new IPropertyData<String>(){
-            @Override
-            public String get() {
-                return data.getBillIdPrefix();
-            }
-
-            @Override
-            public void set(String set) {
-                data.setBillIdPrefix(set);
-            }
-
-            @Override
-            public Object getBean() {
-                return data;
-            }
-
-            @Override
-            public String getName() {
-                return GUIStringCollection.YEAR_PREFIX;
             }
         });
         firstDay = new ObjectAdapterProperty<>(new IPropertyData<LocalDate>(){
@@ -112,10 +91,6 @@ public class GUIFinancialYear extends AGUIData<FinancialYear>
 
     public StringProperty getName() {
         return name;
-    }
-
-    public StringProperty getPrefix() {
-        return prefix;
     }
 
     public ObjectProperty<LocalDate> getFirstDay() {

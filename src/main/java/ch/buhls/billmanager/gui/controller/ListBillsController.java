@@ -7,6 +7,7 @@ import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.ListBillsBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.IListBillsBuilderListener;
+import ch.buhls.billmanager.model.ModelException;
 import java.util.List;
 
 /**
@@ -34,7 +35,12 @@ public class ListBillsController extends AController implements IListBillsBuilde
 
     @Override
     public void showPDF(GUIBill selected) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            dataHandler.showPDF(selected);
+        }
+        catch (ModelException ex) {
+            framework.showExceptionDialoque(ex);
+        }
     }
 
     @Override

@@ -68,14 +68,6 @@ public class ModelFascade
         System.openPDF(pdfFile);
     }
 
-    public static String createBillFilename(String number, String name, String ending) {
-        String storageName = name;
-        storageName = storageName.replace(' ', '_');
-        storageName = number + "_" + storageName;
-
-        return storageName + ending;
-    }
-
     public Project createProject(File location) throws ModelException {
         /*
     - Project
@@ -131,4 +123,19 @@ public class ModelFascade
                 locationTemp,
                 new PersistanceFascade(projectFile));
     }
+    
+    public static String createBillFilename(int number, String name, String ending) {
+        String storageName = name;
+        storageName = storageName.replace(' ', '_');
+        storageName = number + "_" + storageName;
+
+        return storageName + ending;
+    }
+    public static File createPathToBill(File dir, int number, String name, String ending){
+        return new File(dir, ModelFascade.createBillFilename(number, name, ending));
+    }
+    public static File createPathToBillPDF(File dir, int number, String name){
+        return ModelFascade.createPathToBill(dir, number, name, ".pdf");
+    }
+    
 }

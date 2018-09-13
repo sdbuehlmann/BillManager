@@ -14,7 +14,6 @@ import javax.persistence.TemporalType;
 public class FinancialYear extends AEntity<FinancialYear>
 {
     private String name;
-    private String billIdPrefix;
     
     @Temporal(TemporalType.DATE)
     private Date firstDay;
@@ -47,14 +46,6 @@ public class FinancialYear extends AEntity<FinancialYear>
         this.lastDay = lastDay;
     }
 
-    public String getBillIdPrefix() {
-        return billIdPrefix;
-    }
-
-    public void setBillIdPrefix(String billIdPrefix) {
-        this.billIdPrefix = billIdPrefix;
-    }
-
     public String getName() {
         return name;
     }
@@ -65,7 +56,6 @@ public class FinancialYear extends AEntity<FinancialYear>
     
     @Override
     public void copyData(FinancialYear other) {
-        other.billIdPrefix = billIdPrefix;
         other.name = name;
         other.firstDay = new Date(firstDay.getTime());
         other.lastDay = new Date(lastDay.getTime());

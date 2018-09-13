@@ -15,7 +15,6 @@ public class FinancialYearTableContainer extends ATableContainer<GUIFinancialYea
     private final TableColumn<GUIFinancialYear, Number> dbVersionColumn;
 
     private final TableColumn<GUIFinancialYear, String> nameColumn;
-    private final TableColumn<GUIFinancialYear, String> prefixColumn;
     private final TableColumn<GUIFinancialYear, LocalDate> firstDayColumn;
     private final TableColumn<GUIFinancialYear, LocalDate> lastDayColumn;
 
@@ -33,10 +32,6 @@ public class FinancialYearTableContainer extends ATableContainer<GUIFinancialYea
         nameColumn = new TableColumn(GUIStringCollection.YEAR_NAME);
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().getName());
         addColumn(nameColumn);
-
-        prefixColumn = new TableColumn(GUIStringCollection.YEAR_PREFIX);
-        prefixColumn.setCellValueFactory(cellData -> cellData.getValue().getPrefix());
-        addColumn(prefixColumn);
 
         firstDayColumn = TablesUtils.createDateColumn(
                 (TableColumn.CellDataFeatures<GUIFinancialYear, LocalDate> cellData) -> {
@@ -61,10 +56,6 @@ public class FinancialYearTableContainer extends ATableContainer<GUIFinancialYea
 
     public TableColumn<GUIFinancialYear, String> getNameColumn() {
         return nameColumn;
-    }
-
-    public TableColumn<GUIFinancialYear, String> getPrefixColumn() {
-        return prefixColumn;
     }
 
     public TableColumn<GUIFinancialYear, LocalDate> getFirstDayColumn() {

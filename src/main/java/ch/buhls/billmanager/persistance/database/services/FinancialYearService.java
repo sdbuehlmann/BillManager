@@ -17,7 +17,6 @@ public class FinancialYearService extends AService<FinancialYear>
 
     @Override
     protected void updateManagedEntity(FinancialYear managedEntity, FinancialYear entity) throws ServiceException {
-        managedEntity.setBillIdPrefix(entity.getBillIdPrefix());
         managedEntity.setName(entity.getName());
         managedEntity.setFirstDay(entity.getFirstDay());
         managedEntity.setLastDay(entity.getLastDay());
