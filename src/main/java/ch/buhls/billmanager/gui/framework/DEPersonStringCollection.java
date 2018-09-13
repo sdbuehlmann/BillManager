@@ -31,6 +31,14 @@ public class DEPersonStringCollection extends DEDefaultStringCollection<GUIPerso
         return "Personen";
     }
 
+    public String getTabTitle_ListVersions(GUIPerson person){
+        return String.format("Versionen von %s %s", person.getBaseData().getName().get(), person.getBaseData().getPrename().get());
+    }
+    
+    public String getTabTitle_ListRoles(GUIPerson person){
+        return String.format("Rollen von %s %s", person.getBaseData().getName().get(), person.getBaseData().getPrename().get());
+    }
+    
     // ===================================== Hints ======================================================
     @Override
     public String getHintTxt_Created(GUIPerson person) {

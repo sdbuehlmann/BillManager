@@ -23,7 +23,7 @@ public class ManageRolesController extends AController implements IManageRolesLi
     private final GUIPerson person;
 
     public ManageRolesController(IGUIFramework framework, DataHandler dataHandler, GUIPerson person) {
-        super(framework, dataHandler, GUIStringCollection.getTitleForManageRoles(person.getBaseData()));
+        super(framework, dataHandler, framework.getStringCollections().getPersonStringCollection().getTabTitle_ListRoles(person));
 
         this.person = person;
         roles = dataHandler.getPersonsDataHandler().getPersonRoles(person);

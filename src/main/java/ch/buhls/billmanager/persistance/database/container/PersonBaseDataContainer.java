@@ -23,4 +23,9 @@ public class PersonBaseDataContainer extends AContainer<PersonBaseData>
         List<PersonBaseData> temp = query.getResultList();
         return temp;
     }
+    
+    public PersonBaseData findHighestPersonalID(){
+        TypedQuery<PersonBaseData> query = this.em.createQuery("SELECT MAX(p.personalID) FROM PersonBaseData p", PersonBaseData.class);
+        return query.getSingleResult();
+    }
 }

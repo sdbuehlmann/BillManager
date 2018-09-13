@@ -300,7 +300,7 @@ public class PersistanceFascade
     public void storePersonBaseDataAndPerson(Person person) throws PersistanceException {
         try {
             PersonBaseData temp = person.getPersonBaseData();
-
+            
             personBaseDataService.add(temp);
 
             // update previous version

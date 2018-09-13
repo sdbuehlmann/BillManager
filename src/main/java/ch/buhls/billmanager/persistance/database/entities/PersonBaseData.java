@@ -20,7 +20,6 @@ public class PersonBaseData extends ATrackedEntity<PersonBaseData>
     private String iban;
     
     private int postalcode;
-    private int personalID;
     
     @Temporal(TemporalType.DATE)
     private Date birthday;
@@ -127,14 +126,6 @@ public class PersonBaseData extends ATrackedEntity<PersonBaseData>
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
-
-    public int getPersonalID() {
-        return personalID;
-    }
-
-    public void setPersonalID(int personalID) {
-        this.personalID = personalID;
-    }
     
     @Override
     public void copyData(PersonBaseData other) {
@@ -151,7 +142,6 @@ public class PersonBaseData extends ATrackedEntity<PersonBaseData>
         other.email = email;
         other.iban = iban;
         other.postalcode = postalcode;
-        other.personalID = personalID;
         
         if(birthday != null){
             other.birthday = new Date(birthday.getTime());

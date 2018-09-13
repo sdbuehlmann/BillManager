@@ -25,7 +25,7 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
     private final StringProperty phoneP, phoneM, mail;
     private final StringProperty iban;
     
-    private final IntegerProperty postalcode, personalId;
+    private final IntegerProperty postalcode;
     
     private final ObjectProperty<LocalDate> birthday;
     
@@ -256,28 +256,6 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
             }
         });
         
-        personalId = new IntegerAdapterProperty(new IPropertyData<Integer>()
-        {
-            @Override
-            public Integer get() {
-                return data.getPersonalID();
-            }
-
-            @Override
-            public void set(Integer set) {
-                data.setPersonalID(set);
-            }
-
-            @Override
-            public Object getBean() {
-                return data;
-            }
-
-            @Override
-            public String getName() {
-                return "Mitgliedernummer";
-            }
-        });
         postalcode = new IntegerAdapterProperty(new IPropertyData<Integer>()
         {
             @Override
@@ -378,14 +356,7 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
         return postalcode;
     }
 
-    public IntegerProperty getPersonalId() {
-        return personalId;
-    }
-
     public ObjectProperty<LocalDate> getBirthday() {
         return birthday;
     }
-    
-    
-    
 }

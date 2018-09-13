@@ -17,7 +17,6 @@ public class PersonTableContainer extends ATableContainer<GUIPerson>
     private final TableColumn<GUIPerson, Number> baseDataDbIDColumn;
     private final TableColumn<GUIPerson, Number> baseDataDbVersionColumn;
 
-    private final TableColumn<GUIPerson, Number> personalIDColumn;
     private final TableColumn<GUIPerson, Number> personalVersionColumn;
     
     private final TableColumn<GUIPerson, String> nameColumn;
@@ -57,10 +56,6 @@ public class PersonTableContainer extends ATableContainer<GUIPerson>
         baseDataDbVersionColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getDb_version());
         this.addColumn(baseDataDbVersionColumn);
         this.getTechnicalColumns().add(baseDataDbVersionColumn);
-
-        personalIDColumn = new TableColumn(GUIStringCollection.PERSONAL_ID);
-        personalIDColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getPersonalId());
-        this.addColumn(personalIDColumn);
         
         personalVersionColumn = new TableColumn(GUIStringCollection.TRACKED_ENRITY_VERSION_NR);
         personalVersionColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getVersionNr());
@@ -137,10 +132,6 @@ public class PersonTableContainer extends ATableContainer<GUIPerson>
 
     public TableColumn<GUIPerson, Number> getBaseDataDbVersionColumn() {
         return baseDataDbVersionColumn;
-    }
-
-    public TableColumn<GUIPerson, Number> getPersonalIDColumn() {
-        return personalIDColumn;
     }
 
     public TableColumn<GUIPerson, String> getNameColumn() {

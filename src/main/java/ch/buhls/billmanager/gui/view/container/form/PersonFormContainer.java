@@ -15,8 +15,6 @@ import javafx.scene.control.TextField;
  */
 public class PersonFormContainer extends TrackableEntityFormContainer
 {
-    private final LabledSwitchableControlContainer<NumberField> nfPersonIDContainer;
-    
     private final LabledSwitchableControlContainer<TextField> tfNameContainer;
     private final LabledSwitchableControlContainer<TextField> tfPrenameContainer;
     private final LabledSwitchableControlContainer<TextField> tfStreetContainer;
@@ -38,8 +36,6 @@ public class PersonFormContainer extends TrackableEntityFormContainer
 
     public PersonFormContainer()
     {
-        nfPersonIDContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.PERSONAL_ID, GUIStringCollection.EDIT, new NumberField());
-        
         tfNameContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.NAME, GUIStringCollection.EDIT, new TextField());
         tfPrenameContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.PRENAME, GUIStringCollection.EDIT, new TextField());
         tfStreetContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.STREET, GUIStringCollection.EDIT, new TextField());
@@ -60,7 +56,6 @@ public class PersonFormContainer extends TrackableEntityFormContainer
         bSave = new Button(GUIStringCollection.SAVE);
 
         getView().getChildren().addAll(
-                nfPersonIDContainer.getView(),
                 tfNameContainer.getView(),
                 tfPrenameContainer.getView(),
                 tfStreetContainer.getView(),
@@ -77,10 +72,6 @@ public class PersonFormContainer extends TrackableEntityFormContainer
                 tfSalutationContainer.getView(),
                 tfTitleContainer.getView(),
                 bSave);
-    }
-
-    public LabledSwitchableControlContainer<NumberField> getNfPersonIDContainer() {
-        return nfPersonIDContainer;
     }
 
     public LabledSwitchableControlContainer<TextField> getTfNameContainer() {

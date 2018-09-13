@@ -153,7 +153,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
         new ListVersionsController<GUIPersonBaseData>(
                 framework,
                 dataHandler,
-                GUIStringCollection.getTitleForListPersonVersions(persons.get(0).getBaseData()),
+                stringCollection.getTabTitle_ListVersions(persons.get(0)),
                 dataHandler.getPersonsDataHandler().getPersonVersions(persons.get(0)),
                 new IListVersionsListener<GUIPersonBaseData>()
         {

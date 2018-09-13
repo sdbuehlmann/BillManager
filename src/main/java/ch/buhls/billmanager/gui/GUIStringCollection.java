@@ -151,12 +151,7 @@ public class GUIStringCollection
     public static final String APP_SETTINGS_INKSCAPE_PATH = "Pfad zu Inkscape";
     public static final String APP_SETTINGS_SHOW_DB_INFOS = "Datenbank Informationen anzeigen";
     
-    public static String getTitleForListPersonVersions(GUIPersonBaseData person){
-        return String.format("Versionen Mitglied %d", person.getPersonalId().get());
-    }
-    public static String getTitleForManageRoles(GUIPersonBaseData person){
-        return String.format("Rollen Mitglied %d", person.getPersonalId().get());
-    }
+    
     public static String getTitleForCreateBill(){
         return "Rechnung erstellen";
     }

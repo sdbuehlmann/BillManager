@@ -37,8 +37,6 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
     {
         super.bindProperties();
         
-        LabledSwitchableControlContainer.bindNumberfield(maskContainer.getNfPersonIDContainer(), person.getPersonalId(), false);
-        
         LabledSwitchableControlContainer.bindTextfield(maskContainer.getTfPrenameContainer(), person.getPrename(), false);
         LabledSwitchableControlContainer.bindTextfield(maskContainer.getTfNameContainer(), person.getName(), false);
         LabledSwitchableControlContainer.bindTextfield(maskContainer.getTfStreetContainer(), person.getStreet(), false);
@@ -70,8 +68,6 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
     public void changeToEditMode(){
         super.changeToEditMode();
         
-        LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getNfPersonIDContainer());
-        
         LabledSwitchableControlContainer.changeToSwitchableState(maskContainer.getTfPrenameContainer());
         LabledSwitchableControlContainer.changeToSwitchableState(maskContainer.getTfNameContainer());
         LabledSwitchableControlContainer.changeToSwitchableState(maskContainer.getTfStreetContainer());
@@ -96,8 +92,6 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
     public void changeToCreateMode() {
         super.changeToCreateMode();
         
-        LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getNfPersonIDContainer());
-        
         LabledSwitchableControlContainer.changeToEditableState(maskContainer.getTfPrenameContainer());
         LabledSwitchableControlContainer.changeToEditableState(maskContainer.getTfNameContainer());
         LabledSwitchableControlContainer.changeToEditableState(maskContainer.getTfStreetContainer());
@@ -121,8 +115,6 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
     @Override
     public void changeToReadOnlyMode() {
         super.changeToReadOnlyMode();
-        
-        LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getNfPersonIDContainer());
         
         LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getTfPrenameContainer());
         LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getTfNameContainer());
