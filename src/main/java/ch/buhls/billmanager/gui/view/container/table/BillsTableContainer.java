@@ -16,6 +16,8 @@ public class BillsTableContainer extends ATableContainer<GUIBill>
     private final TableColumn<GUIBill, Number> dbIDColumn;
     private final TableColumn<GUIBill, Number> dbVersionColumn;
 
+    private final TableColumn<GUIBill, Number> idColumn;
+    
     private final TableColumn<GUIBill, GUIBillStatus> statusColumn;
     private final TableColumn<GUIBill, String> yearColumn;
     private final TableColumn<GUIBill, String> nameColumn;
@@ -35,6 +37,10 @@ public class BillsTableContainer extends ATableContainer<GUIBill>
         dbVersionColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_version());
         addColumn(dbVersionColumn);
         getTechnicalColumns().add(dbVersionColumn);
+        
+        idColumn = new TableColumn(GUIStringCollection.ID);
+        idColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_id());
+        addColumn(idColumn);
 
         statusColumn = new TableColumn(GUIStringCollection.BILL_STATUS);
         statusColumn.setCellValueFactory(cellData -> cellData.getValue().getState());

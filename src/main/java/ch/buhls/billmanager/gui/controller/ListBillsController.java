@@ -45,7 +45,12 @@ public class ListBillsController extends AController implements IListBillsBuilde
 
     @Override
     public void printPDFs(List<GUIBill> bills) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            dataHandler.printPDFs(bills);
+        }
+        catch (ModelException ex) {
+            framework.showExceptionDialoque(ex);
+        }
     }
     
 }

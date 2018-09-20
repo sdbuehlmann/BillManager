@@ -16,7 +16,10 @@ public class ListPersonsMenuContainer
     private final ContextMenu contextMenu;
 
     private final MenuItem itemEdit, itemNew, itemShow;
+    
+    private final Menu menuBill;
     private final MenuItem itemNewBill;
+    private final MenuItem itemRegisterBill;
 
     private final Menu menuAddArticle;
     private final MenuItem itemAdd1, itemAdd2, itemAdd3, itemAdd4, itemAdd5, itemAddCustom;
@@ -43,7 +46,9 @@ public class ListPersonsMenuContainer
         itemShow = new MenuItem(GUIStringCollection.SHOW);
 
         itemNewBill = new MenuItem(GUIStringCollection.PERSON_NEW_BILL);
-
+        itemRegisterBill = new MenuItem(GUIStringCollection.PERSON_REGISTER_BILL);
+        menuBill = new Menu(GUIStringCollection.PERSON_BILL, null, itemNewBill, itemRegisterBill);
+        
         itemAdd1 = new MenuItem(GUIStringCollection.PERSON_ADD_1);
         itemAdd2 = new MenuItem(GUIStringCollection.PERSON_ADD_2);
         itemAdd3 = new MenuItem(GUIStringCollection.PERSON_ADD_3);
@@ -85,7 +90,7 @@ public class ListPersonsMenuContainer
                 itemEdit,
                 itemShow,
                 new SeparatorMenuItem(),
-                itemNewBill,
+                menuBill,
                 new SeparatorMenuItem(),
                 menuAddArticle,
                 itemShowBusket,
@@ -137,6 +142,14 @@ public class ListPersonsMenuContainer
         return itemNewBill;
     }
 
+    public Menu getMenuBill() {
+        return menuBill;
+    }
+
+    public MenuItem getItemRegisterBill() {
+        return itemRegisterBill;
+    }
+    
     public MenuItem getItemShowVersions() {
         return itemShowVersions;
     }

@@ -2,13 +2,11 @@
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
-import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.data.GUICreateBillsData;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.CreateBillMaskBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.ICreateBillMaskListener;
-import ch.buhls.billmanager.persistance.PersistanceException;
 import java.util.List;
 
 /**

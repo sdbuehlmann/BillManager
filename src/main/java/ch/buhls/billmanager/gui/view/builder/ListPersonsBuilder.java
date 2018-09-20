@@ -79,6 +79,10 @@ public class ListPersonsBuilder extends AListBuilder<GUIPerson> implements IHint
                 -> {
             listener.createNewBill(tableContainer.getTable().getSelectionModel().getSelectedItems());
         });
+        menuContainer.getItemRegisterBill().setOnAction((ActionEvent event)
+                -> {
+            listener.registerNewBill(tableContainer.getTable().getSelectionModel().getSelectedItems());
+        });
 
         menuContainer.getItemAdd1().setOnAction((ActionEvent event)
                 -> {
@@ -178,6 +182,7 @@ public class ListPersonsBuilder extends AListBuilder<GUIPerson> implements IHint
         menuContainer.getMenuAddArticle().setDisable(false);
         menuContainer.getItemAddRole().setDisable(false);
         
+        menuContainer.getItemRegisterBill().setDisable(true);
         menuContainer.getItemEdit().setDisable(true);
         menuContainer.getItemShow().setDisable(true);
         menuContainer.getItemShowBusket().setDisable(true);
@@ -191,6 +196,7 @@ public class ListPersonsBuilder extends AListBuilder<GUIPerson> implements IHint
         menuContainer.getMenuAddArticle().setDisable(false);
         menuContainer.getItemAddRole().setDisable(false);
         
+        menuContainer.getItemRegisterBill().setDisable(false);
         menuContainer.getItemEdit().setDisable(false);
         menuContainer.getItemShow().setDisable(false);
         menuContainer.getItemShowBusket().setDisable(false);

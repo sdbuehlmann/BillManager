@@ -15,4 +15,8 @@ public class DEBillStringCollection extends DEDefaultStringCollection<GUIBill>
         return String.format("Rechnung %d bearbeiten",data.getDb_id().get());
     }
     
+    public String getTabTitle_Register() {
+        return "Rechnung nacherfassen";
+    }
+    
 }

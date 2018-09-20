@@ -222,4 +222,9 @@ public class ListPersonsController extends AController implements IListPersonsLi
         }
     }
 
+    @Override
+    public void registerNewBill(ObservableList<GUIPerson> persons) {
+        new RegisterBillController(framework, dataHandler, persons.get(0));
+    }
+
 }

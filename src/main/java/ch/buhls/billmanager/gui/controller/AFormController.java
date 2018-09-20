@@ -37,6 +37,10 @@ public abstract class AFormController<T>
         tabHandle = framework.displayMask(node, stringCollection.getTabTitle_Show(data), IGUIFramework.Area.RIGHT);
         tabHandle.focus();
     }
+    protected final void displayMask(Node node, String title){
+        tabHandle = framework.displayMask(node, title, IGUIFramework.Area.RIGHT);
+        tabHandle.focus();
+    }
     
     protected final void closeMask(){
         tabHandle.close();

@@ -8,6 +8,7 @@ import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIPosition;
+import ch.buhls.billmanager.gui.data.GUIRegisterBillData;
 import ch.buhls.billmanager.gui.data.GUIRole;
 import ch.buhls.billmanager.gui.data.GUITemplate;
 import ch.buhls.billmanager.model.App;
@@ -306,6 +307,15 @@ public class DataHandler
     }
     
     // bills
+    public GUIRegisterBillData createRegisterBillData(GUIPerson person){
+        GUIRegisterBillData data = new GUIRegisterBillData(financialYearsBuffer, person);
+        
+        data.getPaymentDeadlineInDays().set(App.INSTANCE.getLastPaymentDeadlineInDays());
+        data.getLocation().set(App.INSTANCE.getLastLocation());
+        
+        return data;
+    }
+    
     public GUICreateBillsData createBills(List<GUIPerson> persons){
         GUICreateBillsData data = new GUICreateBillsData(templatesBuffer, financialYearsBuffer, persons);
         data.getPaymentDeadlineInDays().set(App.INSTANCE.getLastPaymentDeadlineInDays());
@@ -346,7 +356,7 @@ public class DataHandler
         templateData.setTotal(total);
 
         // create temp file
-        File tempPDF = new File(project.getLocationBills(), ModelFascade.createBillFilename(billNr, templateData.getName(), ".pdf"));
+        File tempPDF = new File(project.getLocationBills(), ModelFascade.createBillFilename(billNr, ".pdf"));
         modelFascade.createPDF(tempPDF, template, App.INSTANCE.getInkscapePath(), templateData);
 
         return tempPDF;
@@ -354,10 +364,26 @@ public class DataHandler
 
     public void showPDF(GUIBill bill) throws ModelException{
         try {
-            File pdfFile = ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getData().getId(), bill.getData().getPersonBaseData().getName());
+            File pdfFile = ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getData().getId());
             modelFascade.openPDF(pdfFile);
         }
         catch (IOException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+    
+    public void printPDFs(List<GUIBill> bills) throws ModelException{
+        List<File> pdfFiles = new ArrayList<>(bills.size());
+        
+        for(GUIBill bill : bills){
+            File pdfFile = ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getData().getId());
+            pdfFiles.add(pdfFile);
+        }
+        
+        try {
+            modelFascade.printPDFs(pdfFiles);
+        }
+        catch (Exception ex) {
             throw new ModelException(ex.getMessage());
         }
     }

@@ -18,9 +18,10 @@ public class GUIStringCollection
     public final static String APPLICATION_TITLE = "Club Manager 0.3";
     
     public static final String DB_ID = "DB_ID";
-    public static final String DB_VERSION = "DB_Version";
+    public static final String DB_VERSION = "DB_V";
     
-    public static final String TRACKED_ENRITY_VERSION_NR = "Vers.";
+    public static final String ID = "ID";
+    public static final String TRACKED_ENRITY_VERSION_NR = "V";
     public static final String TRACKED_ENRITY_CHANGE_TXT = "Änderungstext";
     public static final String TRACKED_ENRITY_DATE = "Erstelldatum";
     
@@ -40,12 +41,13 @@ public class GUIStringCollection
     public static final String SALUTATION = "Begrüssung";
     public static final String TITLE = "Titel";
     
-    public static final String PERSON_NR_OF_ART = "Anz. WK";
-    public static final String PERSON_NR_OF_ROLES = "Anz. Rollen";
-    public static final String PERSON_NR_OF_BILLS = "Anz. Rechnungen";
+    public static final String PERSON_NR_OF_ART = "WK";
+    public static final String PERSON_NR_OF_ROLES = "Ro.";
+    public static final String PERSON_NR_OF_BILLS = "Re.";
     
-    
+    public static final String PERSON_BILL = "Rechnung eröffnen";
     public static final String PERSON_NEW_BILL = "Rechnung eröffnen";
+    public static final String PERSON_REGISTER_BILL = "Rechnung nacherfassen";
     public static final String PERSON_SHOW_BILL = "Rechnung anzeigen";
     public static final String PERSON_ADD_ART_TO_BILL = "Markierter Artikel hinzufügen";
     public static final String PERSON_ADD_ROLE = "Markierte Rolle hinzufügen";

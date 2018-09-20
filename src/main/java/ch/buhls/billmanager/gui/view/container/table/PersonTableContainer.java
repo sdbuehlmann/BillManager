@@ -12,13 +12,15 @@ import javafx.scene.control.TableView;
  */
 public class PersonTableContainer extends ATableContainer<GUIPerson>
 {
+
     private final TableColumn<GUIPerson, Number> dbIDColumn;
     private final TableColumn<GUIPerson, Number> dbVersionColumn;
     private final TableColumn<GUIPerson, Number> baseDataDbIDColumn;
     private final TableColumn<GUIPerson, Number> baseDataDbVersionColumn;
 
-    private final TableColumn<GUIPerson, Number> personalVersionColumn;
-    
+    private final TableColumn<GUIPerson, Number> idColumn;
+    private final TableColumn<GUIPerson, Number> versionColumn;
+
     private final TableColumn<GUIPerson, String> nameColumn;
     private final TableColumn<GUIPerson, String> prenameColumn;
     private final TableColumn<GUIPerson, String> streetColumn;
@@ -39,85 +41,96 @@ public class PersonTableContainer extends ATableContainer<GUIPerson>
 
         dbIDColumn = new TableColumn(GUIStringCollection.DB_ID);
         dbIDColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_id());
-        this.addColumn(dbIDColumn);
         this.getTechnicalColumns().add(dbIDColumn);
 
         dbVersionColumn = new TableColumn(GUIStringCollection.DB_VERSION);
         dbVersionColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_version());
-        this.addColumn(dbVersionColumn);
         this.getTechnicalColumns().add(dbVersionColumn);
 
         baseDataDbIDColumn = new TableColumn(GUIStringCollection.PERSON_BASE_DATA_DB_ID);
         baseDataDbIDColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getDb_id());
-        this.addColumn(baseDataDbIDColumn);
         this.getTechnicalColumns().add(baseDataDbIDColumn);
 
         baseDataDbVersionColumn = new TableColumn(GUIStringCollection.PERSON_BASE_DATA_DB_VERSION);
         baseDataDbVersionColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getDb_version());
-        this.addColumn(baseDataDbVersionColumn);
         this.getTechnicalColumns().add(baseDataDbVersionColumn);
-        
-        personalVersionColumn = new TableColumn(GUIStringCollection.TRACKED_ENRITY_VERSION_NR);
-        personalVersionColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getVersionNr());
-        this.addColumn(personalVersionColumn);
+
+        idColumn = new TableColumn(GUIStringCollection.ID);
+        idColumn.setCellValueFactory(cellData -> cellData.getValue().getDb_id());
+
+        versionColumn = new TableColumn(GUIStringCollection.TRACKED_ENRITY_VERSION_NR);
+        versionColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getVersionNr());
 
         nameColumn = new TableColumn(GUIStringCollection.NAME);
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getName());
-        this.addColumn(nameColumn);
 
         prenameColumn = new TableColumn(GUIStringCollection.PRENAME);
         prenameColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getPrename());
-        this.addColumn(prenameColumn);
 
         streetColumn = new TableColumn(GUIStringCollection.STREET);
         streetColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getStreet());
-        this.addColumn(streetColumn);
 
         postalCodeColumn = new TableColumn(GUIStringCollection.POSTAL_CODE);
         postalCodeColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getPostalcode());
-        this.addColumn(postalCodeColumn);
 
         cityColumn = new TableColumn(GUIStringCollection.CITY);
         cityColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getCity());
-        this.addColumn(cityColumn);
 
         birthdayColumn = TablesUtils.createDateColumn(
                 (TableColumn.CellDataFeatures<GUIPerson, LocalDate> cellData) -> {
                     return cellData.getValue().getBaseData().getBirthday();
                 }, GUIStringCollection.BIRTHDAY);
-        this.addColumn(birthdayColumn);
 
         phonePColumn = new TableColumn(GUIStringCollection.PHONE_P);
         phonePColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getPhoneP());
-        this.addColumn(phonePColumn);
 
         phoneMColumn = new TableColumn(GUIStringCollection.PHONE_M);
         phoneMColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getPhoneM());
-        this.addColumn(phoneMColumn);
 
         salutationColumn = new TableColumn(GUIStringCollection.SALUTATION);
         salutationColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getSalutation());
-        this.addColumn(salutationColumn);
 
         titleColumn = new TableColumn(GUIStringCollection.TITLE);
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getTitle());
-        this.addColumn(titleColumn);
 
         nrArtInBusketColumn = new TableColumn(GUIStringCollection.PERSON_NR_OF_ART);
         nrArtInBusketColumn.setCellValueFactory(cellData -> cellData.getValue().getNrOfArtInBusket());
-        this.addColumn(nrArtInBusketColumn);
 
         nrBillsColumn = new TableColumn(GUIStringCollection.PERSON_NR_OF_BILLS);
         nrBillsColumn.setCellValueFactory(cellData -> cellData.getValue().getNrOfBills());
-        this.addColumn(nrBillsColumn);
 
         nrRolesColumn = new TableColumn(GUIStringCollection.PERSON_NR_OF_ROLES);
         nrRolesColumn.setCellValueFactory(cellData -> cellData.getValue().getNrOfRoles());
-        this.addColumn(nrRolesColumn);
+        
+        addAllColumns();
     }
-    
-    // getter
 
+    public final void addAllColumns() {
+        this.addColumn(dbIDColumn);
+        this.addColumn(dbVersionColumn);
+        this.addColumn(baseDataDbIDColumn);
+        this.addColumn(baseDataDbVersionColumn);
+
+        this.addColumn(idColumn);
+        this.addColumn(versionColumn);
+        
+        this.addColumn(nrArtInBusketColumn);
+        this.addColumn(nrRolesColumn);
+        this.addColumn(nrBillsColumn);
+
+        this.addColumn(nameColumn);
+        this.addColumn(prenameColumn);
+        this.addColumn(streetColumn);
+        this.addColumn(postalCodeColumn);
+        this.addColumn(cityColumn);
+        this.addColumn(birthdayColumn);
+        this.addColumn(phonePColumn);
+        this.addColumn(phoneMColumn);
+        this.addColumn(salutationColumn);
+        this.addColumn(titleColumn);
+    }
+
+    // getter
     public TableColumn<GUIPerson, Number> getDbIDColumn() {
         return dbIDColumn;
     }

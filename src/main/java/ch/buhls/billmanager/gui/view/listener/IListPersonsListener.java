@@ -20,6 +20,7 @@ public interface IListPersonsListener
     public void show(List<GUIPerson> persons);
 
     public void createNewBill(ObservableList<GUIPerson> persons);
+    public void registerNewBill(ObservableList<GUIPerson> persons);
     
     public void showBusket(ObservableList<GUIPerson> persons);
     public void addArticleToBusket(ObservableList<GUIPerson> persons, int nr);

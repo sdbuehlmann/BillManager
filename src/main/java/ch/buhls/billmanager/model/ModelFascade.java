@@ -10,6 +10,7 @@ import ch.buhls.billmanager.persistance.PersistanceFascade;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -66,6 +67,10 @@ public class ModelFascade
 
     public void openPDF(File pdfFile) throws IOException {
         System.openPDF(pdfFile);
+    }
+    
+    public void printPDFs(List<File> pdfFiles) throws Exception{
+        System.printPDF(pdfFiles);
     }
 
     public Project createProject(File location) throws ModelException {
@@ -124,18 +129,15 @@ public class ModelFascade
                 new PersistanceFascade(projectFile));
     }
     
-    public static String createBillFilename(int number, String name, String ending) {
-        String storageName = name;
-        storageName = storageName.replace(' ', '_');
-        storageName = number + "_" + storageName;
-
+    public static String createBillFilename(int number, String ending) {
+        String storageName = number + "";
         return storageName + ending;
     }
-    public static File createPathToBill(File dir, int number, String name, String ending){
-        return new File(dir, ModelFascade.createBillFilename(number, name, ending));
+    public static File createPathToBill(File dir, int number, String ending){
+        return new File(dir, ModelFascade.createBillFilename(number, ending));
     }
-    public static File createPathToBillPDF(File dir, int number, String name){
-        return ModelFascade.createPathToBill(dir, number, name, ".pdf");
+    public static File createPathToBillPDF(File dir, int number){
+        return ModelFascade.createPathToBill(dir, number, ".pdf");
     }
     
 }
