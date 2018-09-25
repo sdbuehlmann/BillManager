@@ -4,6 +4,8 @@ package ch.buhls.billmanager.gui.view.builder;
 import ch.buhls.billmanager.gui.view.container.table.ATableContainer;
 import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 /**
  *
@@ -16,6 +18,7 @@ public abstract class AListBuilder<T>
     
     public AListBuilder(ATableContainer<T> tableContainer) {
         this.tableContainer = tableContainer;
+        VBox.setVgrow(tableContainer.getTable(), Priority.ALWAYS);
     }
     
     public final void enableDBInfos(boolean enable) {

@@ -30,55 +30,52 @@ import javafx.collections.ObservableList;
  *
  * @author simon
  */
-public class PersonsDataHandler
+public class PersonsDataHandler implements IDataBufferContainer
 {
     private final Project project;
     private final PersistanceFascade persistanceFascade;
     private final ModelFascade modelFascade;
-
-    private final ObservableList<GUIPerson> personsBuffer;
     
-    private final List<IPersonFilter> filters;
+    private final ListFiltersContainer<Person> filteredListContainer;
+    private final ObservableList<GUIPerson> buffer;
 
     public PersonsDataHandler(Project project) {
         this.project = project;
         persistanceFascade = project.getDb();
         modelFascade = new ModelFascade();
-
-        personsBuffer = FXCollections.observableArrayList();
         
-        filters = new ArrayList<>();
+        filteredListContainer = new ListFiltersContainer<>();
+        buffer = FXCollections.observableArrayList();
     }
     
     public FilterHandle addRoleFilter(RoleFilterType type, GUIRole role){
         RolePersonFilter filter = new RolePersonFilter(type, role.getData());
-        filters.add(filter);
+        filteredListContainer.getFilters().add(filter);
         
-        return new FilterHandle(filter, filters);
+        return new FilterHandle(filter, filteredListContainer.getFilters());
     }
     
     public FilterHandle addAgeFilter(AgeFilterType type, GUIFinancialYear year, int age){
         AgePersonFilter filter = new AgePersonFilter(type, year.getData(), age);
-        filters.add(filter);
+        filteredListContainer.getFilters().add(filter);
         
-        return new FilterHandle(filter, filters);
+        return new FilterHandle(filter, filteredListContainer.getFilters());
     }
     
     public ObservableList<GUIPerson> getPersonsBuffer() {
-        return personsBuffer;
+        return buffer;
     }
 
+    @Deprecated
     public void reloadPersonsBuffer() {
-        personsBuffer.clear();
-        
+        // get new data and filter
         List<Person> persons = persistanceFascade.getAllPersons();
+        filteredListContainer.filterList(persons);
         
-        for(IPersonFilter filter : filters){
-            persons = filter.filterList(persons);
-        }
-        
+        // update buffer
+        buffer.clear();
         for(Person pers : persons){
-            personsBuffer.add(wrapPersonToGUIData(pers));
+            buffer.add(wrapPersonToGUIData(pers));
         }
     }
 
@@ -263,6 +260,11 @@ public class PersonsDataHandler
         storePersonBaseDataAndPerson(pers);
         
         return pers;
+    }
+
+    @Override
+    public void reloadBuffer() {
+        this.reloadPersonsBuffer();
     }
     
 }

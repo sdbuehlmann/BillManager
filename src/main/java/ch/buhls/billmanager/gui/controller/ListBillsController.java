@@ -2,8 +2,11 @@
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.FilterHandle;
 import ch.buhls.billmanager.gui.GUIStringCollection;
+import ch.buhls.billmanager.gui.RolePersonFilter;
 import ch.buhls.billmanager.gui.data.GUIBill;
+import ch.buhls.billmanager.gui.data.GUIRole;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.ListBillsBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.IListBillsBuilderListener;
@@ -51,6 +54,14 @@ public class ListBillsController extends AController implements IListBillsBuilde
         catch (ModelException ex) {
             framework.showExceptionDialoque(ex);
         }
+    }
+
+    @Override
+    public void filterByStatus(GUIBill.GUIBillStatus status) {
+        FilterHandle filterHandle = dataHandler.addBillStatusFilter(status);
+        dataHandler.reloadBillsBuffer();
+         
+        new FilterHintController(builder, dataHandler, filterHandle, GUIStringCollection.getHintTxt_showBillStatus(status));
     }
     
 }

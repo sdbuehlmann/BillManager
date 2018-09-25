@@ -47,9 +47,8 @@ import javafx.collections.ObservableList;
  *
  * @author simon
  */
-public class DataHandler
+public class DataHandler implements IDataBufferContainer
 {
-
     private final static int POS_NR_STEP = 10;
 
     private final Project project;
@@ -58,7 +57,8 @@ public class DataHandler
 
     private ObservableList<GUIRole> rolesBuffer;
     private ObservableList<GUIArticle> articlesBuffer;
-    private ObservableList<GUIBill> billsBuffer;
+    private final ObservableList<GUIBill> billsBuffer;
+    private final ListFiltersContainer<Bill> billsFiltersContainer;
     private ObservableList<GUITemplate> templatesBuffer;
     private ObservableList<GUIFinancialYear> financialYearsBuffer;
 
@@ -78,6 +78,7 @@ public class DataHandler
         rolesBuffer = FXCollections.observableArrayList();
         articlesBuffer = FXCollections.observableArrayList();
         billsBuffer = FXCollections.observableArrayList();
+        billsFiltersContainer = new ListFiltersContainer<>();
         templatesBuffer = FXCollections.observableArrayList();
         financialYearsBuffer = FXCollections.observableArrayList();
 
@@ -483,8 +484,11 @@ public class DataHandler
     }
 
     public void reloadBillsBuffer() {
+        List<Bill> bills = persistanceFascade.getAllBills();
+        billsFiltersContainer.filterList(bills);
+        
         billsBuffer.clear();
-        for (Bill bill : persistanceFascade.getAllBills()) {
+        for (Bill bill : bills) {
             billsBuffer.add(
                     new GUIBill(
                             bill,
@@ -493,6 +497,26 @@ public class DataHandler
                             new GUIPersonBaseData(bill.getPersonBaseData())));
         }
     }
+    
+    public FilterHandle addBillStatusFilter(GUIBill.GUIBillStatus status){
+        BillStatusFilter filter = null;
+        switch(status){
+            case PAID:
+                filter = new BillStatusFilter(Bill.BillState.PAID);
+                break;
+            case SENDET:
+                filter = new BillStatusFilter(Bill.BillState.SENDET);
+                break;
+            case STORNO:
+                filter = new BillStatusFilter(Bill.BillState.CANCELED);
+                break;
+        }
+        
+        billsFiltersContainer.getFilters().add(filter);
+        
+        return new FilterHandle(filter, billsFiltersContainer.getFilters());
+    }
+    
     
     // app settings
     public GUIAppSettings getAppSettingsData(){
@@ -525,5 +549,10 @@ public class DataHandler
     // getter
     public PersonsDataHandler getPersonsDataHandler(){
         return personsDataHandler;
+    }
+
+    @Override
+    public void reloadBuffer() {
+        this.reloadBillsBuffer();
     }
 }

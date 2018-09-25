@@ -9,8 +9,8 @@ import java.util.List;
  *
  * @author simon
  */
-public class RolePersonFilter implements IPersonFilter
-{
+public class RolePersonFilter implements IFilter<Person>
+{ 
     public enum RoleFilterType
     {
         SHOW,
@@ -26,25 +26,31 @@ public class RolePersonFilter implements IPersonFilter
     }
 
     @Override
-    public List<Person> filterList(List<Person> persons) {
-        List<Person> filteredPersons = new ArrayList<>();
-        for (Person pers : persons) {
+    public void filterList(List<Person> persons) {
+        persons.removeAll(this.getElementsToRemoveSublist(persons));
+    }
+    
+    @Override
+    public List<Person> getElementsToRemoveSublist(List<Person> list) {
+        List<Person> personsToRemove = new ArrayList<>();
+        for (Person pers : list) {
             switch (roleFilterType) {
                 case HIDE:
-                    if (!pers.getRoles().contains(role)) {
-                        filteredPersons.add(pers);
+                    if (pers.getRoles().contains(role)) {
+                        personsToRemove.add(pers);
                     }
                     break;
                 case SHOW:
-                    if (pers.getRoles().contains(role)) {
-                        filteredPersons.add(pers);
+                    if (!pers.getRoles().contains(role)) {
+                        personsToRemove.add(pers);
                     }
                     break;
             }
         }
-        return filteredPersons;
+        
+        return personsToRemove;
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         if(obj == null){

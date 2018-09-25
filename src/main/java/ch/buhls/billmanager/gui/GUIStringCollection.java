@@ -82,6 +82,7 @@ public class GUIStringCollection
     
     public static final String BILLS = "Rechnungen";
     public static final String BILL_STATUS = "Status";
+    public static final String BILL_STATUS_FILTER = "Status Filter";
     public static final String BILL_STATUS_IN_PROGRESS = "In Arbeit";
     public static final String BILL_STATUS_SENDET = "Gesendet";
     public static final String BILL_STATUS_PAID = "Bezahlt";
@@ -141,6 +142,7 @@ public class GUIStringCollection
     public static final String SHOW_PDF = "PDF anzeigen";
     public static final String GENERATE_PDF = "PDF generieren";
     public static final String PRINT_PDF = "PDF drucken";
+    public static final String FILTER = "Filtern";
     
     public static final String DIFFERENT_DATA = "<diff>";
     
@@ -192,6 +194,9 @@ public class GUIStringCollection
     }
     public static String getHintTxt_hideRoleFilter(GUIRole role){
         return String.format("Inhaber der Rolle \"%s\" ausgeblendet", role.getName().get());
+    }
+    public static String getHintTxt_showBillStatus(GUIBill.GUIBillStatus status){
+        return String.format("Rechnungen mit Status \"%s\" angezeigt", status);
     }
     
     public static String getHintTxt_roleAdded(GUIRole role, int nrAdded){

@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author simon
  */
-public class AgePersonFilter implements IPersonFilter
+public class AgePersonFilter implements IFilter<Person>
 {
 
     public enum AgeFilterType
@@ -35,46 +35,51 @@ public class AgePersonFilter implements IPersonFilter
     }
 
     @Override
-    public List<Person> filterList(List<Person> persons) {
-        List<Person> filteredPersons = new ArrayList<>();
-        for (Person pers : persons) {
+    public void filterList(List<Person> persons) {
+        persons.removeAll(this.getElementsToRemoveSublist(persons));
+    }
+    
+    @Override
+    public List<Person> getElementsToRemoveSublist(List<Person> list) {
+        List<Person> personsToRemove = new ArrayList<>();
+        for (Person pers : list) {
             if (pers.getPersonBaseData().getBirthday() != null) {
-                LocalDate tempBirthday = pers.getPersonBaseData().getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                LocalDate tempFirstDay = year.getFirstDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                LocalDate tempLastDay = year.getLastDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate birthday = pers.getPersonBaseData().getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate firstDay = year.getFirstDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate lastDay = year.getLastDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
                 switch (ageFilterType) {
                     case EQUAL:
-                        if (Period.between(tempBirthday, tempLastDay).getYears() == age) {
-                            filteredPersons.add(pers);
+                        if (!(Period.between(birthday, lastDay).getYears() == age)) {
+                            personsToRemove.add(pers);
                         }
                         break;
                     case OLDER:
-                        if (Period.between(tempBirthday, tempLastDay).getYears() < age) {
-                            filteredPersons.add(pers);
+                        if (!(Period.between(birthday, lastDay).getYears() < age)) {
+                            personsToRemove.add(pers);
                         }
                         break;
                     case YOUNGER:
-                        if (Period.between(tempBirthday, tempFirstDay).getYears() > age) {
-                            filteredPersons.add(pers);
+                        if (!(Period.between(birthday, firstDay).getYears() > age)) {
+                            personsToRemove.add(pers);
                         }
                         break;
                     case OLDER_OR_EQUAL:
-                        if (Period.between(tempBirthday, tempLastDay).getYears() >= age) {
-                            filteredPersons.add(pers);
+                        if (!(Period.between(birthday, lastDay).getYears() >= age)) {
+                            personsToRemove.add(pers);
                         }
                         break;
                     case YOUNGER_OR_EQUAL:
-                        if (Period.between(tempBirthday, tempLastDay).getYears() <= age) {
-                            filteredPersons.add(pers);
+                        if (!(Period.between(birthday, lastDay).getYears() <= age)) {
+                            personsToRemove.add(pers);
                         }
                         break;
                 }
             }
         }
-        return filteredPersons;
+        return personsToRemove;
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

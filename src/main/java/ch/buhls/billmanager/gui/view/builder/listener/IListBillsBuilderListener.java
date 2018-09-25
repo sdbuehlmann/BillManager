@@ -2,6 +2,7 @@
 package ch.buhls.billmanager.gui.view.builder.listener;
 
 import ch.buhls.billmanager.gui.data.GUIBill;
+import ch.buhls.billmanager.gui.data.GUIBill.GUIBillStatus;
 import java.util.List;
 
 /**
@@ -15,4 +16,7 @@ public interface IListBillsBuilderListener
     public void showPDF(GUIBill selected);
     
     public void printPDFs(List<GUIBill> bills);
+    
+    public void filterByStatus(GUIBillStatus status);
+    
 }

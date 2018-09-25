@@ -2,10 +2,11 @@
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.FilterHandle;
+import ch.buhls.billmanager.gui.IDataBufferContainer;
 import ch.buhls.billmanager.gui.PersonsDataHandler;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.framework.IHintListener;
-import ch.buhls.billmanager.gui.view.container.IHintBar;
+import ch.buhls.billmanager.gui.view.container.IHintBarContainer;
 
 /**
  *
@@ -13,16 +14,16 @@ import ch.buhls.billmanager.gui.view.container.IHintBar;
  */
 public class FilterHintController implements IHintListener
 {
-    private final IHintBar hintBar;
+    private final IHintBarContainer hintBar;
     private final IHintHandle hintHandle;
     
-    private final PersonsDataHandler dataHandler;
+    private final IDataBufferContainer bufferContainer;
     
     private final FilterHandle filterHandle;
 
-    public FilterHintController(IHintBar hintBar, PersonsDataHandler dataHandler, FilterHandle filterHandle, String hintTxt) {
+    public FilterHintController(IHintBarContainer hintBar, IDataBufferContainer bufferContainer, FilterHandle filterHandle, String hintTxt) {
         this.hintBar = hintBar;
-        this.dataHandler = dataHandler;
+        this.bufferContainer = bufferContainer;
         this.filterHandle = filterHandle;
         
         hintHandle = hintBar.addHint(hintTxt, this);
@@ -32,6 +33,6 @@ public class FilterHintController implements IHintListener
     public void hintClosed() {
         filterHandle.delete();
         hintHandle.close();
-        dataHandler.reloadPersonsBuffer();
+        bufferContainer.reloadBuffer();
     }
 }

@@ -5,7 +5,6 @@ import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.framework.IHintListener;
 import ch.buhls.billmanager.gui.view.container.HintBarContainer;
-import ch.buhls.billmanager.gui.view.container.IHintBar;
 import ch.buhls.billmanager.gui.view.container.menues.ListPersonsMenuContainer;
 import ch.buhls.billmanager.gui.view.container.table.PersonTableContainer;
 import ch.buhls.billmanager.gui.view.listener.IListPersonsListener;
@@ -14,12 +13,13 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import ch.buhls.billmanager.gui.view.container.IHintBarContainer;
 
 /**
  *
  * @author simon
  */
-public class ListPersonsBuilder extends AListBuilder<GUIPerson> implements IHintBar
+public class ListPersonsBuilder extends AListBuilder<GUIPerson> implements IHintBarContainer
 {
     private final VBox view;
     

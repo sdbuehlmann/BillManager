@@ -8,7 +8,7 @@ import ch.buhls.billmanager.gui.framework.IHintListener;
  *
  * @author simon
  */
-public interface IHintBar
+public interface IHintBarContainer
 {
     public IHintHandle addHint(String text, IHintListener listener);
 }
