@@ -395,7 +395,7 @@ public class DataHandler implements IDataBufferContainer
 
     private String dateToString(Date date) {
         StringBuilder sb = new StringBuilder();
-        sb.append(Integer.toString(date.getDay()));
+        sb.append(Integer.toString(date.getDate()));
         sb.append(". ");
 
         switch (date.getMonth()) {
