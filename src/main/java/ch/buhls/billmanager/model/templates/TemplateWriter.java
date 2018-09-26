@@ -1,6 +1,5 @@
 package ch.buhls.billmanager.model.templates;
 
-
 import ch.buhls.billmanager.model.data.TemplatePosition;
 import ch.buhls.billmanager.model.data.TemplateData;
 import java.text.DateFormat;
@@ -19,8 +18,7 @@ public class TemplateWriter
 
     private String date;
 
-    public TemplateWriter()
-    {
+    public TemplateWriter() {
 
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
         Date today = new Date();
@@ -30,8 +28,7 @@ public class TemplateWriter
         LOG.log(Level.INFO, String.format("TemplateWriter generated."));
     }
 
-    public void fillTemplate(Template template, TemplateData bill)
-    {
+    public void fillTemplate(Template template, TemplateData bill) {
         writeAddress(bill, template);
         writeHeader(bill, template);
         writeSalutation(bill, template);
@@ -41,11 +38,9 @@ public class TemplateWriter
         writeDate(bill, template, bill.getLocation(), bill.getDate());
     }
 
-    public void writeAddress(TemplateData bill, Template template)
-    {
+    public void writeAddress(TemplateData bill, Template template) {
         template.address.setContent(
-                new String[]
-                {
+                new String[]{
                     bill.getTitle(),
                     bill.getPrename() + " " + bill.getName(),
                     bill.getStreet(),
@@ -54,20 +49,16 @@ public class TemplateWriter
                 });
     }
 
-    public void writeHeader(TemplateData bill, Template template)
-    {
+    public void writeHeader(TemplateData bill, Template template) {
         template.header.setContent("Rechnung " + bill.getNumber());
     }
 
-    public void writeSalutation(TemplateData bill, Template template)
-    {
+    public void writeSalutation(TemplateData bill, Template template) {
         template.salutation.setContent(bill.getSalutation());
     }
 
-    public void writePosition(TemplatePosition position, Template template, int pos)
-    {
-        if (position != null)
-        {
+    public void writePosition(TemplatePosition position, Template template, int pos) {
+        if (position != null) {
             template.position[pos].position.setContent(position.getPosition() + "");
             template.position[pos].line1.setContent(position.getFirstLine());
             template.position[pos].line2.setContent(position.getSecondLine());
@@ -75,8 +66,7 @@ public class TemplateWriter
             template.position[pos].prize.setContent(this.formatCHF(position.getPrice()));
             template.position[pos].subtotal.setContent(this.formatCHF(position.getPrice() * position.getNumber()));
         }
-        else
-        {
+        else {
             template.position[pos].position.setContent("");
             template.position[pos].line1.setContent("");
             template.position[pos].line2.setContent("");
@@ -86,13 +76,10 @@ public class TemplateWriter
         }
     }
 
-    public void writePositions(TemplateData bill, Template template)
-    {
-        for (int cnt = 0; cnt < 4; cnt++)
-        {
+    public void writePositions(TemplateData bill, Template template) {
+        for (int cnt = 0; cnt < 4; cnt++) {
             TemplatePosition pos = null;
-            if (bill.getPositions().size() >= cnt + 1)
-            {
+            if (bill.getPositions().size() >= cnt + 1) {
                 pos = bill.getPositions().get(cnt);
             }
 
@@ -103,29 +90,23 @@ public class TemplateWriter
         template.total.setContent(this.formatCHF(bill.getTotal()));
     }
 
-    public void writeSum(TemplateData bill, Template template)
-    {
+    public void writeSum(TemplateData bill, Template template) {
         StringBuilder builder = new StringBuilder(10);
         int total = bill.getTotal();
         String sum = "";
-        if (total != 0)
-        {
+        if (total != 0) {
             sum = bill.getTotal() + "";
         }
-        else
-        {
+        else {
             sum = "000";
         }
 
-        for (int cnt = 0; cnt < 10; cnt++)
-        {
-            if (sum.length() > cnt)
-            {
+        for (int cnt = 0; cnt < 10; cnt++) {
+            if (sum.length() > cnt) {
                 template.sumLeft.sum[cnt].setContent(sum.charAt(sum.length() - 1 - cnt));
                 template.sumRight.sum[cnt].setContent(sum.charAt(sum.length() - 1 - cnt));
             }
-            else
-            {
+            else {
                 template.sumLeft.sum[cnt].setContent(' ');
                 template.sumRight.sum[cnt].setContent(' ');
             }
@@ -143,38 +124,28 @@ public class TemplateWriter
         }
     }
 
-    public void writePurpose(TemplateData bill, Template template)
-    {
+    public void writePurpose(TemplateData bill, Template template) {
         template.purpose.setContent(
-                new String[]
-                {
+                new String[]{
                     bill.getNumber(),
                     "",
                     "",
                     "",
-                    "",
-                });
+                    "",});
     }
 
-    public void writeDate(TemplateData bill, Template template, String place, String date)
-    {
+    public void writeDate(TemplateData bill, Template template, String place, String date) {
         template.date.setContent(place + ", " + date);
     }
 
-    protected String formatCHF(int chf)
-    {
+    protected String formatCHF(int chf) {
         StringBuilder builder = new StringBuilder(chf + "");
 
-        // Check: Costs less than 1Rp.
-        if ((Math.abs(chf) / 10) < 1)
-        {
+        if (chf == 0) {
             builder.insert(0, "00");
-        }
-        
-        // Check: less than 1Chf.
-        if((Math.abs(chf) / 10) < 100){
+        }else if (Math.abs(chf) < 100) {
             // add leading 0
-            builder.insert(0,"0");
+            builder.insert(0, "0");
         }
 
         builder.insert(builder.length() - 2, ".");
@@ -183,13 +154,11 @@ public class TemplateWriter
         return builder.toString();
     }
 
-    public String getDate()
-    {
+    public String getDate() {
         return date;
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         TemplateWriter tw = new TemplateWriter();
         System.out.println(tw.formatCHF(-6000));
     }

@@ -18,7 +18,7 @@ import org.eclipse.persistence.annotations.OptimisticLocking;
 public abstract class AEntity <T extends AEntity> implements Serializable
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected int id;
 
     @Version

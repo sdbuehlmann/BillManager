@@ -49,6 +49,7 @@ import javafx.collections.ObservableList;
  */
 public class DataHandler implements IDataBufferContainer
 {
+
     private final static int POS_NR_STEP = 10;
 
     private final Project project;
@@ -65,9 +66,9 @@ public class DataHandler implements IDataBufferContainer
     private ObjectProperty<GUIArticle> markedArticleProperty;
     private ObjectProperty<GUIRole> markedRoleProperty;
     private ObjectProperty<GUIFinancialYear> markedYearProperty;
-    
+
     private final BooleanProperty showDBInfosProperty;
-    
+
     private final PersonsDataHandler personsDataHandler;
 
     public DataHandler(Project project) {
@@ -85,9 +86,9 @@ public class DataHandler implements IDataBufferContainer
         markedArticleProperty = new SimpleObjectProperty<>();
         markedRoleProperty = new SimpleObjectProperty<>();
         markedYearProperty = new SimpleObjectProperty<>();
-        
+
         showDBInfosProperty = new SimpleBooleanProperty(App.INSTANCE.isShowDBInfos());
-        
+
         personsDataHandler = new PersonsDataHandler(project);
     }
 
@@ -200,10 +201,11 @@ public class DataHandler implements IDataBufferContainer
 
         storePosition(guiPosition);
         personsDataHandler.storePerson(guiPerson);
+        
+        guiPerson.getNrOfArtInBusket().set(0);
     }
 
-    public void mergeAndStoreBusket(GUIPerson guiPerson,
-            ObservableList<GUIPosition> guiBusket) throws PersistanceException {
+    public void mergeAndStoreBusket(GUIPerson guiPerson, ObservableList<GUIPosition> guiBusket) throws PersistanceException {
 
         List<Position> busket = new ArrayList<>(guiBusket.size());
         for (GUIPosition guiPos : guiBusket) {
@@ -211,6 +213,8 @@ public class DataHandler implements IDataBufferContainer
         }
 
         persistanceFascade.mergeAndStoreBusket(guiPerson.getData(), busket);
+        
+        guiPerson.getNrOfArtInBusket().set(0);
     }
 
     public int getNextPositionNr(List<GUIPosition> guiPositions) {
@@ -306,25 +310,25 @@ public class DataHandler implements IDataBufferContainer
     public ObjectProperty<GUIFinancialYear> getMarkedYear() {
         return markedYearProperty;
     }
-    
+
     // bills
-    public GUIRegisterBillData createRegisterBillData(GUIPerson person){
+    public GUIRegisterBillData createRegisterBillData(GUIPerson person) {
         GUIRegisterBillData data = new GUIRegisterBillData(financialYearsBuffer, person);
-        
+
         data.getPaymentDeadlineInDays().set(App.INSTANCE.getLastPaymentDeadlineInDays());
         data.getLocation().set(App.INSTANCE.getLastLocation());
-        
+
         return data;
     }
-    
-    public GUICreateBillsData createBills(List<GUIPerson> persons){
+
+    public GUICreateBillsData createBills(List<GUIPerson> persons) {
         GUICreateBillsData data = new GUICreateBillsData(templatesBuffer, financialYearsBuffer, persons);
         data.getPaymentDeadlineInDays().set(App.INSTANCE.getLastPaymentDeadlineInDays());
         data.getLocation().set(App.INSTANCE.getLastLocation());
-        
+
         return data;
     }
-    
+
     private File createBillPDF(GUIPerson person, String location, String date, int billNr, File template) throws ModelException, AppException {
         TemplateData templateData = new TemplateData()
                 .setPrename(person.getBaseData().getPrename().get())
@@ -334,7 +338,7 @@ public class DataHandler implements IDataBufferContainer
                 .setCity(person.getBaseData().getCity().get())
                 .setSalutation(person.getBaseData().getSalutation().get())
                 .setTitle(person.getBaseData().getTitle().get())
-                .setNumber(billNr+"")
+                .setNumber(billNr + "")
                 .setLocation(location)
                 .setDate(date)
                 .setTemplate(template.getAbsolutePath());
@@ -363,7 +367,7 @@ public class DataHandler implements IDataBufferContainer
         return tempPDF;
     }
 
-    public void showPDF(GUIBill bill) throws ModelException{
+    public void showPDF(GUIBill bill) throws ModelException {
         try {
             File pdfFile = ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getData().getId());
             modelFascade.openPDF(pdfFile);
@@ -372,15 +376,15 @@ public class DataHandler implements IDataBufferContainer
             throw new ModelException(ex.getMessage());
         }
     }
-    
-    public void printPDFs(List<GUIBill> bills) throws ModelException{
+
+    public void printPDFs(List<GUIBill> bills) throws ModelException {
         List<File> pdfFiles = new ArrayList<>(bills.size());
-        
-        for(GUIBill bill : bills){
+
+        for (GUIBill bill : bills) {
             File pdfFile = ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getData().getId());
             pdfFiles.add(pdfFile);
         }
-        
+
         try {
             modelFascade.printPDFs(pdfFiles);
         }
@@ -388,7 +392,7 @@ public class DataHandler implements IDataBufferContainer
             throw new ModelException(ex.getMessage());
         }
     }
-    
+
     private String dateToString(Date date) {
         StringBuilder sb = new StringBuilder();
         sb.append(Integer.toString(date.getDay()));
@@ -432,9 +436,9 @@ public class DataHandler implements IDataBufferContainer
                 sb.append("Dezember ");
                 break;
         }
-        
+
         sb.append(Integer.toString(date.getYear() + 1900));
-        
+
         return sb.toString();
     }
 
@@ -459,10 +463,10 @@ public class DataHandler implements IDataBufferContainer
 
             // create file
             File pdfFile = createBillPDF(person, data.getLocation().get(), dateToString(bill.getDateSendet()), bill.getId(), templateFile);
-            
+
             person.getData().getBills().add(bill);
             person.getData().getBusket().clear();
-            
+
             persistanceFascade.storePerson(person.getData());
         }
 
@@ -470,15 +474,15 @@ public class DataHandler implements IDataBufferContainer
         personsDataHandler.reloadPersonsBuffer();
     }
 
-    public GUIBill editBill(GUIBill bill){
-        return new GUIBill(persistanceFascade.editBill(bill.getData()),bill.getTemplate(), bill.getYear(), bill.getPerson());
+    public GUIBill editBill(GUIBill bill) {
+        return new GUIBill(persistanceFascade.editBill(bill.getData()), bill.getTemplate(), bill.getYear(), bill.getPerson());
     }
-    
-    public void storeBill(GUIBill bill) throws PersistanceException{
+
+    public void storeBill(GUIBill bill) throws PersistanceException {
         persistanceFascade.storeBill(bill.getData());
         reloadBillsBuffer();
     }
-    
+
     public ObservableList<GUIBill> getBillsBuffer() {
         return billsBuffer;
     }
@@ -486,7 +490,7 @@ public class DataHandler implements IDataBufferContainer
     public void reloadBillsBuffer() {
         List<Bill> bills = persistanceFascade.getAllBills();
         billsFiltersContainer.filterList(bills);
-        
+
         billsBuffer.clear();
         for (Bill bill : bills) {
             billsBuffer.add(
@@ -497,10 +501,10 @@ public class DataHandler implements IDataBufferContainer
                             new GUIPersonBaseData(bill.getPersonBaseData())));
         }
     }
-    
-    public FilterHandle addBillStatusFilter(GUIBill.GUIBillStatus status){
+
+    public FilterHandle addBillStatusFilter(GUIBill.GUIBillStatus status) {
         BillStatusFilter filter = null;
-        switch(status){
+        switch (status) {
             case PAID:
                 filter = new BillStatusFilter(Bill.BillState.PAID);
                 break;
@@ -511,15 +515,41 @@ public class DataHandler implements IDataBufferContainer
                 filter = new BillStatusFilter(Bill.BillState.CANCELED);
                 break;
         }
-        
+
         billsFiltersContainer.getFilters().add(filter);
-        
+
         return new FilterHandle(filter, billsFiltersContainer.getFilters());
     }
-    
-    
+
+    public void registerBill(GUIRegisterBillData data, File billPDF) throws ModelException, PersistanceException {
+        GUIPerson person = data.getPerson().get();
+        // create db entry
+        Bill bill = persistanceFascade.createBill();
+
+        bill.setBillState(Bill.BillState.SENDET);
+        bill.setPaymentPeriodInDays(data.getPaymentDeadlineInDays().get());
+        bill.setDateSendet(Date.from(data.getDate().get().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        bill.setLocation(data.getLocation().get());
+        bill.setFinancialYear(data.getSelectedYear().get().getData());
+        bill.getPositions().addAll(person.getData().getBusket());
+        bill.setPersonBaseData(person.getBaseData().getData());
+
+        persistanceFascade.storeBill(bill);
+        
+        person.getData().getBills().add(bill);
+        person.getData().getBusket().clear();
+
+        persistanceFascade.storePerson(person.getData());
+        
+        File dest = new File(project.getLocationBills(), ModelFascade.createBillFilename(bill.getId(), ".pdf"));
+        modelFascade.copyPDF(billPDF, dest);
+
+        reloadBillsBuffer();
+        personsDataHandler.reloadPersonsBuffer();
+    }
+
     // app settings
-    public GUIAppSettings getAppSettingsData(){
+    public GUIAppSettings getAppSettingsData() {
         GUIAppSettings data = new GUIAppSettings();
         try {
             data.getInkscapePathProperty().set(App.INSTANCE.getInkscapePath().getPath());
@@ -528,15 +558,15 @@ public class DataHandler implements IDataBufferContainer
             Logger.getLogger(DataHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         data.getShowDBInfosProperty().set(App.INSTANCE.isShowDBInfos());
-        
+
         return data;
     }
-    
-    public void storeAppSettingsData(GUIAppSettings data){
+
+    public void storeAppSettingsData(GUIAppSettings data) {
         App.INSTANCE.setInkscapePath(data.getInkscapePathProperty().get());
         App.INSTANCE.setShowDBInfos(data.getShowDBInfosProperty().get());
-        
-        if(data.getShowDBInfosProperty().get() != showDBInfosProperty.get()){
+
+        if (data.getShowDBInfosProperty().get() != showDBInfosProperty.get()) {
             // update
             showDBInfosProperty.set(data.getShowDBInfosProperty().get());
         }
@@ -545,9 +575,9 @@ public class DataHandler implements IDataBufferContainer
     public BooleanProperty getShowDBInfosProperty() {
         return showDBInfosProperty;
     }
-    
+
     // getter
-    public PersonsDataHandler getPersonsDataHandler(){
+    public PersonsDataHandler getPersonsDataHandler() {
         return personsDataHandler;
     }
 

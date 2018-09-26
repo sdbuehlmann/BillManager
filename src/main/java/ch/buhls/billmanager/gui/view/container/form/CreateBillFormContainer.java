@@ -68,6 +68,13 @@ public class CreateBillFormContainer
         contextMenu = new ContextMenu(itemRemove);
         personTableContainer = new PersonTableContainer();
         personTableContainer.getTable().setContextMenu(contextMenu);
+        personTableContainer.removeAllColumns();
+        personTableContainer.addColumn(personTableContainer.getPrenameColumn());
+        personTableContainer.addColumn(personTableContainer.getNameColumn());
+        personTableContainer.addColumn(personTableContainer.getStreetColumn());
+        personTableContainer.addColumn(personTableContainer.getCityColumn());
+        personTableContainer.addColumn(personTableContainer.getSalutationColumn());
+        personTableContainer.addColumn(personTableContainer.getTitleColumn());
         
         // buttons
         bCreate = new Button(GUIStringCollection.BILL_CREATE);

@@ -460,7 +460,11 @@ public class PersistanceFascade
         
         // store all used positions
         for(Position pos : newBusket){
-            storePosition(pos);
+            if(pos.getId() == 0){
+                storePosition(pos);
+            }else{
+                updatePosition(pos);
+            }
         }
         
         // update person entity

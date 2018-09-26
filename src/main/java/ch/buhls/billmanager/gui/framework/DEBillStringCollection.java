@@ -2,6 +2,7 @@
 package ch.buhls.billmanager.gui.framework;
 
 import ch.buhls.billmanager.gui.data.GUIBill;
+import ch.buhls.billmanager.gui.data.GUIRole;
 
 /**
  *
@@ -19,4 +20,8 @@ public class DEBillStringCollection extends DEDefaultStringCollection<GUIBill>
         return "Rechnung nacherfassen";
     }
     
+    public DialoquesStringsTO getConfirmTxt_ImportBill() {
+        return new DialoquesStringsTO("Bestätigung erforderlich", "Soll Rechnung importiert werden?");
+    }
+
 }

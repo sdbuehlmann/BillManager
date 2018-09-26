@@ -229,7 +229,7 @@ public class GUIBill extends AGUIData<Bill>
 
             @Override
             public void set(Integer set) {
-                throw new UnsupportedOperationException("illegal operation: can not et the sum of a bill");
+                // inform bounded
             }
 
             @Override
@@ -252,7 +252,7 @@ public class GUIBill extends AGUIData<Bill>
 
             @Override
             public void set(Integer set) {
-                throw new UnsupportedOperationException("illegal operation: can not set the nr of positions from a bill");
+                // inform bounded
             }
 
             @Override
@@ -265,6 +265,7 @@ public class GUIBill extends AGUIData<Bill>
                 return GUIStringCollection.BILL_NR_POSITIONS;
             }
         });
+        
     }
 
     public ObjectProperty<LocalDate> getSendetDate() {

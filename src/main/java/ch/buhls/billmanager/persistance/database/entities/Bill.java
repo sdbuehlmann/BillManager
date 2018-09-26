@@ -23,6 +23,7 @@ public class Bill extends AEntity<Bill>
     private BillState billState;
     
     private int paymentPeriodInDays;
+    private int sum;
     
     @Temporal(TemporalType.DATE)
     private Date dateSendet;
@@ -67,6 +68,7 @@ public class Bill extends AEntity<Bill>
         other.location = location;
         
         other.paymentPeriodInDays = paymentPeriodInDays;
+        other.sum = sum;
         
         other.template = template;
         other.financialYear = financialYear;
@@ -172,5 +174,13 @@ public class Bill extends AEntity<Bill>
 
     public void setPersonBaseData(PersonBaseData personBaseData) {
         this.personBaseData = personBaseData;
+    }
+
+    public int getSum() {
+        return sum;
+    }
+
+    public void setSum(int sum) {
+        this.sum = sum;
     }
 }

@@ -29,7 +29,7 @@ public class GUIPerson extends AGUIData<Person>
 
             @Override
             public void set(Integer set) {
-                throw new UnsupportedOperationException("Not possible to set the number of articles in the basket by property");
+                // inform bounded
             }
 
             @Override
@@ -52,7 +52,7 @@ public class GUIPerson extends AGUIData<Person>
 
             @Override
             public void set(Integer set) {
-                throw new UnsupportedOperationException("Not possible to set the number of roles by property");
+                // inform bounded
             }
 
             @Override
@@ -75,7 +75,7 @@ public class GUIPerson extends AGUIData<Person>
 
             @Override
             public void set(Integer set) {
-                throw new UnsupportedOperationException("Not possible to set the number of bills property");
+                // inform bounded
             }
 
             @Override

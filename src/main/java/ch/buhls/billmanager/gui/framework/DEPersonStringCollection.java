@@ -58,6 +58,10 @@ public class DEPersonStringCollection extends DEDefaultStringCollection<GUIPerso
         return String.format("Artikel \"%s; %s\" zu %d Personen jeweils %d mal hinzugefügt", art.getTitle().get(), art.getDescription().get(), nrPers, nrArt);
     }
     
+    public String getHintTxt_imported(int nrPers) {
+        return String.format("%d Personen importiert",nrPers);
+    }
+    
     // ===================================== Confirms ===================================================
     @Override
     public String getConfirmTxt_Save(GUIPerson person) {
@@ -78,6 +82,12 @@ public class DEPersonStringCollection extends DEDefaultStringCollection<GUIPerso
                 String.format("Soll der Artikel \"%s; %s\" zu %d Personen jeweils %d mal hinzugefügt werden?", art.getTitle().get(), art.getDescription().get(), nrPers, nrArt));
     }
 
+    public DialoquesStringsTO getConfirmTxt_ImportMembers(int nrPers) {
+        return new DialoquesStringsTO(
+                "Bestätigung erforderlich", 
+                String.format("Sollen %d Personen importiert werden?", nrPers));
+    }
+    
     // ===================================== Txt inputs ==================================================
     public DialoquesStringsTO getDialoqueTxt_NrArticlesToAdd(GUIArticle art) {
         return new DialoquesStringsTO(

@@ -101,6 +101,8 @@ public class GUIStringCollection
     public static final String BILL_SUM_RP= "Summe [Rp]";
     public static final String BILL_NR_POSITIONS= "Anzahl Positionen";
     public static final String BILL_COMMENT = "Kommentar";
+    public static final String BILL_PATH_TO_FILE = "Pfad zu Datei";
+    public static final String BILL_SELECT_BILL_TO_REGISTER = "Datei zum nacherfassen auswählen";
     
     public static final String ART_TITLE = "Titel";
     public static final String ART_DESCRIPTION = "Beschrieb";

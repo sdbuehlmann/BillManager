@@ -31,6 +31,8 @@ public class ImportPersonsController extends AController implements IImportPerso
         builder = new ImportPersonsBuilder(this, persons);
 
         display(builder.getView(), IGUIFramework.Area.RIGHT);
+        
+        readFile();
     }
 
     @Override
@@ -39,13 +41,13 @@ public class ImportPersonsController extends AController implements IImportPerso
     }
 
     @Override
-    public void readFile() {
+    public final void readFile() {
         File projectFile = framework.openFileChooser(GUIStringCollection.IMPORT_PERSONS_FILE_CHOOSER_TXT, App.INSTANCE.getLastPath());
         if (projectFile != null) {
             App.INSTANCE.setLastPath(projectFile);
-            
+
             try {
-                List<GUIImportedPerson> importedPersons = dataHandler.getPersonsDataHandler().importPersons(projectFile); 
+                List<GUIImportedPerson> importedPersons = dataHandler.getPersonsDataHandler().importPersons(projectFile);
                 persons.addAll(importedPersons);
             }
             catch (PersistanceException ex) {
@@ -53,19 +55,24 @@ public class ImportPersonsController extends AController implements IImportPerso
             }
         }
     }
-    
+
     @Override
     public void store() {
-        for(GUIImportedPerson impPers : persons){
-            try {
-                dataHandler.getPersonsDataHandler().createPerson(impPers);
+        if (framework.showConfirmDialoque(framework.getStringCollections().getPersonStringCollection().getConfirmTxt_ImportMembers(persons.size()))) {
+
+            for (GUIImportedPerson impPers : persons) {
+                try {
+                    dataHandler.getPersonsDataHandler().createPerson(impPers);
+                }
+                catch (PersistanceException ex) {
+                    framework.showExceptionDialoque(ex);
+                }
             }
-            catch (PersistanceException ex) {
-                framework.showExceptionDialoque(ex);
-            }
+
+            dataHandler.getPersonsDataHandler().reloadPersonsBuffer();
+            framework.displayInfoHint(framework.getStringCollections().getPersonStringCollection().getHintTxt_imported(persons.size()));
+            close();
         }
-        
-        dataHandler.getPersonsDataHandler().reloadPersonsBuffer();
     }
 
 }

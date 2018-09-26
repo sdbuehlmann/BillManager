@@ -2,12 +2,19 @@
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIRegisterBillData;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.RegisterBillMaskBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.IRegisterBillMaskListener;
+import ch.buhls.billmanager.model.App;
+import ch.buhls.billmanager.model.ModelException;
+import ch.buhls.billmanager.persistance.PersistanceException;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,10 +24,14 @@ public class RegisterBillController extends AFormController<GUIBill> implements 
 {
     private final RegisterBillMaskBuilder builder;
     
+    private final GUIRegisterBillData data;
+    
+    private File selectedFile;
+    
     public RegisterBillController(IGUIFramework framework, DataHandler dataHandler, GUIPerson person) {
         super(framework, dataHandler, framework.getStringCollections().getBillStringCollection());
         
-        GUIRegisterBillData data = dataHandler.createRegisterBillData(person);
+        data = dataHandler.createRegisterBillData(person);
         
         builder = new RegisterBillMaskBuilder(data, this);
         displayMask(builder.getView(), framework.getStringCollections().getBillStringCollection().getTabTitle_Register());
@@ -28,12 +39,24 @@ public class RegisterBillController extends AFormController<GUIBill> implements 
 
     @Override
     public void register(GUIRegisterBillData bill) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(framework.showConfirmDialoque(framework.getStringCollections().getBillStringCollection().getConfirmTxt_ImportBill())){
+            try {
+                dataHandler.registerBill(data, selectedFile);
+            }
+            catch (Exception ex) {
+                framework.showExceptionDialoque(ex);
+            }
+        }
     }
 
     @Override
     public void selectBillFile() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        selectedFile = framework.openFileChooser(GUIStringCollection.BILL_SELECT_BILL_TO_REGISTER, App.INSTANCE.getLastPath());
+        if (selectedFile != null) {
+            App.INSTANCE.setLastPath(selectedFile);
+            
+            data.getFile().set(selectedFile.getPath());
+        }
     }
     
 }

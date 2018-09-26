@@ -8,6 +8,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
@@ -36,6 +37,7 @@ public class ImportPersonsFormContainer
         tbManageImported = new ToolBar(bReadFile, bImportData);
         
         tableContainer = new ImportedPersonsTableContainer();
+        VBox.setVgrow(tableContainer.getTable(), Priority.ALWAYS);
         
         miRemove = new MenuItem(GUIStringCollection.DELETE);
         contextMenu = new ContextMenu(miRemove);

@@ -45,7 +45,6 @@ public class AgePersonFilter implements IFilter<Person>
         for (Person pers : list) {
             if (pers.getPersonBaseData().getBirthday() != null) {
                 LocalDate birthday = pers.getPersonBaseData().getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                LocalDate firstDay = year.getFirstDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 LocalDate lastDay = year.getLastDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
                 switch (ageFilterType) {
@@ -55,12 +54,12 @@ public class AgePersonFilter implements IFilter<Person>
                         }
                         break;
                     case OLDER:
-                        if (!(Period.between(birthday, lastDay).getYears() < age)) {
+                        if (!(Period.between(birthday, lastDay).getYears() > age)) {
                             personsToRemove.add(pers);
                         }
                         break;
                     case YOUNGER:
-                        if (!(Period.between(birthday, firstDay).getYears() > age)) {
+                        if (!(Period.between(birthday, lastDay).getYears() < age)) {
                             personsToRemove.add(pers);
                         }
                         break;

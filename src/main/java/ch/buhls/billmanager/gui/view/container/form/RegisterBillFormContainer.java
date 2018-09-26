@@ -45,7 +45,7 @@ public class RegisterBillFormContainer
                 GUIStringCollection.BILL_FINANCIAL_YEAR, 
                 new ComboBox());
         
-        sffBillPath = new LabeledNodeContainer<>(GUIStringCollection.APP_SETTINGS_INKSCAPE_PATH, new SelectFileField());
+        sffBillPath = new LabeledNodeContainer<>(GUIStringCollection.BILL_PATH_TO_FILE, new SelectFileField());
         
         // buttons
         bRegister = new Button(GUIStringCollection.BILL_CREATE);
