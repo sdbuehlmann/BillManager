@@ -1,5 +1,5 @@
 
-package ch.buhls.billmanager.gui;
+package ch.buhls.billmanager.model.data.filter;
 
 import java.util.List;
 

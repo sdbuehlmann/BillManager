@@ -1,5 +1,5 @@
 
-package ch.buhls.billmanager.gui;
+package ch.buhls.billmanager.model.data.filter;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * @author simon
  * @param <T>
  */
-public class FilterHandle<T>
+public class FilterHandle<T> implements IFilterHandle
 {
     private final IFilter<T> filter;
     private final List<IFilter<T>> filters;
@@ -18,6 +18,7 @@ public class FilterHandle<T>
         this.filters = filters;
     }
 
+    @Override
     public void delete() {
         filters.remove(filter);
     }

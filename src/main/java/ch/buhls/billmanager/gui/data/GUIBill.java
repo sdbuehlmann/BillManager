@@ -9,6 +9,7 @@ import ch.buhls.billmanager.persistance.database.entities.Bill;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -311,5 +312,21 @@ public class GUIBill extends AGUIData<Bill>
     public StringProperty getComment() {
         return comment;
     }
-
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GUIBill other = (GUIBill) obj;
+        return this.data.equals(other.data);
+    }
+    
+    
 }

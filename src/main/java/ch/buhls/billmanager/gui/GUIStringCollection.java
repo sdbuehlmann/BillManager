@@ -4,9 +4,9 @@ package ch.buhls.billmanager.gui;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
-import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIRole;
 import java.io.File;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -103,6 +103,8 @@ public class GUIStringCollection
     public static final String BILL_COMMENT = "Kommentar";
     public static final String BILL_PATH_TO_FILE = "Pfad zu Datei";
     public static final String BILL_SELECT_BILL_TO_REGISTER = "Datei zum nacherfassen auswählen";
+    public static final String BILL_ROLE_FILTER = "Rollenfilter";
+    public static final String BILL_SHOW_BILLS_FROM_ROLE_MEMBERS = "Rechnungen anzeigen";
     
     public static final String ART_TITLE = "Titel";
     public static final String ART_DESCRIPTION = "Beschrieb";
@@ -145,6 +147,7 @@ public class GUIStringCollection
     public static final String GENERATE_PDF = "PDF generieren";
     public static final String PRINT_PDF = "PDF drucken";
     public static final String FILTER = "Filtern";
+    public static final String CHANGE_STATE_TO_PAID = "bezahlt am %s";
     
     public static final String DIFFERENT_DATA = "<diff>";
     
@@ -165,6 +168,11 @@ public class GUIStringCollection
         return "App Einstellungen bearbeiten";
     }
     
+    public static String getItemText_setStateToPaid(LocalDate date){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        return String.format(CHANGE_STATE_TO_PAID, dtf.format(date));
+    }
     
     public static String getTitleForListFinancialYears(){
         return "Vereinsjahre";

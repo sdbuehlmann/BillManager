@@ -19,7 +19,7 @@ public class EditBillController extends AController implements IDefaultMaskListe
     public EditBillController(IGUIFramework framework, DataHandler dataHandler, GUIBill bill) {
         super(framework, dataHandler, framework.getStringCollections().getBillStringCollection().getTabTitle_Edit(bill));
         
-        builder = new EditBillBuilder(dataHandler.editBill(bill), this);
+        builder = new EditBillBuilder(dataHandler.copyBill(bill), this);
         
         display(builder.getView(), IGUIFramework.Area.RIGHT);
     }
@@ -27,10 +27,10 @@ public class EditBillController extends AController implements IDefaultMaskListe
     @Override
     public void save(GUIBill entity) {
         try {
-            dataHandler.storeBill(entity);
+            dataHandler.updateBill(entity);
             close();
         }
-        catch (PersistanceException ex) {
+        catch (Exception ex) {
             framework.showExceptionDialoque(ex);
         }
     }

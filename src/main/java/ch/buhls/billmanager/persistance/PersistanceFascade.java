@@ -217,6 +217,34 @@ public class PersistanceFascade
         return billTemplateService.getContainer().findAll();
     }
     
+    public List<Bill> getBillsByRole(Role role){
+        List<Person> roleMembers = this.personService.getPersonsByRole(role);
+        
+        List<Bill> bills = new ArrayList();
+        
+        for(Person roleMember : roleMembers){
+            bills.addAll(roleMember.getBills());
+        }
+        
+        return bills;
+    }
+    
+    public List<Bill> getBillsByState(Bill.BillState state){
+        return this.billService.getBillsByState(state);
+    }
+    
+    public List<Bill> getBillsByRoleAndState(Role role, Bill.BillState state){
+        List<Bill> bills = new ArrayList();
+        
+        for(Bill bill : this.getBillsByRole(role)){
+            if(bill.getBillState() == state){
+                bills.add(bill);
+            }
+        }
+        
+        return bills;
+    }
+    
     // financial year
     public FinancialYear createFinancialYear() {
         FinancialYear year = new FinancialYear();
@@ -351,6 +379,12 @@ public class PersistanceFascade
         PersonBaseDataContainer container = (PersonBaseDataContainer)personBaseDataService.getContainer(); // TEMP!!!!!!!!!!!!!!!!!!!!!!!!! Ugly cast
         return container.findByPrename(prename);
     }
+
+    public PersonService getPersonService() {
+        return personService;
+    }
+    
+    
     
     public List<CSVPerson> importPersons(File file) throws PersistanceException{
         try {

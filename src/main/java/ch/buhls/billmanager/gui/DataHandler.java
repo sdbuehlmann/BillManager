@@ -1,5 +1,8 @@
 package ch.buhls.billmanager.gui;
 
+import ch.buhls.billmanager.model.data.filter.FilterHandle;
+import ch.buhls.billmanager.model.data.filter.BillStatusFilter;
+import ch.buhls.billmanager.model.data.filter.ListFiltersContainer;
 import ch.buhls.billmanager.gui.data.GUIAppSettings;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIBill;
@@ -18,18 +21,25 @@ import ch.buhls.billmanager.model.ModelFascade;
 import ch.buhls.billmanager.model.Project;
 import ch.buhls.billmanager.model.data.TemplateData;
 import ch.buhls.billmanager.model.data.TemplatePosition;
+import ch.buhls.billmanager.model.data.filter.IFilterHandle;
+import ch.buhls.billmanager.model.services.BillsBufferService;
+import ch.buhls.billmanager.model.services.DocumentService;
+import ch.buhls.billmanager.model.services.IBillsBufferService;
+import ch.buhls.billmanager.model.services.IBufferListener;
 import ch.buhls.billmanager.persistance.PersistanceException;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
 import ch.buhls.billmanager.persistance.database.entities.Article;
 import ch.buhls.billmanager.persistance.database.entities.Bill;
 import ch.buhls.billmanager.persistance.database.entities.BillTemplate;
 import ch.buhls.billmanager.persistance.database.entities.FinancialYear;
+import ch.buhls.billmanager.persistance.database.entities.Person;
 import ch.buhls.billmanager.persistance.database.entities.Position;
 import ch.buhls.billmanager.persistance.database.entities.Role;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,7 +54,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- *
+ * Does only convert the gui data to the model data. No further functionality.
  * @author simon
  */
 public class DataHandler implements IDataBufferContainer
@@ -56,6 +66,9 @@ public class DataHandler implements IDataBufferContainer
     private PersistanceFascade persistanceFascade;
     private ModelFascade modelFascade;
 
+    private LocalDate lastUsedDate;
+    
+    // buffers
     private ObservableList<GUIRole> rolesBuffer;
     private ObservableList<GUIArticle> articlesBuffer;
     private final ObservableList<GUIBill> billsBuffer;
@@ -70,11 +83,18 @@ public class DataHandler implements IDataBufferContainer
     private final BooleanProperty showDBInfosProperty;
 
     private final PersonsDataHandler personsDataHandler;
+    
+    // services
+    private final BillsBufferService billsBufferService;
+    
+    private final DocumentService docService;
 
     public DataHandler(Project project) {
         this.project = project;
         persistanceFascade = project.getDb();
         modelFascade = new ModelFascade();
+        
+        lastUsedDate = LocalDate.now();
 
         rolesBuffer = FXCollections.observableArrayList();
         articlesBuffer = FXCollections.observableArrayList();
@@ -90,7 +110,45 @@ public class DataHandler implements IDataBufferContainer
         showDBInfosProperty = new SimpleBooleanProperty(App.INSTANCE.isShowDBInfos());
 
         personsDataHandler = new PersonsDataHandler(project);
+        
+        billsBufferService = new BillsBufferService(persistanceFascade, new IBufferListener<Bill>()
+        {
+            @Override
+            public void added(Bill bill) {
+                billsBuffer.add(new GUIBill(
+                            bill,
+                            new GUITemplate(bill.getTemplate()),
+                            new GUIFinancialYear(bill.getFinancialYear()),
+                            new GUIPersonBaseData(bill.getPersonBaseData())));
+            }
+
+            @Override
+            public void removed(Bill bill) {
+                billsBuffer.remove(new GUIBill(
+                            bill,
+                            new GUITemplate(bill.getTemplate()),
+                            new GUIFinancialYear(bill.getFinancialYear()),
+                            new GUIPersonBaseData(bill.getPersonBaseData())));
+            }
+
+            @Override
+            public void bufferCleared() {
+                billsBuffer.clear();
+            }
+        });
+        
+        docService = new DocumentService(modelFascade, project);
     }
+    
+    // date
+    public LocalDate getLastUsedDate() {
+        return lastUsedDate;
+    }
+
+    public void setLastUsedDate(LocalDate lastUsedDate) {
+        this.lastUsedDate = lastUsedDate;
+    }
+    
 
     // articles
     public ObservableList<GUIArticle> getArticlesBuffer() {
@@ -265,7 +323,7 @@ public class DataHandler implements IDataBufferContainer
 
         // copy file
         try {
-            File dest = getTemplateFile(template);
+            File dest = project.getTemplateFile(template.getData());
             Files.copy(svg.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException ex) {
@@ -278,9 +336,7 @@ public class DataHandler implements IDataBufferContainer
         reloadTemplatesBuffer();
     }
 
-    public File getTemplateFile(GUITemplate template) {
-        return new File(project.getLocationTemplates(), project.createTemplateName(template.getData().getId()));
-    }
+    
 
     // financial years
     public ObservableList<GUIFinancialYear> getFinancialYearsBuffer() {
@@ -323,129 +379,27 @@ public class DataHandler implements IDataBufferContainer
 
     public GUICreateBillsData createBills(List<GUIPerson> persons) {
         GUICreateBillsData data = new GUICreateBillsData(templatesBuffer, financialYearsBuffer, persons);
+        
         data.getPaymentDeadlineInDays().set(App.INSTANCE.getLastPaymentDeadlineInDays());
         data.getLocation().set(App.INSTANCE.getLastLocation());
 
         return data;
     }
 
-    private File createBillPDF(GUIPerson person, String location, String date, int billNr, File template) throws ModelException, AppException {
-        TemplateData templateData = new TemplateData()
-                .setPrename(person.getBaseData().getPrename().get())
-                .setName(person.getBaseData().getName().get())
-                .setStreet(person.getBaseData().getStreet().get())
-                .setPlz(Integer.toString(person.getBaseData().getPostalcode().get()))
-                .setCity(person.getBaseData().getCity().get())
-                .setSalutation(person.getBaseData().getSalutation().get())
-                .setTitle(person.getBaseData().getTitle().get())
-                .setNumber(billNr + "")
-                .setLocation(location)
-                .setDate(date)
-                .setTemplate(template.getAbsolutePath());
-
-        int total = 0;
-        for (Position pos : person.getData().getBusket()) {
-            TemplatePosition templatePos = new TemplatePosition()
-                    .setPosition(pos.getPosition())
-                    .setNumber(pos.getNumber())
-                    .setPrice(pos.getArticle().getCosts())
-                    .setSum(pos.getArticle().getCosts() * pos.getNumber())
-                    .setFirstLine(pos.getArticle().getTitle())
-                    .setSecondLine(pos.getArticle().getDescription());
-
-            templateData.getPositions().add(templatePos);
-
-            total = total + templatePos.getSum();
-        }
-
-        templateData.setTotal(total);
-
-        // create temp file
-        File tempPDF = new File(project.getLocationBills(), ModelFascade.createBillFilename(billNr, ".pdf"));
-        modelFascade.createPDF(tempPDF, template, App.INSTANCE.getInkscapePath(), templateData);
-
-        return tempPDF;
+    public GUIBill copyBill(GUIBill bill){
+        GUIBill billCopy = new GUIBill(
+                this.billsBufferService.copyBill(bill.getData()), 
+                bill.getTemplate(), 
+                bill.getYear(), 
+                bill.getPerson());
+        
+        return billCopy;
     }
-
-    public void showPDF(GUIBill bill) throws ModelException {
-        try {
-            File pdfFile = ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getData().getId());
-            modelFascade.openPDF(pdfFile);
-        }
-        catch (IOException ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    public void printPDFs(List<GUIBill> bills) throws ModelException {
-        List<File> pdfFiles = new ArrayList<>(bills.size());
-
-        for (GUIBill bill : bills) {
-            File pdfFile = ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getData().getId());
-            pdfFiles.add(pdfFile);
-        }
-
-        try {
-            modelFascade.printPDFs(pdfFiles);
-        }
-        catch (Exception ex) {
-            throw new ModelException(ex.getMessage());
-        }
-    }
-
-    private String dateToString(Date date) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Integer.toString(date.getDate()));
-        sb.append(". ");
-
-        switch (date.getMonth()) {
-            case 0:
-                sb.append("Januar ");
-                break;
-            case 1:
-                sb.append("Februar ");
-                break;
-            case 2:
-                sb.append("März ");
-                break;
-            case 3:
-                sb.append("April ");
-                break;
-            case 4:
-                sb.append("Mai ");
-                break;
-            case 5:
-                sb.append("Juni ");
-                break;
-            case 6:
-                sb.append("Juli ");
-                break;
-            case 7:
-                sb.append("August ");
-                break;
-            case 8:
-                sb.append("September ");
-                break;
-            case 9:
-                sb.append("Oktober ");
-                break;
-            case 10:
-                sb.append("November ");
-                break;
-            case 11:
-                sb.append("Dezember ");
-                break;
-        }
-
-        sb.append(Integer.toString(date.getYear() + 1900));
-
-        return sb.toString();
-    }
-
+    
     public void storeBills(GUICreateBillsData data) throws Exception {
         for (GUIPerson person : data.getPersons()) {
             // create db entry
-            Bill bill = persistanceFascade.createBill();
+            Bill bill = new Bill();
 
             bill.setBillState(Bill.BillState.SENDET);
             bill.setPaymentPeriodInDays(data.getPaymentDeadlineInDays().get());
@@ -456,13 +410,14 @@ public class DataHandler implements IDataBufferContainer
             bill.getPositions().addAll(person.getData().getBusket());
             bill.setPersonBaseData(person.getBaseData().getData());
 
-            persistanceFascade.storeBill(bill);
+            this.billsBufferService.storeBill(bill, person.getData());
 
-            // manage template data
-            File templateFile = getTemplateFile(data.getSelectedTemplate().get());
-
-            // create file
-            File pdfFile = createBillPDF(person, data.getLocation().get(), dateToString(bill.getDateSendet()), bill.getId(), templateFile);
+            this.docService.createDoc(
+                    data.getSelectedTemplate().get().getData(), 
+                    person.getData(), 
+                    data.getLocation().get(), 
+                    data.getDate().get(),
+                    bill.getId());
 
             person.getData().getBills().add(bill);
             person.getData().getBusket().clear();
@@ -474,13 +429,13 @@ public class DataHandler implements IDataBufferContainer
         personsDataHandler.reloadPersonsBuffer();
     }
 
-    public GUIBill editBill(GUIBill bill) {
-        return new GUIBill(persistanceFascade.editBill(bill.getData()), bill.getTemplate(), bill.getYear(), bill.getPerson());
+    public void updateBill(GUIBill bill) throws Exception {
+        Person person = this.persistanceFascade.getPersonService().getPersonByBaseData(bill.getData().getPersonBaseData());
+        this.billsBufferService.updateBill(bill.getData(), person);
     }
 
-    public void storeBill(GUIBill bill) throws PersistanceException {
-        persistanceFascade.storeBill(bill.getData());
-        reloadBillsBuffer();
+    public void storeBill(GUIBill bill, GUIPerson person) throws Exception {
+        this.billsBufferService.storeBill(bill.getData(), person.getData());
     }
 
     public ObservableList<GUIBill> getBillsBuffer() {
@@ -488,40 +443,38 @@ public class DataHandler implements IDataBufferContainer
     }
 
     public void reloadBillsBuffer() {
-        List<Bill> bills = persistanceFascade.getAllBills();
-        billsFiltersContainer.filterList(bills);
-
-        billsBuffer.clear();
-        for (Bill bill : bills) {
-            billsBuffer.add(
-                    new GUIBill(
-                            bill,
-                            new GUITemplate(bill.getTemplate()),
-                            new GUIFinancialYear(bill.getFinancialYear()),
-                            new GUIPersonBaseData(bill.getPersonBaseData())));
-        }
+        this.billsBufferService.reloadBillsBuffer();
     }
 
-    public FilterHandle addBillStatusFilter(GUIBill.GUIBillStatus status) {
-        BillStatusFilter filter = null;
+    public IFilterHandle setBillStatusFilter(GUIBill.GUIBillStatus status) {
         switch (status) {
             case PAID:
-                filter = new BillStatusFilter(Bill.BillState.PAID);
+                this.billsBufferService.setStatusFilter(IBillsBufferService.EStatus.PAID);
                 break;
             case SENDET:
-                filter = new BillStatusFilter(Bill.BillState.SENDET);
+                this.billsBufferService.setStatusFilter(IBillsBufferService.EStatus.SENDET);
                 break;
             case STORNO:
-                filter = new BillStatusFilter(Bill.BillState.CANCELED);
+                this.billsBufferService.setStatusFilter(IBillsBufferService.EStatus.STORNO);
                 break;
         }
+        this.billsBufferService.reloadBillsBuffer();
 
-        billsFiltersContainer.getFilters().add(filter);
-
-        return new FilterHandle(filter, billsFiltersContainer.getFilters());
+        return () -> {
+            this.billsBufferService.setStatusFilter(IBillsBufferService.EStatus.ALL);
+        };
     }
 
-    public void registerBill(GUIRegisterBillData data, File billPDF) throws ModelException, PersistanceException {
+    public IFilterHandle setBillRoleFilter(GUIRole role){
+        this.billsBufferService.setRoleFilter(role.getData());
+        this.billsBufferService.reloadBillsBuffer();
+        
+        return () -> {
+            this.billsBufferService.resetRoleFilter();
+        };
+    }
+    
+    public void registerBill(GUIRegisterBillData data, File billPDF) throws ModelException, PersistanceException {  
         GUIPerson person = data.getPerson().get();
         // create db entry
         Bill bill = persistanceFascade.createBill();
@@ -548,6 +501,20 @@ public class DataHandler implements IDataBufferContainer
         personsDataHandler.reloadPersonsBuffer();
     }
 
+    public void showPDF(GUIBill bill) throws ModelException {
+        this.docService.showPDF(bill.getData());
+    }
+
+    public void printPDFs(List<GUIBill> bills) throws ModelException {
+        List<Bill> billDatas = new ArrayList<>(bills.size());
+        
+        for(GUIBill bill : bills){
+            billDatas.add(bill.getData());
+        }
+        
+        this.docService.printPDFs(billDatas);
+    }
+    
     // app settings
     public GUIAppSettings getAppSettingsData() {
         GUIAppSettings data = new GUIAppSettings();

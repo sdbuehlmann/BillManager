@@ -1,7 +1,8 @@
 package ch.buhls.billmanager.gui;
 
-import ch.buhls.billmanager.gui.AgePersonFilter.AgeFilterType;
-import ch.buhls.billmanager.gui.RolePersonFilter.RoleFilterType;
+import ch.buhls.billmanager.model.data.filter.AgePersonFilter.AgeFilterType;
+import ch.buhls.billmanager.gui.IDataBufferContainer;
+import ch.buhls.billmanager.model.data.filter.RolePersonFilter.RoleFilterType;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUIImportedPerson;
@@ -11,6 +12,10 @@ import ch.buhls.billmanager.gui.data.GUIPosition;
 import ch.buhls.billmanager.gui.data.GUIRole;
 import ch.buhls.billmanager.model.ModelFascade;
 import ch.buhls.billmanager.model.Project;
+import ch.buhls.billmanager.model.data.filter.AgePersonFilter;
+import ch.buhls.billmanager.model.data.filter.FilterHandle;
+import ch.buhls.billmanager.model.data.filter.ListFiltersContainer;
+import ch.buhls.billmanager.model.data.filter.RolePersonFilter;
 import ch.buhls.billmanager.persistance.PersistanceException;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
 import ch.buhls.billmanager.persistance.csvHandling.CSVPerson;

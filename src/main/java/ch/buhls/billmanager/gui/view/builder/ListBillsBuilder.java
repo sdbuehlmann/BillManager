@@ -1,5 +1,6 @@
 package ch.buhls.billmanager.gui.view.builder;
 
+import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.framework.IHintListener;
@@ -13,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.VBox;
 import ch.buhls.billmanager.gui.view.container.IHintBarContainer;
+import java.time.LocalDate;
 
 /**
  *
@@ -31,6 +33,7 @@ public class ListBillsBuilder extends AListBuilder<GUIBill> implements IHintBarC
 
     // data
     private final ObservableList<GUIBill> entites;
+    private LocalDate paidAtDate;
 
     public ListBillsBuilder(IListBillsBuilderListener listener, ObservableList<GUIBill> entites) {
         super(new BillsTableContainer());
@@ -51,29 +54,39 @@ public class ListBillsBuilder extends AListBuilder<GUIBill> implements IHintBarC
 
         bindData();
         bindListener();
+        
+        this.setPaidAtDate(LocalDate.now());
     }
 
+    public final void setPaidAtDate(LocalDate date){
+        this.paidAtDate = date;
+        
+        // update menu item
+        menuContainer.getItemStateToPaid().setText(GUIStringCollection.getItemText_setStateToPaid(this.paidAtDate));
+    }
+    
     private void bindData() {
         tableContainer.getTable().setItems(entites);
     }
 
     private void bindListener() {
+        // edit
         menuContainer.getItemEdit().setOnAction((ActionEvent event) -> {
             listener.edit(tableContainer.getTable().getSelectionModel().getSelectedItem());
         });
+        menuContainer.getItemStateToPaid().setOnAction((ActionEvent event) -> {
+            listener.changeStateToPaid(tableContainer.getTable().getSelectionModel().getSelectedItem(), paidAtDate);
+        });
 
+        // pdf handling
         menuContainer.getItemShowPDF().setOnAction((ActionEvent event) -> {
             listener.showPDF(tableContainer.getTable().getSelectionModel().getSelectedItem());
         });
-
         menuContainer.getItemPrint().setOnAction((ActionEvent event) -> {
             listener.printPDFs(tableContainer.getTable().getSelectionModel().getSelectedItems());
         });
 
-        menuContainer.getContextMenu().setOnShowing((event) -> {
-            handleMenuOpened(tableContainer.getTable().getSelectionModel().getSelectedItems().size());
-        });
-        
+        // filter
         menuContainer.getItemStatusCanceled().setOnAction((ActionEvent event) -> {
             listener.filterByStatus(GUIBill.GUIBillStatus.STORNO);
         });
@@ -82,6 +95,14 @@ public class ListBillsBuilder extends AListBuilder<GUIBill> implements IHintBarC
         });
         menuContainer.getItemStatusSendet().setOnAction((ActionEvent event) -> {
             listener.filterByStatus(GUIBill.GUIBillStatus.SENDET);
+        });
+        menuContainer.getItemShowBillsOfRoleMembers().setOnAction((ActionEvent event) -> {
+            listener.showOnlyBillsFromRoleMembers();
+        });
+        
+        // other
+        menuContainer.getContextMenu().setOnShowing((event) -> {
+            handleMenuOpened(tableContainer.getTable().getSelectionModel().getSelectedItems().size());
         });
     }
 

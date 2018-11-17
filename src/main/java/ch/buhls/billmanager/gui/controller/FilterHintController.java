@@ -1,12 +1,12 @@
 
 package ch.buhls.billmanager.gui.controller;
 
-import ch.buhls.billmanager.gui.FilterHandle;
+import ch.buhls.billmanager.model.data.filter.FilterHandle;
 import ch.buhls.billmanager.gui.IDataBufferContainer;
-import ch.buhls.billmanager.gui.PersonsDataHandler;
 import ch.buhls.billmanager.gui.framework.IHintHandle;
 import ch.buhls.billmanager.gui.framework.IHintListener;
 import ch.buhls.billmanager.gui.view.container.IHintBarContainer;
+import ch.buhls.billmanager.model.data.filter.IFilterHandle;
 
 /**
  *
@@ -19,9 +19,9 @@ public class FilterHintController implements IHintListener
     
     private final IDataBufferContainer bufferContainer;
     
-    private final FilterHandle filterHandle;
+    private final IFilterHandle filterHandle;
 
-    public FilterHintController(IHintBarContainer hintBar, IDataBufferContainer bufferContainer, FilterHandle filterHandle, String hintTxt) {
+    public FilterHintController(IHintBarContainer hintBar, IDataBufferContainer bufferContainer, IFilterHandle filterHandle, String hintTxt) {
         this.hintBar = hintBar;
         this.bufferContainer = bufferContainer;
         this.filterHandle = filterHandle;

@@ -183,4 +183,21 @@ public class Bill extends AEntity<Bill>
     public void setSum(int sum) {
         this.sum = sum;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Bill other = (Bill) obj;
+        return (other.getId() == this.getId());
+    }
+    
+    
 }

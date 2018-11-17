@@ -2,6 +2,7 @@ package ch.buhls.billmanager.model;
 
 import ch.buhls.billmanager.gui.DataHandler;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
+import ch.buhls.billmanager.persistance.database.entities.BillTemplate;
 import java.io.File;
 
 /**
@@ -54,5 +55,9 @@ public class Project
 
     public DataHandler getDataHandler() {
         return dataHandler;
+    }
+    
+    public File getTemplateFile(BillTemplate template) {
+        return new File(getLocationTemplates(), createTemplateName(template.getId()));
     }
 }

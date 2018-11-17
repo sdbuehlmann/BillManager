@@ -1,4 +1,4 @@
-package ch.buhls.billmanager.gui;
+package ch.buhls.billmanager.model.data.filter;
 
 import ch.buhls.billmanager.persistance.database.entities.Person;
 import ch.buhls.billmanager.persistance.database.entities.Role;
