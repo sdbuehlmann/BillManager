@@ -76,5 +76,17 @@ public class Person extends AEntity<Person>
     public void setBills(List<Bill> bills) {
         this.bills = bills;
     }
+
+    @Override
+    public void copyData(Person other) {
+        super.copyData(other);
+        
+        other.getBills().addAll(this.getBills());
+        other.getBusket().addAll(this.getBusket());
+        other.getRoles().addAll(this.getRoles());
+        
+        other.setPersonBaseData(new PersonBaseData(this.getPersonBaseData()));
+    }
+    
     
 }

@@ -301,23 +301,20 @@ public class PersistanceFascade
      * @return
      */
     public Person editPerson(Person person) {
-        // trackable entity
-        PersonBaseData tempBaseData = new PersonBaseData(person.getPersonBaseData());
-
-        tempBaseData.setId(0);
-        tempBaseData.setVersion(0);
-
-        tempBaseData.setChangeTxt("");
-        tempBaseData.setFollowingVersion(null);
-        tempBaseData.setPreviousVersion(person.getPersonBaseData());
+        Person personCopy = new Person(person);
         
-        tempBaseData.setDateAdded(new Date());
-        tempBaseData.setVersionNr(person.getPersonBaseData().getVersionNr()+1);
-        
-        Person temp = new Person(person);
-        temp.setPersonBaseData(tempBaseData);
+        PersonBaseData personDataCopy = personCopy.getPersonBaseData();
+        personDataCopy.setId(0);
+        personDataCopy.setVersion(0);
 
-        return temp;
+        personDataCopy.setChangeTxt("");
+        personDataCopy.setFollowingVersion(null);
+        personDataCopy.setPreviousVersion(person.getPersonBaseData());
+        
+        personDataCopy.setDateAdded(new Date());
+        personDataCopy.setVersionNr(person.getPersonBaseData().getVersionNr()+1);
+
+        return personCopy;
     }
 
     /**
