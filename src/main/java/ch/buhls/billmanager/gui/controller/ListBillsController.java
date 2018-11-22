@@ -1,10 +1,7 @@
-
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.gui.DataHandler;
-import ch.buhls.billmanager.model.data.filter.FilterHandle;
 import ch.buhls.billmanager.gui.GUIStringCollection;
-import ch.buhls.billmanager.model.data.filter.RolePersonFilter;
 import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.data.GUIRole;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
@@ -14,6 +11,9 @@ import ch.buhls.billmanager.model.ModelException;
 import ch.buhls.billmanager.model.data.filter.IFilterHandle;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -21,21 +21,26 @@ import java.util.List;
  */
 public class ListBillsController extends AController implements IListBillsBuilderListener
 {
+
     private final ListBillsBuilder builder;
-    
+
     private IFilterHandle statusFilterHandle;
     private FilterHintController statusHintController;
-    
+
+    private IFilterHandle roleFilterHandle;
+    private FilterHintController roleFilterHintController;
+
     public ListBillsController(IGUIFramework framework, DataHandler dataHandler) {
         super(framework, dataHandler, GUIStringCollection.BILLS);
-        
+
         builder = new ListBillsBuilder(this, dataHandler.getBillsBuffer());
         this.bindBuilder(builder);
-        
+
+        this.filterByStatus(GUIBill.GUIBillStatus.SENDET);
+
         this.display(builder.getView(), IGUIFramework.Area.LEFT);
     }
 
-    
     @Override
     public void edit(GUIBill selected) {
         new EditBillController(framework, dataHandler, selected);
@@ -62,25 +67,56 @@ public class ListBillsController extends AController implements IListBillsBuilde
     }
 
     @Override
-    public void filterByStatus(GUIBill.GUIBillStatus status) {
-        if(statusFilterHandle!=null){
+    public final void filterByStatus(GUIBill.GUIBillStatus status) {
+        if (statusFilterHandle != null) {
             statusFilterHandle.delete();
         }
-        if(statusHintController != null){
+        if (statusHintController != null) {
             statusHintController.hintClosed();
         }
-        
+
         statusFilterHandle = dataHandler.setBillStatusFilter(status);
         statusHintController = new FilterHintController(builder, dataHandler, statusFilterHandle, GUIStringCollection.getHintTxt_showBillStatus(status));
     }
 
     @Override
-    public void changeStateToPaid(GUIBill selected, LocalDate date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void showOnlyBillsFromRoleMembers() {
+        GUIRole markedRole = dataHandler.getMarkedRole().get();
+
+        if (this.roleFilterHandle != null) {
+            this.roleFilterHandle.delete();
+        }
+        if (this.roleFilterHintController != null) {
+            this.roleFilterHintController.hintClosed();
+        }
+
+        this.roleFilterHandle = dataHandler.setBillRoleFilter(markedRole);
+        this.roleFilterHintController = new FilterHintController(
+                builder,
+                dataHandler,
+                roleFilterHandle,
+                GUIStringCollection.getHintTxt_showBillsByRoleFilter(markedRole));
     }
 
     @Override
-    public void showOnlyBillsFromRoleMembers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void changeStateToPaid(GUIBill selected, LocalDate date) {
+        try {
+            selected.getState().set(GUIBill.GUIBillStatus.PAID);
+            selected.getClosedDate().set(date);
+
+            this.dataHandler.updateBill(selected);
+            
+            framework.displayInfoHint(GUIStringCollection.getHintTxt_changedStateOfBillToPaid(selected, date));
+        }
+        catch (Exception ex) {
+            framework.showExceptionDialoque(ex);
+        }
     }
+
+    @Override
+    public void contextMenuOpened(ObservableList<GUIBill> selected) {
+        this.builder.handleMenuOpened(selected.size());
+        this.builder.setPaidAtDate(this.dataHandler.getLastUsedDate());
+    }
+
 }

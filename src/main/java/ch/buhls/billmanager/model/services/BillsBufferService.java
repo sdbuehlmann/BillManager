@@ -59,7 +59,7 @@ public class BillsBufferService implements IBillsBufferService
     @Override
     public void updateBill(Bill bill, Person person) throws Exception {
         // check person and bill
-        if(person.getPersonBaseData().equals(bill.getPersonBaseData())){
+        if(!person.getPersonBaseData().equals(bill.getPersonBaseData())){
             throw new ModelException("Buffer error: The handed bill and person were not matching");
         }
         
@@ -153,10 +153,18 @@ public class BillsBufferService implements IBillsBufferService
         }
 
         // check status
-        return (this.filterStatus == EStatus.ALL) ||
-                (bill.getBillState() == Bill.BillState.PAID) ||
-                (bill.getBillState() == Bill.BillState.SENDET) ||
-                (bill.getBillState() == Bill.BillState.CANCELED);
+        switch(this.filterStatus){
+            case ALL:
+                return true;
+            case PAID:
+                return (bill.getBillState() == Bill.BillState.PAID);
+            case SENDET:
+                return (bill.getBillState() == Bill.BillState.SENDET);
+            case STORNO:
+                return (bill.getBillState() == Bill.BillState.CANCELED);
+        }
+        
+        return false;
     }
 
 }

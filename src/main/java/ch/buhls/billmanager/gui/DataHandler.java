@@ -124,11 +124,17 @@ public class DataHandler implements IDataBufferContainer
 
             @Override
             public void removed(Bill bill) {
-                billsBuffer.remove(new GUIBill(
-                            bill,
-                            new GUITemplate(bill.getTemplate()),
-                            new GUIFinancialYear(bill.getFinancialYear()),
-                            new GUIPersonBaseData(bill.getPersonBaseData())));
+                GUIBill objToRemove = null;
+                
+                for(GUIBill bufferedBill : billsBuffer){
+                    if(bufferedBill.getDb_id().get() == bill.getId())
+                    {
+                        objToRemove = bufferedBill;
+                        break;
+                    }
+                }
+                
+                billsBuffer.remove(objToRemove);
             }
 
             @Override
@@ -430,7 +436,11 @@ public class DataHandler implements IDataBufferContainer
     }
 
     public void updateBill(GUIBill bill) throws Exception {
-        Person person = this.persistanceFascade.getPersonService().getPersonByBaseData(bill.getData().getPersonBaseData());
+        if(bill.getClosedDate().get() != null){
+            this.lastUsedDate = bill.getClosedDate().get();
+        }
+        
+        Person person = this.persistanceFascade.getPersonService().getPersonByBaseData(bill.getPerson().getData());
         this.billsBufferService.updateBill(bill.getData(), person);
     }
 

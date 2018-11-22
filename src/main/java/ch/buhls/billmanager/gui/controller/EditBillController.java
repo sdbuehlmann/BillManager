@@ -12,23 +12,26 @@ import ch.buhls.billmanager.persistance.PersistanceException;
  *
  * @author simon
  */
-public class EditBillController extends AController implements IDefaultMaskListener<GUIBill>
+public class EditBillController extends AFormController<GUIBill> implements IDefaultMaskListener<GUIBill>
 {
     private final EditBillBuilder builder;
 
     public EditBillController(IGUIFramework framework, DataHandler dataHandler, GUIBill bill) {
-        super(framework, dataHandler, framework.getStringCollections().getBillStringCollection().getTabTitle_Edit(bill));
+        super(framework, dataHandler, framework.getStringCollections().getBillStringCollection());
         
+        GUIBill copyBill = dataHandler.copyBill(bill);
         builder = new EditBillBuilder(dataHandler.copyBill(bill), this);
         
-        display(builder.getView(), IGUIFramework.Area.RIGHT);
+        displayEditMask(builder.getView(), copyBill);
     }
 
     @Override
     public void save(GUIBill entity) {
         try {
             dataHandler.updateBill(entity);
-            close();
+            
+            tabHandle.close();
+            displayEditedInfoHint(entity);
         }
         catch (Exception ex) {
             framework.showExceptionDialoque(ex);

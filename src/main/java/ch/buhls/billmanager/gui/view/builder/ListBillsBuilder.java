@@ -102,26 +102,29 @@ public class ListBillsBuilder extends AListBuilder<GUIBill> implements IHintBarC
         
         // other
         menuContainer.getContextMenu().setOnShowing((event) -> {
-            handleMenuOpened(tableContainer.getTable().getSelectionModel().getSelectedItems().size());
+            listener.contextMenuOpened(tableContainer.getTable().getSelectionModel().getSelectedItems());
         });
     }
 
-    private void handleMenuOpened(int nrSelectedBills) {
+    public void handleMenuOpened(int nrSelectedBills) {
         switch (nrSelectedBills) {
             case 0:
                 menuContainer.getItemEdit().setDisable(true);
                 menuContainer.getItemPrint().setDisable(true);
                 menuContainer.getItemShowPDF().setDisable(true);
+                menuContainer.getItemStateToPaid().setDisable(true);
                 break;
             case 1:
                 menuContainer.getItemEdit().setDisable(false);
                 menuContainer.getItemPrint().setDisable(false);
                 menuContainer.getItemShowPDF().setDisable(false);
+                menuContainer.getItemStateToPaid().setDisable(false);
                 break;
             default:
                 menuContainer.getItemEdit().setDisable(true);
                 menuContainer.getItemPrint().setDisable(false);
                 menuContainer.getItemShowPDF().setDisable(true);
+                menuContainer.getItemStateToPaid().setDisable(true);
                 break;
         }
     }

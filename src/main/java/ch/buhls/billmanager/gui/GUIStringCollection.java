@@ -208,6 +208,13 @@ public class GUIStringCollection
     public static String getHintTxt_showBillStatus(GUIBill.GUIBillStatus status){
         return String.format("Rechnungen mit Status \"%s\" angezeigt", status);
     }
+    public static String getHintTxt_showBillsByRoleFilter(GUIRole role){
+        return String.format("Rechnungen der Inhaber der Rolle \"%s\" angezeigt", role.getName().get());
+    }
+    public static String getHintTxt_changedStateOfBillToPaid(GUIBill bill, LocalDate date){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return String.format("Der Status der Rechnungen %d wurde auf \"Bezahlt am %s\" geändert." , bill.getDb_id().get(), dtf.format(date));
+    }
     
     public static String getHintTxt_roleAdded(GUIRole role, int nrAdded){
         return String.format("Rolle \"%s\" zu %d Personen hinzugefügt", role.getName().get(), nrAdded);

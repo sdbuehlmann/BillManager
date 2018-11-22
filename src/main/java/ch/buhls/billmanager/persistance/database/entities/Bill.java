@@ -73,6 +73,7 @@ public class Bill extends AEntity<Bill>
         other.template = template;
         other.financialYear = financialYear;
         other.positions = new ArrayList<>(positions);
+        other.personBaseData = personBaseData;
         
         super.copyData(other);
     }

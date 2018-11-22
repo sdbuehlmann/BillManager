@@ -5,6 +5,7 @@ import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.gui.data.GUIBill.GUIBillStatus;
 import java.time.LocalDate;
 import java.util.List;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -12,6 +13,8 @@ import java.util.List;
  */
 public interface IListBillsBuilderListener
 {
+    public void contextMenuOpened(ObservableList<GUIBill> selected);
+    
     // edit
     public void edit(GUIBill selected);
     public void changeStateToPaid(GUIBill selected, LocalDate date);    
