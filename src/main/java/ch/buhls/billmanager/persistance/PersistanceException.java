@@ -10,4 +10,8 @@ public class PersistanceException extends Exception
     public PersistanceException(Throwable cause) {
         super(cause);
     }
+    
+    public PersistanceException(String message) {
+        super(message);
+    }
 }

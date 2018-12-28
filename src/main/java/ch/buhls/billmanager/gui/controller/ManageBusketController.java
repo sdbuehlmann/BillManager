@@ -1,6 +1,6 @@
 package ch.buhls.billmanager.gui.controller;
 
-import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.handlers.DataHandler;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPosition;

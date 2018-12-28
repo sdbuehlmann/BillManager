@@ -1,10 +1,10 @@
 package ch.buhls.billmanager.gui.controller;
 
 import ch.buhls.billmanager.model.data.filter.AgePersonFilter.AgeFilterType;
-import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.handlers.DataHandler;
 import ch.buhls.billmanager.model.data.filter.FilterHandle;
 import ch.buhls.billmanager.gui.GUIStringCollection;
-import ch.buhls.billmanager.gui.PersonsDataHandler;
+import ch.buhls.billmanager.gui.handlers.PersonsDataHandler;
 import ch.buhls.billmanager.model.data.filter.RolePersonFilter;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;

@@ -52,7 +52,7 @@ public interface IContainer<T extends AEntity>
      * @return the desired entity or null if the entity was not found
      * @throws persistance.database.container.EntityNotFoundException
      */
-    public T findByID(Integer id) throws EntityNotFoundException;
+    public T findByID(int id) throws EntityNotFoundException;
 
     /**
      * Counts all entities

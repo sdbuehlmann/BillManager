@@ -10,25 +10,24 @@ import java.util.List;
 import javafx.collections.FXCollections;
 
 /**
- *
+ * Does Buffer
  * @author simon
  */
 public class BillsBufferService implements IBillsBufferService
 {
-
     // data buffers
     private final ListFiltersContainer<Bill> filtersContainer;
     private final List<Bill> buffer;
     
     // listener
-    private IBufferListener<Bill> listener;
+    private final IBufferListener<Bill> listener;
 
     // filters
     private EStatus filterStatus;
     private Role filterRole;
 
     // services
-    private PersistanceFascade persistanceFascade;
+    private final PersistanceFascade persistanceFascade;
 
     public BillsBufferService(PersistanceFascade persistanceFascade, IBufferListener<Bill> listener) {
         this.persistanceFascade = persistanceFascade;
@@ -44,7 +43,7 @@ public class BillsBufferService implements IBillsBufferService
     @Override
     public void storeBill(Bill bill, Person person) throws Exception {
         // check person and bill
-        if(person.getPersonBaseData().equals(bill.getPersonBaseData())){
+        if(!person.getPersonBaseData().equals(bill.getPersonBaseData())){
             throw new ModelException("Buffer error: The handed bill and person were not matching");
         }
         
@@ -59,8 +58,9 @@ public class BillsBufferService implements IBillsBufferService
     @Override
     public void updateBill(Bill bill, Person person) throws Exception {
         // check person and bill
-        if(!person.getPersonBaseData().equals(bill.getPersonBaseData())){
+        if(person.getId() != bill.getPersonBaseData().getPersonId()){
             throw new ModelException("Buffer error: The handed bill and person were not matching");
+            // ToDo: Problem: Falls die Daten der Person geändert haben inzwischen --> neuer DB-Entry, andere ID
         }
         
         persistanceFascade.storeBill(bill);

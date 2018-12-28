@@ -1,6 +1,6 @@
 package ch.buhls.billmanager.gui.controller;
 
-import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.handlers.DataHandler;
 import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.data.GUIPerson;
@@ -44,7 +44,7 @@ public class ManageRolesController extends AController implements IManageRolesLi
         if (framework.showConfirmDialoque(framework.getStringCollections().getPersonStringCollection().getConfirmTxt_AddRole(markedRole, 1))) {
             try {
                 person.getData().getRoles().add(markedRole.getData());
-                dataHandler.getPersonsDataHandler().storePerson(person);
+                dataHandler.getPersonsDataHandler().updatePerson(person);
                 roles.add(markedRole);
             }
             catch (PersistanceException ex) {
@@ -58,7 +58,7 @@ public class ManageRolesController extends AController implements IManageRolesLi
         if (framework.showConfirmDialoque(framework.getStringCollections().getPersonStringCollection().getConfirmTxt_RemoveRole(role))) {
             try {
                 person.getData().getRoles().remove(role.getData());
-                dataHandler.getPersonsDataHandler().storePerson(person);
+                dataHandler.getPersonsDataHandler().updatePerson(person);
                 roles.remove(role);
             }
             catch (PersistanceException ex) {

@@ -4,6 +4,7 @@ import ch.buhls.billmanager.persistance.csvHandling.CSVManager;
 import ch.buhls.billmanager.persistance.csvHandling.CSVPerson;
 import ch.buhls.billmanager.persistance.database.ContainerFactory;
 import ch.buhls.billmanager.persistance.database.container.BillContainer;
+import ch.buhls.billmanager.persistance.database.container.EntityNotFoundException;
 import ch.buhls.billmanager.persistance.database.container.PersonBaseDataContainer;
 import ch.buhls.billmanager.persistance.database.entities.AEntity;
 import ch.buhls.billmanager.persistance.database.entities.ATrackedEntity;
@@ -293,13 +294,6 @@ public class PersistanceFascade
         return pers;
     }
 
-    /**
-     * Create a copy of the handed person-object (including a copy of the base
-     * data object)
-     *
-     * @param person
-     * @return
-     */
     public Person editPerson(Person person) {
         Person personCopy = new Person(person);
         
@@ -316,13 +310,47 @@ public class PersistanceFascade
 
         return personCopy;
     }
-
-    /**
-     * Stores the base data and the person itself
-     * @param person
-     * @throws PersistanceException 
-     */
-    public void storePersonBaseDataAndPerson(Person person) throws PersistanceException {
+    
+    public void storePerson(Person person) throws PersistanceException {
+        // new person
+        if(person.getId() != 0){
+            throw new PersistanceException("Can not store person cause the entity has allready an id.");
+        }
+        
+        try {
+            personBaseDataService.add(person.getPersonBaseData());
+            personService.add(person);
+            
+            person.getPersonBaseData().setPersonId(person.getId());
+            personService.update(person);
+        }
+        catch (ServiceException ex) {
+            throw new PersistanceException(ex);
+        }
+    }
+    
+    public void updatePerson(Person person) throws PersistanceException {
+        // existing person
+        if(person.getId() == 0){
+            throw new PersistanceException("Can not update person cause the entity has no id.");
+        }
+        
+        try {
+            Person origPerson = personService.getContainer().findByID(person.getId());
+            person.setPersonBaseData(origPerson.getPersonBaseData());
+            
+            personService.update(person);
+        }
+        catch (EntityNotFoundException | ServiceException ex) {
+            throw new PersistanceException(ex);
+        }
+    }
+    
+    public void storePersonBaseData(Person person) throws PersistanceException {
+        if(person.getPersonBaseData().getId() != 0){
+            throw new PersistanceException(String.format("Person base data has allready an id with value %d",person.getPersonBaseData().getId()));
+        }
+        
         try {
             PersonBaseData temp = person.getPersonBaseData();
             
@@ -338,29 +366,18 @@ public class PersistanceFascade
             if (person.getId() == 0) {
                 // new person
                 personService.add(person);
+                
+                // update id in base data
+                if(person.getId() == 0){
+                    throw new PersistanceException("Can not update base data, cause wrong person id (is 0).");
+                }
+                
+                person.getPersonBaseData().setPersonId(person.getId());
+                personBaseDataService.update(person.getPersonBaseData());
             }
             else {
                 // existing person
                 personService.update(person);
-            }
-        }
-        catch (ServiceException ex) {
-            throw new PersistanceException(ex);
-        }
-    }
-
-    public void storePerson(Person person) throws PersistanceException {
-        try {
-            if (person.getId() == 0) {
-                // new person
-                personService.add(person);
-            }
-            else {
-                // existing person
-                personService.update(person);
-                
-                
-                // handle positions in basket
             }
         }
         catch (ServiceException ex) {
@@ -381,7 +398,22 @@ public class PersistanceFascade
         return personService;
     }
     
+    public void updatePersonIdInAllPersonBaseDatas() throws ServiceException
+    {
+        List<Person> allPersons = personService.getContainer().findAll();
+        for(Person pers : allPersons){
+            this.definePersonId(pers.getPersonBaseData(), pers.getId());
+        }
+    }
     
+    private void definePersonId(PersonBaseData baseData, int personId) throws ServiceException{
+        baseData.setPersonId(personId);
+        personBaseDataService.update(baseData);
+        
+        if(baseData.getPreviousVersion() != null){
+            this.definePersonId(baseData.getPreviousVersion(), personId);
+        }
+    }
     
     public List<CSVPerson> importPersons(File file) throws PersistanceException{
         try {
@@ -501,7 +533,7 @@ public class PersistanceFascade
         // update person entity
         person.getBusket().clear();
         person.getBusket().addAll(newBusket);
-        storePerson(person);
+        updatePerson(person);
         
         // delete unused
         for(Position pos : oldPositions){

@@ -1,7 +1,7 @@
-package ch.buhls.billmanager.gui;
+package ch.buhls.billmanager.gui.handlers;
 
-import ch.buhls.billmanager.model.data.filter.AgePersonFilter.AgeFilterType;
 import ch.buhls.billmanager.gui.IDataBufferContainer;
+import ch.buhls.billmanager.model.data.filter.AgePersonFilter.AgeFilterType;
 import ch.buhls.billmanager.model.data.filter.RolePersonFilter.RoleFilterType;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
@@ -76,7 +76,6 @@ public class PersonsDataHandler implements IDataBufferContainer
         return buffer;
     }
 
-    @Deprecated
     public void reloadPersonsBuffer() {
         // get new data and filter
         List<Person> persons = persistanceFascade.getAllPersons();
@@ -85,18 +84,8 @@ public class PersonsDataHandler implements IDataBufferContainer
         // update buffer
         buffer.clear();
         for (Person pers : persons) {
-            buffer.add(wrapPersonToGUIData(pers));
+            buffer.add(new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData())));
         }
-    }
-
-    public ObservableList<GUIPersonBaseData> getPersonBaseDataVersions(GUIPerson guiPerson) {
-        ObservableList<GUIPersonBaseData> versionsBuffer = FXCollections.observableArrayList();
-
-        for (PersonBaseData person : persistanceFascade.getAllPersonBaseDataVersions(guiPerson.getData().getPersonBaseData())) {
-            versionsBuffer.add(new GUIPersonBaseData(person));
-        }
-
-        return versionsBuffer;
     }
 
     public GUIPerson createPerson() {
@@ -104,22 +93,18 @@ public class PersonsDataHandler implements IDataBufferContainer
         return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
     }
 
-    public GUIPerson wrapPersonToGUIData(Person pers) {
-        return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
-    }
-
     public GUIPerson editPerson(GUIPerson guiPers) {
         Person pers = persistanceFascade.editPerson(guiPers.getData());
         return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
     }
-
-    public void storePerson(GUIPerson pers) throws PersistanceException {
-        persistanceFascade.storePerson(pers.getData());
+    
+    public void updatePerson(GUIPerson pers) throws PersistanceException {
+        persistanceFascade.updatePerson(pers.getData());
         reloadPersonsBuffer();
     }
 
     public void storePersonBaseDataAndPerson(GUIPerson pers) throws PersistanceException {
-        persistanceFascade.storePersonBaseDataAndPerson(pers.getData());
+        persistanceFascade.storePersonBaseData(pers.getData());
         reloadPersonsBuffer();
     }
 
@@ -145,7 +130,7 @@ public class PersonsDataHandler implements IDataBufferContainer
 
     public void addRoleToPerson(GUIPerson guiPerson, GUIRole guiRole) throws PersistanceException {
         guiPerson.getData().getRoles().add(guiRole.getData());
-        storePerson(guiPerson);
+        updatePerson(guiPerson);
         
         guiPerson.getNrOfRoles().set(0);
     }
@@ -160,6 +145,15 @@ public class PersonsDataHandler implements IDataBufferContainer
         return busket;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // import
     public List<GUIImportedPerson> importPersons(File file) throws PersistanceException {
         List<CSVPerson> persons = persistanceFascade.importPersons(file);

@@ -1,11 +1,10 @@
 
 package ch.buhls.billmanager.model.services;
 
-import java.util.List;
-
 /**
  *
  * @author simon
+ * @param <E>
  */
 public interface IBufferListener<E>
 {

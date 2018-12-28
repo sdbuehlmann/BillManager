@@ -1,7 +1,6 @@
-package ch.buhls.billmanager.gui;
+package ch.buhls.billmanager.gui.handlers;
 
-import ch.buhls.billmanager.model.data.filter.FilterHandle;
-import ch.buhls.billmanager.model.data.filter.BillStatusFilter;
+import ch.buhls.billmanager.gui.IDataBufferContainer;
 import ch.buhls.billmanager.model.data.filter.ListFiltersContainer;
 import ch.buhls.billmanager.gui.data.GUIAppSettings;
 import ch.buhls.billmanager.gui.data.GUIArticle;
@@ -19,8 +18,6 @@ import ch.buhls.billmanager.model.AppException;
 import ch.buhls.billmanager.model.ModelException;
 import ch.buhls.billmanager.model.ModelFascade;
 import ch.buhls.billmanager.model.Project;
-import ch.buhls.billmanager.model.data.TemplateData;
-import ch.buhls.billmanager.model.data.TemplatePosition;
 import ch.buhls.billmanager.model.data.filter.IFilterHandle;
 import ch.buhls.billmanager.model.services.BillsBufferService;
 import ch.buhls.billmanager.model.services.DocumentService;
@@ -264,7 +261,7 @@ public class DataHandler implements IDataBufferContainer
         guiPerson.getData().getBusket().add(guiPosition.getData());
 
         storePosition(guiPosition);
-        personsDataHandler.storePerson(guiPerson);
+        personsDataHandler.updatePerson(guiPerson);
         
         guiPerson.getNrOfArtInBusket().set(0);
     }
@@ -428,7 +425,7 @@ public class DataHandler implements IDataBufferContainer
             person.getData().getBills().add(bill);
             person.getData().getBusket().clear();
 
-            persistanceFascade.storePerson(person.getData());
+            persistanceFascade.updatePerson(person.getData());
         }
 
         reloadBillsBuffer();
@@ -502,7 +499,7 @@ public class DataHandler implements IDataBufferContainer
         person.getData().getBills().add(bill);
         person.getData().getBusket().clear();
 
-        persistanceFascade.storePerson(person.getData());
+        persistanceFascade.updatePerson(person.getData());
         
         File dest = new File(project.getLocationBills(), ModelFascade.createBillFilename(bill.getId(), ".pdf"));
         modelFascade.copyPDF(billPDF, dest);

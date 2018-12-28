@@ -30,6 +30,7 @@ public class PersonBaseDataService extends AService<PersonBaseData>
         managedEntity.setBirthday(entity.getBirthday());
         managedEntity.setEmail(entity.getEmail());
         managedEntity.setIban(entity.getIban());
+        managedEntity.setPersonId(entity.getPersonId());
         
         managedEntity.setPreviousVersion(entity.getPreviousVersion());
         managedEntity.setFollowingVersion(entity.getFollowingVersion());

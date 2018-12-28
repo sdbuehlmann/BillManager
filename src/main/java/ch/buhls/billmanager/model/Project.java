@@ -1,6 +1,6 @@
 package ch.buhls.billmanager.model;
 
-import ch.buhls.billmanager.gui.DataHandler;
+import ch.buhls.billmanager.gui.handlers.DataHandler;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
 import ch.buhls.billmanager.persistance.database.entities.BillTemplate;
 import java.io.File;

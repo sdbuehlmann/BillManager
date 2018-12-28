@@ -58,7 +58,7 @@ public abstract class AContainer<T extends AEntity> implements IContainer<T>
     }
 
     @Override
-    public T findByID(Integer id) throws EntityNotFoundException
+    public T findByID(int id) throws EntityNotFoundException
     {
         T temp = this.em.find(typeParameterClass, id);
 
