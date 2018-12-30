@@ -1,6 +1,7 @@
-package ch.buhls.billmanager.gui.handlers;
+package ch.buhls.billmanager.gui.viewModel;
 
 import ch.buhls.billmanager.gui.IDataBufferContainer;
+import ch.buhls.billmanager.gui.data.CopiedDataObjectContainer;
 import ch.buhls.billmanager.model.data.filter.AgePersonFilter.AgeFilterType;
 import ch.buhls.billmanager.model.data.filter.RolePersonFilter.RoleFilterType;
 import ch.buhls.billmanager.gui.data.GUIArticle;
@@ -10,6 +11,10 @@ import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.data.GUIPosition;
 import ch.buhls.billmanager.gui.data.GUIRole;
+import ch.buhls.billmanager.gui.viewModel.buffer.BufferDataService;
+import ch.buhls.billmanager.gui.viewModel.dataLoader.PersonDataLoader;
+import ch.buhls.billmanager.gui.viewModel.filter.PersonFilterService;
+import ch.buhls.billmanager.gui.viewModel.wrappers.PersonWrapper;
 import ch.buhls.billmanager.model.ModelFascade;
 import ch.buhls.billmanager.model.Project;
 import ch.buhls.billmanager.model.data.filter.AgePersonFilter;
@@ -45,69 +50,75 @@ public class PersonsDataHandler implements IDataBufferContainer
     private final Project project;
     private final PersistanceFascade persistanceFascade;
     private final ModelFascade modelFascade;
-
-    private final ListFiltersContainer<Person> filteredListContainer;
-    private final ObservableList<GUIPerson> buffer;
+    
+    private final BufferDataService<Person, GUIPerson> bufferService;
 
     public PersonsDataHandler(Project project) {
         this.project = project;
         persistanceFascade = project.getDb();
         modelFascade = new ModelFascade();
 
-        filteredListContainer = new ListFiltersContainer<>();
-        buffer = FXCollections.observableArrayList();
+        this.bufferService = new BufferDataService<>(
+                new PersonFilterService(), 
+                new PersonDataLoader(persistanceFascade), 
+                new PersonWrapper());
     }
 
-    public FilterHandle addRoleFilter(RoleFilterType type, GUIRole role) {
-        RolePersonFilter filter = new RolePersonFilter(type, role.getData());
-        filteredListContainer.getFilters().add(filter);
-
-        return new FilterHandle(filter, filteredListContainer.getFilters());
-    }
-
-    public FilterHandle addAgeFilter(AgeFilterType type, GUIFinancialYear year, int age) {
-        AgePersonFilter filter = new AgePersonFilter(type, year.getData(), age);
-        filteredListContainer.getFilters().add(filter);
-
-        return new FilterHandle(filter, filteredListContainer.getFilters());
-    }
-
-    public ObservableList<GUIPerson> getPersonsBuffer() {
-        return buffer;
-    }
-
-    public void reloadPersonsBuffer() {
-        // get new data and filter
-        List<Person> persons = persistanceFascade.getAllPersons();
-        filteredListContainer.filterList(persons);
-
-        // update buffer
-        buffer.clear();
-        for (Person pers : persons) {
-            buffer.add(new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData())));
-        }
-    }
-
+    // entity management
+    
     public GUIPerson createPerson() {
         Person pers = persistanceFascade.createPerson();
         return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
     }
 
-    public GUIPerson editPerson(GUIPerson guiPers) {
+    public CopiedDataObjectContainer<GUIPerson> copyPerson(GUIPerson guiPers) {
         Person pers = persistanceFascade.editPerson(guiPers.getData());
-        return new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
+        GUIPerson copiedPers = new GUIPerson(pers, new GUIPersonBaseData(pers.getPersonBaseData()));
+        
+        return new CopiedDataObjectContainer<>(guiPers, copiedPers);
     }
     
-    public void updatePerson(GUIPerson pers) throws PersistanceException {
-        persistanceFascade.updatePerson(pers.getData());
-        reloadPersonsBuffer();
+    public void storePerson(GUIPerson pers) throws PersistanceException {
+        persistanceFascade.storePerson(pers.getData());
+        bufferService.add(pers);
+    }
+    
+    public void updatePerson(CopiedDataObjectContainer<GUIPerson> copiedDataContainer) throws PersistanceException {
+        persistanceFascade.updatePerson(copiedDataContainer.getCopiedDataObject().getData());
+        bufferService.update(copiedDataContainer);
     }
 
-    public void storePersonBaseDataAndPerson(GUIPerson pers) throws PersistanceException {
-        persistanceFascade.storePersonBaseData(pers.getData());
-        reloadPersonsBuffer();
+    public void updatePersonBaseDataAndPerson(CopiedDataObjectContainer<GUIPerson> copiedDataContainer) throws PersistanceException {
+        persistanceFascade.storePersonBaseData(copiedDataContainer.getCopiedDataObject().getData());
+        bufferService.update(copiedDataContainer);
     }
 
+    
+    // criterias
+    public FilterHandle addRoleFilter(RoleFilterType type, GUIRole role) {
+        RolePersonFilter filter = new RolePersonFilter(type, role.getData());
+        this.bufferService.addCriteria(filter);
+        
+        return new FilterHandle(filter, this.bufferService);
+    }
+
+    public FilterHandle addAgeFilter(AgeFilterType type, GUIFinancialYear year, int age) {
+        AgePersonFilter filter = new AgePersonFilter(type, year.getData(), age);
+        this.bufferService.addCriteria(filter);
+        
+        return new FilterHandle(filter, this.bufferService);
+    }
+
+    public ObservableList<GUIPerson> getPersonsBuffer() {
+        return this.bufferService.getBuffer();
+    }
+
+    public void reloadPersonsBuffer() {
+        this.bufferService.reloadData();
+    }
+
+    // utils
+    
     public ObservableList<GUIPersonBaseData> getPersonVersions(GUIPerson guiPerson) {
         ObservableList<GUIPersonBaseData> versionsBuffer = FXCollections.observableArrayList();
 
@@ -129,10 +140,9 @@ public class PersonsDataHandler implements IDataBufferContainer
     }
 
     public void addRoleToPerson(GUIPerson guiPerson, GUIRole guiRole) throws PersistanceException {
-        guiPerson.getData().getRoles().add(guiRole.getData());
-        updatePerson(guiPerson);
-        
-        guiPerson.getNrOfRoles().set(0);
+        CopiedDataObjectContainer<GUIPerson> copiedDataContainer = this.copyPerson(guiPerson);
+        copiedDataContainer.getCopiedDataObject().getData().getRoles().add(guiRole.getData());
+        updatePerson(copiedDataContainer);
     }
 
     public ObservableList<GUIPosition> getCopyOfPersonBusket(GUIPerson guiPerson) {
@@ -266,7 +276,7 @@ public class PersonsDataHandler implements IDataBufferContainer
 
         pers.getBaseData().getChangeTxt().set("imported");
 
-        storePersonBaseDataAndPerson(pers);
+        storePerson(pers);
 
         return pers;
     }

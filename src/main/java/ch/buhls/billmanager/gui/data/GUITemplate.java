@@ -15,9 +15,9 @@ import javafx.beans.property.StringProperty;
  */
 public class GUITemplate extends AGUIData<BillTemplate>
 {
-    private final StringProperty name;
+    private final StringAdapterProperty name;
     
-    private final IntegerProperty maxNrPositions;
+    private final IntegerAdapterProperty maxNrPositions;
 
     public GUITemplate(BillTemplate template) {
         super(template);
@@ -26,17 +26,17 @@ public class GUITemplate extends AGUIData<BillTemplate>
         {
             @Override
             public String get() {
-                return data.getName();
+                return getData().getName();
             }
 
             @Override
             public void set(String set) {
-                data.setName(set);
+                getData().setName(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -49,17 +49,17 @@ public class GUITemplate extends AGUIData<BillTemplate>
         {
             @Override
             public Integer get() {
-                return data.getMaxPositions();
+                return getData().getMaxPositions();
             }
 
             @Override
             public void set(Integer set) {
-                data.setMaxPositions(set);
+                getData().setMaxPositions(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -80,5 +80,11 @@ public class GUITemplate extends AGUIData<BillTemplate>
     @Override
     public String toString() {
         return name.get();
+    }
+
+    @Override
+    public void informBounded() {
+        this.name.markInvalid();
+        this.maxNrPositions.markInvalid();
     }
 }

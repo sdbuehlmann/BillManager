@@ -12,7 +12,7 @@ import ch.buhls.billmanager.persistance.database.entities.AEntity;
  */
 public abstract class AGUIData<T extends AEntity>
 {
-    protected final T data;
+    private T data;
     
     protected final IntegerAdapterProperty db_id;
     protected final IntegerAdapterProperty db_version;
@@ -71,6 +71,11 @@ public abstract class AGUIData<T extends AEntity>
     public T getData() {
         return data;
     }
+    
+    public void setData(T data) {
+        this.data = data;
+        informBounded();
+    }
 
     public IntegerAdapterProperty getDb_id() {
         return db_id;
@@ -93,5 +98,6 @@ public abstract class AGUIData<T extends AEntity>
                 && this.getData().getVersion()== other.getData().getVersion();
     }
     
-    
+    // abstract methods
+    public abstract void informBounded();
 }

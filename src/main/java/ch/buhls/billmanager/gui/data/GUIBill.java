@@ -9,7 +9,6 @@ import ch.buhls.billmanager.persistance.database.entities.Bill;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Objects;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -20,32 +19,17 @@ import javafx.beans.property.StringProperty;
  */
 public class GUIBill extends AGUIData<Bill>
 {
-    public enum GUIBillStatus{
-        SENDET(GUIStringCollection.BILL_STATUS_SENDET),
-        PAID(GUIStringCollection.BILL_STATUS_PAID),
-        STORNO(GUIStringCollection.BILL_STATUS_STORNO);
-        
-        private String label;
 
-        GUIBillStatus(String label) {
-            this.label = label;
-        }
+    private final ObjectAdapterProperty<LocalDate> sendetDate;
+    private final ObjectAdapterProperty<LocalDate> closedDate;
 
-        public String toString() {
-            return label;
-        }
-    }
+    private final StringAdapterProperty location;
+    private final StringAdapterProperty comment;
+    private final ObjectAdapterProperty<GUIBillStatus> state;
 
-    private final ObjectProperty<LocalDate> sendetDate;
-    private final ObjectProperty<LocalDate> closedDate;
-
-    private final StringProperty location;
-    private final StringProperty comment;
-    private final ObjectProperty<GUIBillStatus> state;
-
-    private final IntegerProperty paymentPeriodInDays;
-    private final IntegerProperty sumInRp;
-    private final IntegerProperty nrPositions;
+    private final IntegerAdapterProperty paymentPeriodInDays;
+    private final IntegerAdapterProperty sumInRp;
+    private final IntegerAdapterProperty nrPositions;
 
     private final GUITemplate template;
     private final GUIFinancialYear year;
@@ -62,17 +46,17 @@ public class GUIBill extends AGUIData<Bill>
         {
             @Override
             public LocalDate get() {
-                return data.getDateSendet().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                return getData().getDateSendet().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             }
 
             @Override
             public void set(LocalDate set) {
-                data.setDateSendet(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                getData().setDateSendet(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -85,21 +69,22 @@ public class GUIBill extends AGUIData<Bill>
         {
             @Override
             public LocalDate get() {
-                if(data.getDateClosed() != null){
-                    return data.getDateClosed().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                }else{
+                if (getData().getDateClosed() != null) {
+                    return getData().getDateClosed().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                }
+                else {
                     return null;
                 }
             }
 
             @Override
             public void set(LocalDate set) {
-                data.setDateClosed(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                getData().setDateClosed(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -112,17 +97,17 @@ public class GUIBill extends AGUIData<Bill>
         {
             @Override
             public String get() {
-                return data.getLocation();
+                return getData().getLocation();
             }
 
             @Override
             public void set(String set) {
-                data.setLocation(set);
+                getData().setLocation(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -130,22 +115,22 @@ public class GUIBill extends AGUIData<Bill>
                 return GUIStringCollection.BILL_LOCATION;
             }
         });
-        
+
         comment = new StringAdapterProperty(new IPropertyData<String>()
         {
             @Override
             public String get() {
-                return data.getComment();
+                return getData().getComment();
             }
 
             @Override
             public void set(String set) {
-                data.setComment(set);
+                getData().setComment(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -158,7 +143,7 @@ public class GUIBill extends AGUIData<Bill>
         {
             @Override
             public GUIBillStatus get() {
-                switch (data.getBillState()) {
+                switch (getData().getBillState()) {
                     case SENDET:
                         return GUIBillStatus.SENDET;
                     case CANCELED:
@@ -174,13 +159,13 @@ public class GUIBill extends AGUIData<Bill>
             public void set(GUIBillStatus set) {
                 switch (set) {
                     case SENDET:
-                        data.setBillState(Bill.BillState.SENDET);
+                        getData().setBillState(Bill.BillState.SENDET);
                         break;
                     case STORNO:
-                        data.setBillState(Bill.BillState.CANCELED);
+                        getData().setBillState(Bill.BillState.CANCELED);
                         break;
                     case PAID:
-                        data.setBillState(Bill.BillState.PAID);
+                        getData().setBillState(Bill.BillState.PAID);
                         break;
                     default:
                         throw new UnsupportedOperationException("illegal bill state");
@@ -189,7 +174,7 @@ public class GUIBill extends AGUIData<Bill>
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -197,22 +182,22 @@ public class GUIBill extends AGUIData<Bill>
                 return GUIStringCollection.BILL_STATUS;
             }
         });
-        
+
         paymentPeriodInDays = new IntegerAdapterProperty(new IPropertyData<Integer>()
         {
             @Override
             public Integer get() {
-                return data.getPaymentPeriodInDays();
+                return getData().getPaymentPeriodInDays();
             }
 
             @Override
             public void set(Integer set) {
-                data.setPaymentPeriodInDays(set);
+                getData().setPaymentPeriodInDays(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -220,12 +205,12 @@ public class GUIBill extends AGUIData<Bill>
                 return GUIStringCollection.BILL_PAYMENT_DEADLINE;
             }
         });
-        
+
         sumInRp = new IntegerAdapterProperty(new IPropertyData<Integer>()
         {
             @Override
             public Integer get() {
-                return Bill.getSumInRp(data);
+                return Bill.getSumInRp(getData());
             }
 
             @Override
@@ -235,7 +220,7 @@ public class GUIBill extends AGUIData<Bill>
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -243,12 +228,12 @@ public class GUIBill extends AGUIData<Bill>
                 return GUIStringCollection.BILL_SUM_RP;
             }
         });
-        
+
         nrPositions = new IntegerAdapterProperty(new IPropertyData<Integer>()
         {
             @Override
             public Integer get() {
-                return data.getPositions().size();
+                return getData().getPositions().size();
             }
 
             @Override
@@ -258,7 +243,7 @@ public class GUIBill extends AGUIData<Bill>
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -266,7 +251,7 @@ public class GUIBill extends AGUIData<Bill>
                 return GUIStringCollection.BILL_NR_POSITIONS;
             }
         });
-        
+
     }
 
     public ObjectProperty<LocalDate> getSendetDate() {
@@ -312,7 +297,7 @@ public class GUIBill extends AGUIData<Bill>
     public StringProperty getComment() {
         return comment;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -325,8 +310,38 @@ public class GUIBill extends AGUIData<Bill>
             return false;
         }
         final GUIBill other = (GUIBill) obj;
-        return this.data.equals(other.data);
+        return this.getData().equals(other.getData());
     }
-    
-    
+
+    @Override
+    public void informBounded() {
+        sendetDate.markInvalid();
+        closedDate.markInvalid();
+
+        location.markInvalid();
+        comment.markInvalid();
+        state.markInvalid();
+
+        paymentPeriodInDays.markInvalid();
+        sumInRp.markInvalid();
+        nrPositions.markInvalid();
+    }
+
+    public enum GUIBillStatus
+    {
+        SENDET(GUIStringCollection.BILL_STATUS_SENDET),
+        PAID(GUIStringCollection.BILL_STATUS_PAID),
+        STORNO(GUIStringCollection.BILL_STATUS_STORNO);
+
+        private String label;
+
+        GUIBillStatus(String label) {
+            this.label = label;
+        }
+
+        public String toString() {
+            return label;
+        }
+    }
+
 }

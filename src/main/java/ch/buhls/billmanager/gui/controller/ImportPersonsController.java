@@ -1,6 +1,6 @@
 package ch.buhls.billmanager.gui.controller;
 
-import ch.buhls.billmanager.gui.handlers.DataHandler;
+import ch.buhls.billmanager.gui.viewModel.DataHandler;
 import ch.buhls.billmanager.gui.GUIStringCollection;
 import ch.buhls.billmanager.gui.data.GUIImportedPerson;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;

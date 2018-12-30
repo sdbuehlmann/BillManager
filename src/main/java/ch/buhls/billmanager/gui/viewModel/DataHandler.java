@@ -1,6 +1,7 @@
-package ch.buhls.billmanager.gui.handlers;
+package ch.buhls.billmanager.gui.viewModel;
 
 import ch.buhls.billmanager.gui.IDataBufferContainer;
+import ch.buhls.billmanager.gui.data.CopiedDataObjectContainer;
 import ch.buhls.billmanager.model.data.filter.ListFiltersContainer;
 import ch.buhls.billmanager.gui.data.GUIAppSettings;
 import ch.buhls.billmanager.gui.data.GUIArticle;
@@ -258,12 +259,12 @@ public class DataHandler implements IDataBufferContainer
     }
 
     public void addPositionAndStoreBusket(GUIPerson guiPerson, GUIPosition guiPosition) throws PersistanceException {
-        guiPerson.getData().getBusket().add(guiPosition.getData());
+        CopiedDataObjectContainer<GUIPerson> copiedDataContainer = personsDataHandler.copyPerson(guiPerson);
+        
+        copiedDataContainer.getCopiedDataObject().getData().getBusket().add(guiPosition.getData());
 
         storePosition(guiPosition);
-        personsDataHandler.updatePerson(guiPerson);
-        
-        guiPerson.getNrOfArtInBusket().set(0);
+        personsDataHandler.updatePerson(copiedDataContainer);
     }
 
     public void mergeAndStoreBusket(GUIPerson guiPerson, ObservableList<GUIPosition> guiBusket) throws PersistanceException {

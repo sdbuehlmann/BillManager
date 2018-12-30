@@ -1,7 +1,7 @@
 
 package ch.buhls.billmanager.gui.controller;
 
-import ch.buhls.billmanager.gui.handlers.DataHandler;
+import ch.buhls.billmanager.gui.viewModel.DataHandler;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
@@ -32,7 +32,7 @@ public class CreatePersonController extends AFormController<GUIPerson> implement
     public void save(GUIPersonBaseData entity) {
         try {
             if (displayConfirmToStoreDialoque(person)) {
-                this.dataHandler.getPersonsDataHandler().storePersonBaseDataAndPerson(person);
+                this.dataHandler.getPersonsDataHandler().storePerson(person);
                 closeMask();
                 displayCreatedInfoHint(person);
             }

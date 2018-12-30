@@ -1,4 +1,3 @@
-
 package ch.buhls.billmanager.gui.data;
 
 import ch.buhls.billmanager.gui.data.properties.IPropertyData;
@@ -19,34 +18,34 @@ import javafx.beans.property.StringProperty;
  */
 public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
 {
-    
-    private final StringProperty name, prename, street, city;
-    private final StringProperty salutation, title;
-    private final StringProperty phoneP, phoneM, mail;
-    private final StringProperty iban;
-    
-    private final IntegerProperty postalcode;
-    
-    private final ObjectProperty<LocalDate> birthday;
-    
+
+    private final StringAdapterProperty name, prename, street, city;
+    private final StringAdapterProperty salutation, title;
+    private final StringAdapterProperty phoneP, phoneM, mail;
+    private final StringAdapterProperty iban;
+
+    private final IntegerAdapterProperty postalcode;
+
+    private final ObjectAdapterProperty<LocalDate> birthday;
+
     public GUIPersonBaseData(PersonBaseData t) {
         super(t);
-        
+
         name = new StringAdapterProperty(new IPropertyData<String>()
         {
             @Override
             public String get() {
-                return data.getName();
+                return getData().getName();
             }
 
             @Override
             public void set(String set) {
-                data.setName(set);
+                getData().setName(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -58,17 +57,17 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
         {
             @Override
             public String get() {
-                return data.getPrename();
+                return getData().getPrename();
             }
 
             @Override
             public void set(String set) {
-                data.setPrename(set);
+                getData().setPrename(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -80,17 +79,17 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
         {
             @Override
             public String get() {
-                return data.getStreet();
+                return getData().getStreet();
             }
 
             @Override
             public void set(String set) {
-                data.setStreet(set);
+                getData().setStreet(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -102,17 +101,17 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
         {
             @Override
             public String get() {
-                return data.getCity();
+                return getData().getCity();
             }
 
             @Override
             public void set(String set) {
-                data.setCity(set);
+                getData().setCity(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -120,22 +119,22 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
                 return "Stadt";
             }
         });
-        
+
         salutation = new StringAdapterProperty(new IPropertyData<String>()
         {
             @Override
             public String get() {
-                return data.getSalutation();
+                return getData().getSalutation();
             }
 
             @Override
             public void set(String set) {
-                data.setSalutation(set);
+                getData().setSalutation(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -147,17 +146,17 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
         {
             @Override
             public String get() {
-                return data.getTitle();
+                return getData().getTitle();
             }
 
             @Override
             public void set(String set) {
-                data.setTitle(set);
+                getData().setTitle(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -165,22 +164,22 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
                 return "Titel";
             }
         });
-        
+
         phoneM = new StringAdapterProperty(new IPropertyData<String>()
         {
             @Override
             public String get() {
-                return data.getPhoneM();
+                return getData().getPhoneM();
             }
 
             @Override
             public void set(String set) {
-                data.setPhoneM(set);
+                getData().setPhoneM(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -192,17 +191,17 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
         {
             @Override
             public String get() {
-                return data.getPhoneP();
+                return getData().getPhoneP();
             }
 
             @Override
             public void set(String set) {
-                data.setPhoneP(set);
+                getData().setPhoneP(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -214,17 +213,17 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
         {
             @Override
             public String get() {
-                return data.getEmail();
+                return getData().getEmail();
             }
 
             @Override
             public void set(String set) {
-                data.setEmail(set);
+                getData().setEmail(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -232,22 +231,22 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
                 return "E-Mail";
             }
         });
-        
+
         iban = new StringAdapterProperty(new IPropertyData<String>()
         {
             @Override
             public String get() {
-                return data.getIban();
+                return getData().getIban();
             }
 
             @Override
             public void set(String set) {
-                data.setIban(set);
+                getData().setIban(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -255,22 +254,22 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
                 return "IBAN";
             }
         });
-        
+
         postalcode = new IntegerAdapterProperty(new IPropertyData<Integer>()
         {
             @Override
             public Integer get() {
-                return data.getPostalcode();
+                return getData().getPostalcode();
             }
 
             @Override
             public void set(Integer set) {
-                data.setPostalcode(set);
+                getData().setPostalcode(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -278,31 +277,31 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
                 return "PLZ";
             }
         });
-        
+
         birthday = new ObjectAdapterProperty<>(new IPropertyData<LocalDate>()
         {
             @Override
             public LocalDate get() {
-                if(data.getBirthday() == null){
+                if (getData().getBirthday() == null) {
                     return null;
                 }
-                
-                return data.getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                return getData().getBirthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             }
 
             @Override
             public void set(LocalDate set) {
-                if(set == null){
-                    data.setBirthday(null);
+                if (set == null) {
+                    getData().setBirthday(null);
                     return;
                 }
-                
-                data.setBirthday(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+                getData().setBirthday(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -358,5 +357,21 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
 
     public ObjectProperty<LocalDate> getBirthday() {
         return birthday;
+    }
+
+    @Override
+    public void informBounded() {
+        name.markInvalid();
+        prename.markInvalid();
+        street.markInvalid();
+        city.markInvalid();
+        salutation.markInvalid();
+        title.markInvalid();
+        phoneP.markInvalid();
+        phoneM.markInvalid();
+        mail.markInvalid();
+        iban.markInvalid();
+        postalcode.markInvalid();
+        birthday.markInvalid();
     }
 }

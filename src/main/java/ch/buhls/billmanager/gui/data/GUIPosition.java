@@ -13,7 +13,7 @@ import javafx.beans.property.IntegerProperty;
  */
 public class GUIPosition extends AGUIData<Position>
 {
-    private final IntegerProperty amount, position;
+    private final IntegerAdapterProperty amount, position;
     
     private final GUIArticle guiArticle;
     
@@ -26,17 +26,17 @@ public class GUIPosition extends AGUIData<Position>
         {
             @Override
             public Integer get() {
-                return data.getNumber();
+                return getData().getNumber();
             }
 
             @Override
             public void set(Integer set) {
-                data.setNumber(set);
+                getData().setNumber(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -48,17 +48,17 @@ public class GUIPosition extends AGUIData<Position>
         {
             @Override
             public Integer get() {
-                return data.getPosition();
+                return getData().getPosition();
             }
 
             @Override
             public void set(Integer set) {
-                data.setPosition(set);
+                getData().setPosition(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -78,6 +78,12 @@ public class GUIPosition extends AGUIData<Position>
 
     public GUIArticle getGuiArticle() {
         return guiArticle;
+    }
+
+    @Override
+    public void informBounded() {
+        this.amount.markInvalid();
+        this.position.markInvalid();
     }
     
     

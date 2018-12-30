@@ -17,7 +17,7 @@ import javafx.beans.property.IntegerProperty;
  * @author simon
  * @param <T>
  */
-public class AGUITrackedData<T extends ATrackedEntity> extends AGUIData<T>
+public abstract class AGUITrackedData<T extends ATrackedEntity> extends AGUIData<T>
 {
     protected final StringAdapterProperty changeTxt;
     protected final IntegerProperty versionNr;
@@ -32,17 +32,17 @@ public class AGUITrackedData<T extends ATrackedEntity> extends AGUIData<T>
         {
             @Override
             public String get() {
-                return data.getChangeTxt();
+                return getData().getChangeTxt();
             }
 
             @Override
             public void set(String set) {
-                data.setChangeTxt(set);
+                getData().setChangeTxt(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -55,17 +55,17 @@ public class AGUITrackedData<T extends ATrackedEntity> extends AGUIData<T>
         {
             @Override
             public Integer get() {
-                return data.getVersionNr();
+                return getData().getVersionNr();
             }
 
             @Override
             public void set(Integer set) {
-                data.setVersionNr(set);
+                getData().setVersionNr(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -74,7 +74,7 @@ public class AGUITrackedData<T extends ATrackedEntity> extends AGUIData<T>
             }
         });
         
-        localdate = data.getDateAdded().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        localdate = getData().getDateAdded().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         dateAdded = new ObjectAdapterProperty<>(new IPropertyData<LocalDate>()
         {
             @Override
@@ -85,12 +85,12 @@ public class AGUITrackedData<T extends ATrackedEntity> extends AGUIData<T>
             @Override
             public void set(LocalDate set) {
                 localdate = set;
-                data.setDateAdded(Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                getData().setDateAdded(Date.from(localdate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override

@@ -1,7 +1,8 @@
 package ch.buhls.billmanager.gui.controller;
 
-import ch.buhls.billmanager.gui.handlers.DataHandler;
+import ch.buhls.billmanager.gui.viewModel.DataHandler;
 import ch.buhls.billmanager.gui.GUIStringCollection;
+import ch.buhls.billmanager.gui.data.CopiedDataObjectContainer;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import ch.buhls.billmanager.gui.data.GUIRole;
@@ -43,8 +44,9 @@ public class ManageRolesController extends AController implements IManageRolesLi
         
         if (framework.showConfirmDialoque(framework.getStringCollections().getPersonStringCollection().getConfirmTxt_AddRole(markedRole, 1))) {
             try {
-                person.getData().getRoles().add(markedRole.getData());
-                dataHandler.getPersonsDataHandler().updatePerson(person);
+                CopiedDataObjectContainer<GUIPerson> copiedData = this.dataHandler.getPersonsDataHandler().copyPerson(person);
+                copiedData.getCopiedDataObject().getData().getRoles().add(markedRole.getData());
+                dataHandler.getPersonsDataHandler().updatePerson(copiedData);
                 roles.add(markedRole);
             }
             catch (PersistanceException ex) {
@@ -57,8 +59,9 @@ public class ManageRolesController extends AController implements IManageRolesLi
     public void removeRole(GUIRole role) {
         if (framework.showConfirmDialoque(framework.getStringCollections().getPersonStringCollection().getConfirmTxt_RemoveRole(role))) {
             try {
-                person.getData().getRoles().remove(role.getData());
-                dataHandler.getPersonsDataHandler().updatePerson(person);
+                CopiedDataObjectContainer<GUIPerson> copiedData = this.dataHandler.getPersonsDataHandler().copyPerson(person);
+                copiedData.getCopiedDataObject().getData().getRoles().remove(role.getData());
+                dataHandler.getPersonsDataHandler().updatePerson(copiedData);
                 roles.remove(role);
             }
             catch (PersistanceException ex) {

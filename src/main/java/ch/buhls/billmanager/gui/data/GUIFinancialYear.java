@@ -18,8 +18,8 @@ import javafx.beans.property.StringProperty;
  */
 public class GUIFinancialYear extends AGUIData<FinancialYear>
 {
-    private final StringProperty name;
-    private final ObjectProperty<LocalDate> firstDay, lastDay;
+    private final StringAdapterProperty name;
+    private final ObjectAdapterProperty<LocalDate> firstDay, lastDay;
 
     public GUIFinancialYear(FinancialYear year) {
         super(year);
@@ -27,17 +27,17 @@ public class GUIFinancialYear extends AGUIData<FinancialYear>
         name = new StringAdapterProperty(new IPropertyData<String>(){
             @Override
             public String get() {
-                return data.getName();
+                return getData().getName();
             }
 
             @Override
             public void set(String set) {
-                data.setName(set);
+                getData().setName(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -48,17 +48,17 @@ public class GUIFinancialYear extends AGUIData<FinancialYear>
         firstDay = new ObjectAdapterProperty<>(new IPropertyData<LocalDate>(){
             @Override
             public LocalDate get() {
-                return data.getFirstDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                return getData().getFirstDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             }
 
             @Override
             public void set(LocalDate set) {
-                data.setFirstDay(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                getData().setFirstDay(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -69,17 +69,17 @@ public class GUIFinancialYear extends AGUIData<FinancialYear>
         lastDay = new ObjectAdapterProperty<>(new IPropertyData<LocalDate>(){
             @Override
             public LocalDate get() {
-                return data.getLastDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                return getData().getLastDay().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             }
 
             @Override
             public void set(LocalDate set) {
-                data.setLastDay(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                getData().setLastDay(Date.from(set.atStartOfDay(ZoneId.systemDefault()).toInstant()));
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -104,5 +104,12 @@ public class GUIFinancialYear extends AGUIData<FinancialYear>
     @Override
     public String toString() {
         return name.get();
+    }
+
+    @Override
+    public void informBounded() {
+        name.markInvalid();
+        firstDay.markInvalid();
+        lastDay.markInvalid();
     }
 }

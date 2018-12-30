@@ -5,9 +5,7 @@ import ch.buhls.billmanager.gui.data.properties.IPropertyData;
 import ch.buhls.billmanager.gui.data.properties.IntegerAdapterProperty;
 import ch.buhls.billmanager.gui.data.properties.StringAdapterProperty;
 import ch.buhls.billmanager.persistance.database.entities.Article;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
 
 
@@ -17,8 +15,8 @@ import javafx.beans.property.StringProperty;
  */
 public class GUIArticle extends AGUITrackedData<Article>
 {
-    private final StringProperty title, description, internalCategorie;
-    private final IntegerProperty costs;
+    private final StringAdapterProperty title, description, internalCategorie;
+    private final IntegerAdapterProperty costs;
     
     public GUIArticle(Article t) {
         super(t);
@@ -27,17 +25,17 @@ public class GUIArticle extends AGUITrackedData<Article>
         {
             @Override
             public String get() {
-                return data.getTitle();
+                return getData().getTitle();
             }
 
             @Override
             public void set(String set) {
-                data.setTitle(set);
+                getData().setTitle(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -50,17 +48,17 @@ public class GUIArticle extends AGUITrackedData<Article>
         {
             @Override
             public String get() {
-                return data.getDescription();
+                return getData().getDescription();
             }
 
             @Override
             public void set(String set) {
-                data.setDescription(set);
+                getData().setDescription(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -73,17 +71,17 @@ public class GUIArticle extends AGUITrackedData<Article>
         {
             @Override
             public String get() {
-                return data.getInternalCategorie();
+                return getData().getInternalCategorie();
             }
 
             @Override
             public void set(String set) {
-                data.setInternalCategorie(set);
+                getData().setInternalCategorie(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -96,17 +94,17 @@ public class GUIArticle extends AGUITrackedData<Article>
         {
             @Override
             public Integer get() {
-                return data.getCosts();
+                return getData().getCosts();
             }
 
             @Override
             public void set(Integer set) {
-                data.setCosts(set);
+                getData().setCosts(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -130,5 +128,13 @@ public class GUIArticle extends AGUITrackedData<Article>
 
     public IntegerProperty getCosts() {
         return costs;
+    }
+
+    @Override
+    public void informBounded() {
+        title.markInvalid();
+        description.markInvalid();
+        internalCategorie.markInvalid();
+        costs.markInvalid();
     }
 }

@@ -61,7 +61,7 @@ public class BooleanAdapterProperty  extends BooleanProperty {
         ExpressionHelper.fireValueChangedEvent(helper);
     }
 
-    private void markInvalid() {
+    public void markInvalid() {
         if (valid) {
             valid = false;
             invalidated();

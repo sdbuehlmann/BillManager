@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
  */
 public class GUIRole extends AGUIData<Role>
 {
-    private final StringProperty name;
+    private final StringAdapterProperty name;
 
     public GUIRole(Role role) {
         super(role);
@@ -21,17 +21,17 @@ public class GUIRole extends AGUIData<Role>
         {
             @Override
             public String get() {
-                return data.getName();
+                return getData().getName();
             }
 
             @Override
             public void set(String set) {
-                data.setName(set);
+                getData().setName(set);
             }
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -43,5 +43,10 @@ public class GUIRole extends AGUIData<Role>
 
     public StringProperty getName() {
         return name;
+    }
+
+    @Override
+    public void informBounded() {
+        this.name.markInvalid();
     }
 }

@@ -62,7 +62,7 @@ public class IntegerAdapterProperty extends IntegerProperty {
         ExpressionHelper.fireValueChangedEvent(helper);
     }
 
-    private void markInvalid() {
+    public void markInvalid() {
         if (valid) {
             valid = false;
             invalidated();

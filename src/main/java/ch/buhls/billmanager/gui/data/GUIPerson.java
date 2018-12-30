@@ -13,7 +13,7 @@ import javafx.beans.property.IntegerProperty;
 public class GUIPerson extends AGUIData<Person>
 {
     
-    private final IntegerProperty nrOfArtInBusket, nrOfRoles, nrOfBills;
+    private final IntegerAdapterProperty nrOfArtInBusket, nrOfRoles, nrOfBills;
     
     private final GUIPersonBaseData baseData;
     
@@ -24,7 +24,7 @@ public class GUIPerson extends AGUIData<Person>
         {
             @Override
             public Integer get() {
-                return data.getBusket().size();
+                return getData().getBusket().size();
             }
 
             @Override
@@ -34,7 +34,7 @@ public class GUIPerson extends AGUIData<Person>
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -47,7 +47,7 @@ public class GUIPerson extends AGUIData<Person>
         {
             @Override
             public Integer get() {
-                return data.getRoles().size();
+                return getData().getRoles().size();
             }
 
             @Override
@@ -57,7 +57,7 @@ public class GUIPerson extends AGUIData<Person>
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -70,7 +70,7 @@ public class GUIPerson extends AGUIData<Person>
         {
             @Override
             public Integer get() {
-                return data.getBills().size();
+                return getData().getBills().size();
             }
 
             @Override
@@ -80,7 +80,7 @@ public class GUIPerson extends AGUIData<Person>
 
             @Override
             public Object getBean() {
-                return data;
+                return getData();
             }
 
             @Override
@@ -106,5 +106,12 @@ public class GUIPerson extends AGUIData<Person>
 
     public GUIPersonBaseData getBaseData() {
         return baseData;
+    }
+
+    @Override
+    public void informBounded() {
+        nrOfArtInBusket.markInvalid();
+        nrOfRoles.markInvalid();
+        nrOfBills.markInvalid();
     }
 }
