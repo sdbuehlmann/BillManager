@@ -1,14 +1,14 @@
 
 package ch.buhls.billmanager.gui.viewModel.filter;
 
-import ch.buhls.billmanager.model.data.filter.AgePersonFilter;
-import ch.buhls.billmanager.model.data.filter.IFilter;
-import ch.buhls.billmanager.model.data.filter.RolePersonFilter;
+import ch.buhls.billmanager.gui.viewModel.criteria.AgePersonCriteria;
+import ch.buhls.billmanager.gui.viewModel.criteria.RolePersonCriteria;
 import ch.buhls.billmanager.persistance.database.entities.Person;
 import ch.buhls.billmanager.persistance.database.entities.Role;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import ch.buhls.billmanager.gui.viewModel.criteria.ICriteria;
 
 
 /**
@@ -19,19 +19,19 @@ public class PersonFilterService implements IFilterService<Person>
 {
     
     @Override
-    public boolean doesElementMatchTheCriteria(IFilter<Person> criteria, Person element) {
-        if(criteria instanceof AgePersonFilter){
-            return this.doesEntityMatchTheCriteria((AgePersonFilter)criteria, element);
+    public boolean doesElementMatchTheCriteria(ICriteria<Person> criteria, Person element) {
+        if(criteria instanceof AgePersonCriteria){
+            return this.doesEntityMatchTheCriteria((AgePersonCriteria)criteria, element);
         }
-        if(criteria instanceof RolePersonFilter){
-            return this.doesEntityMatchTheCriteria((RolePersonFilter)criteria, element);
+        if(criteria instanceof RolePersonCriteria){
+            return this.doesEntityMatchTheCriteria((RolePersonCriteria)criteria, element);
         }
         
         return false;
     }
     
     // private methods
-    private boolean doesEntityMatchTheCriteria(AgePersonFilter criteria, Person pers) {
+    private boolean doesEntityMatchTheCriteria(AgePersonCriteria criteria, Person pers) {
         if (pers.getPersonBaseData().getBirthday() == null) {
             return false;
         }
@@ -70,7 +70,7 @@ public class PersonFilterService implements IFilterService<Person>
         return true;
     }
 
-    private boolean doesEntityMatchTheCriteria(RolePersonFilter criteria, Person pers) {
+    private boolean doesEntityMatchTheCriteria(RolePersonCriteria criteria, Person pers) {
         Role role = criteria.getRole();
 
         switch (criteria.getRoleFilterType()) {

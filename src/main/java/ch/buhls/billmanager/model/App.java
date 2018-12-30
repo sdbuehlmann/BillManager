@@ -4,6 +4,7 @@ package ch.buhls.billmanager.model;
 import ch.buhls.billmanager.persistance.files.History;
 import ch.buhls.billmanager.persistance.files.XMLHandler;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -16,13 +17,15 @@ public class App
     
     private int lastPaymentDeadlineInDays;
     private String lastLocation;
+    private LocalDate lastUsedDate;
     
-    private XMLHandler xmlHandler;
-    private History history;
+    private final XMLHandler xmlHandler;
+    private final History history;
     
     private App(){
         xmlHandler = new XMLHandler();
         history = xmlHandler.load();
+        lastUsedDate = LocalDate.now();
     }
     
     public boolean isShowDBInfos(){
@@ -103,4 +106,14 @@ public class App
         history.setLastPath(lastPath.getPath());
         xmlHandler.store(history);
     }
+
+    public LocalDate getLastUsedDate() {
+        return lastUsedDate;
+    }
+
+    public void setLastUsedDate(LocalDate lastUsedDate) {
+        this.lastUsedDate = lastUsedDate;
+    }
+    
+    
 }

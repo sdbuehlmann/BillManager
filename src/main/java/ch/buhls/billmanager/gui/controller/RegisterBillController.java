@@ -10,11 +10,7 @@ import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.RegisterBillMaskBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.IRegisterBillMaskListener;
 import ch.buhls.billmanager.model.App;
-import ch.buhls.billmanager.model.ModelException;
-import ch.buhls.billmanager.persistance.PersistanceException;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -31,7 +27,7 @@ public class RegisterBillController extends AFormController<GUIBill> implements 
     public RegisterBillController(IGUIFramework framework, DataHandler dataHandler, GUIPerson person) {
         super(framework, dataHandler, framework.getStringCollections().getBillStringCollection());
         
-        data = dataHandler.createRegisterBillData(person);
+        data = dataHandler.getBillViewModel().createRegisterBillData(person);
         
         builder = new RegisterBillMaskBuilder(data, this);
         displayMask(builder.getView(), framework.getStringCollections().getBillStringCollection().getTabTitle_Register());
@@ -41,7 +37,7 @@ public class RegisterBillController extends AFormController<GUIBill> implements 
     public void register(GUIRegisterBillData bill) {
         if(framework.showConfirmDialoque(framework.getStringCollections().getBillStringCollection().getConfirmTxt_ImportBill())){
             try {
-                dataHandler.registerBill(data, selectedFile);
+                dataHandler.getBillViewModel().registerBill(data, selectedFile);
             }
             catch (Exception ex) {
                 framework.showExceptionDialoque(ex);

@@ -1,8 +1,8 @@
 package ch.buhls.billmanager.gui.viewModel.filter;
 
-import ch.buhls.billmanager.model.data.filter.IFilter;
 import java.util.Iterator;
 import java.util.List;
+import ch.buhls.billmanager.gui.viewModel.criteria.ICriteria;
 
 /**
  *
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface IFilterService<T>
 {
-    default void filter(List<IFilter<T>> criterias, Iterator<T> elements) {
+    default void filter(List<ICriteria<T>> criterias, Iterator<T> elements) {
         while(elements.hasNext()){
             if(!this.doesElementMatchTheCriterias(criterias, elements.next())){
                 elements.remove();
@@ -19,8 +19,8 @@ public interface IFilterService<T>
         }
     }
     
-    default boolean doesElementMatchTheCriterias(List<IFilter<T>> criterias, T element) {
-        for(IFilter<T> criteria : criterias){
+    default boolean doesElementMatchTheCriterias(List<ICriteria<T>> criterias, T element) {
+        for(ICriteria<T> criteria : criterias){
             if(!this.doesElementMatchTheCriteria(criteria, element)){
                 return false;
             }
@@ -29,6 +29,6 @@ public interface IFilterService<T>
         return true;
     }
     
-    public boolean doesElementMatchTheCriteria(IFilter<T> criteria, T element);
+    public boolean doesElementMatchTheCriteria(ICriteria<T> criteria, T element);
     
 }

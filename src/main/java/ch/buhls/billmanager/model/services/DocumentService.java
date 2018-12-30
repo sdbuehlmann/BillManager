@@ -1,7 +1,6 @@
 
 package ch.buhls.billmanager.model.services;
 
-import ch.buhls.billmanager.gui.data.GUIBill;
 import ch.buhls.billmanager.model.App;
 import ch.buhls.billmanager.model.AppException;
 import ch.buhls.billmanager.model.ModelException;

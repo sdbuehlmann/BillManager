@@ -8,11 +8,9 @@ import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.ListBillsBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.IListBillsBuilderListener;
 import ch.buhls.billmanager.model.ModelException;
-import ch.buhls.billmanager.model.data.filter.IFilterHandle;
+import ch.buhls.billmanager.gui.viewModel.criteria.IFilterHandle;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 
 /**
@@ -33,7 +31,7 @@ public class ListBillsController extends AController implements IListBillsBuilde
     public ListBillsController(IGUIFramework framework, DataHandler dataHandler) {
         super(framework, dataHandler, GUIStringCollection.BILLS);
 
-        builder = new ListBillsBuilder(this, dataHandler.getBillsBuffer());
+        builder = new ListBillsBuilder(this, dataHandler.getBillViewModel().getBuffer());
         this.bindBuilder(builder);
 
         this.filterByStatus(GUIBill.GUIBillStatus.SENDET);
@@ -49,7 +47,7 @@ public class ListBillsController extends AController implements IListBillsBuilde
     @Override
     public void showPDF(GUIBill selected) {
         try {
-            dataHandler.showPDF(selected);
+            dataHandler.getBillViewModel().showPDF(selected);
         }
         catch (ModelException ex) {
             framework.showExceptionDialoque(ex);
@@ -59,7 +57,7 @@ public class ListBillsController extends AController implements IListBillsBuilde
     @Override
     public void printPDFs(List<GUIBill> bills) {
         try {
-            dataHandler.printPDFs(bills);
+            dataHandler.getBillViewModel().printPDFs(bills);
         }
         catch (ModelException ex) {
             framework.showExceptionDialoque(ex);
@@ -75,8 +73,8 @@ public class ListBillsController extends AController implements IListBillsBuilde
             statusHintController.hintClosed();
         }
 
-        statusFilterHandle = dataHandler.setBillStatusFilter(status);
-        statusHintController = new FilterHintController(builder, dataHandler, statusFilterHandle, GUIStringCollection.getHintTxt_showBillStatus(status));
+        statusFilterHandle = dataHandler.getBillViewModel().setBillStatusFilter(status);
+        statusHintController = new FilterHintController(builder, statusFilterHandle, GUIStringCollection.getHintTxt_showBillStatus(status));
     }
 
     @Override
@@ -90,10 +88,9 @@ public class ListBillsController extends AController implements IListBillsBuilde
             this.roleFilterHintController.hintClosed();
         }
 
-        this.roleFilterHandle = dataHandler.setBillRoleFilter(markedRole);
+        this.roleFilterHandle = dataHandler.getBillViewModel().setBillRoleFilter(markedRole);
         this.roleFilterHintController = new FilterHintController(
                 builder,
-                dataHandler,
                 roleFilterHandle,
                 GUIStringCollection.getHintTxt_showBillsByRoleFilter(markedRole));
     }
@@ -101,11 +98,7 @@ public class ListBillsController extends AController implements IListBillsBuilde
     @Override
     public void changeStateToPaid(GUIBill selected, LocalDate date) {
         try {
-            selected.getState().set(GUIBill.GUIBillStatus.PAID);
-            selected.getClosedDate().set(date);
-
-            this.dataHandler.updateBill(selected);
-            
+            this.dataHandler.getBillViewModel().setStateToPaid(selected, date);
             framework.displayInfoHint(GUIStringCollection.getHintTxt_changedStateOfBillToPaid(selected, date));
         }
         catch (Exception ex) {
@@ -116,7 +109,7 @@ public class ListBillsController extends AController implements IListBillsBuilde
     @Override
     public void contextMenuOpened(ObservableList<GUIBill> selected) {
         this.builder.handleMenuOpened(selected.size());
-        this.builder.setPaidAtDate(this.dataHandler.getLastUsedDate());
+        this.builder.setPaidAtDate(this.dataHandler.getBillViewModel().getLastPaidDate());
     }
 
 }

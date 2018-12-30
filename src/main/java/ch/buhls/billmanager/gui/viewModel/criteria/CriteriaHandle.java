@@ -1,5 +1,5 @@
 
-package ch.buhls.billmanager.model.data.filter;
+package ch.buhls.billmanager.gui.viewModel.criteria;
 
 import java.util.List;
 
@@ -8,24 +8,24 @@ import java.util.List;
  * @author simon
  * @param <T>
  */
-public class FilterHandle<T> implements IFilterHandle
+public class CriteriaHandle<T> implements IFilterHandle
 {
-    private final IFilter<T> filter;
+    private final ICriteria<T> filter;
     private final ICriteriaContainer<T> container;
-    private final List<IFilter<T>> filters;
+    private final List<ICriteria<T>> filters;
 
     /**
      * @deprecated 
      * @param personFilter
      * @param filters 
      */
-    public FilterHandle(IFilter<T> personFilter, List<IFilter<T>> filters) {
+    public CriteriaHandle(ICriteria<T> personFilter, List<ICriteria<T>> filters) {
         this.filter = personFilter;
         this.filters = filters;
         this.container = null;
     }
 
-    public FilterHandle(IFilter<T> personFilter, ICriteriaContainer<T> container) {
+    public CriteriaHandle(ICriteria<T> personFilter, ICriteriaContainer<T> container) {
         this.filter = personFilter;
         this.filters = null;
         this.container = container;

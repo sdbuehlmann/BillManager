@@ -137,7 +137,7 @@ public class MainMaskController implements IMainViewListener
         project.getDataHandler().getPersonsDataHandler().reloadPersonsBuffer();
         project.getDataHandler().reloadTemplatesBuffer();
         project.getDataHandler().reloadFinancialYearsBuffer();
-        project.getDataHandler().reloadBillsBuffer();
+        project.getDataHandler().getBillViewModel().reloadBuffer();
 
         this.viewBuilder.enableProjectDependentItems();
     }

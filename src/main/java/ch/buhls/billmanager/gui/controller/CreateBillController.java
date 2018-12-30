@@ -20,7 +20,7 @@ public class CreateBillController extends AFormController implements ICreateBill
     public CreateBillController(IGUIFramework framework, DataHandler dataHandler, List<GUIPerson> persons) {
         super(framework, dataHandler, framework.getStringCollections().getBillStringCollection());
         
-        GUICreateBillsData data = dataHandler.createBills(persons);
+        GUICreateBillsData data = dataHandler.getBillViewModel().createBills(persons);
         
         builder = new CreateBillMaskBuilder(data, this);
         displayCreateMask(builder.getView());
@@ -30,7 +30,7 @@ public class CreateBillController extends AFormController implements ICreateBill
     public void create(GUICreateBillsData billsData) {
         try {
             if (displayConfirmToStoreDialoque(billsData)) {
-                dataHandler.storeBills(billsData);
+                dataHandler.getBillViewModel().storeBills(billsData);
                 tabHandle.close();
                 displayCreatedInfoHint(billsData);
             }

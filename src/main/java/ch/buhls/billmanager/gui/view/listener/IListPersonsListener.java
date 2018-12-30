@@ -1,7 +1,7 @@
 
 package ch.buhls.billmanager.gui.view.listener;
 
-import ch.buhls.billmanager.model.data.filter.AgePersonFilter.AgeFilterType;
+import ch.buhls.billmanager.gui.viewModel.criteria.AgePersonCriteria.AgeFilterType;
 import ch.buhls.billmanager.gui.data.GUIPerson;
 import java.util.List;
 import javafx.collections.ObservableList;

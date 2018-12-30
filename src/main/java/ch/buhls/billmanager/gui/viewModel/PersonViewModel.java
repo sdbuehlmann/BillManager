@@ -1,9 +1,8 @@
 package ch.buhls.billmanager.gui.viewModel;
 
-import ch.buhls.billmanager.gui.IDataBufferContainer;
 import ch.buhls.billmanager.gui.data.CopiedDataObjectContainer;
-import ch.buhls.billmanager.model.data.filter.AgePersonFilter.AgeFilterType;
-import ch.buhls.billmanager.model.data.filter.RolePersonFilter.RoleFilterType;
+import ch.buhls.billmanager.gui.viewModel.criteria.AgePersonCriteria.AgeFilterType;
+import ch.buhls.billmanager.gui.viewModel.criteria.RolePersonCriteria.RoleFilterType;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.data.GUIImportedPerson;
@@ -15,12 +14,10 @@ import ch.buhls.billmanager.gui.viewModel.buffer.BufferDataService;
 import ch.buhls.billmanager.gui.viewModel.dataLoader.PersonDataLoader;
 import ch.buhls.billmanager.gui.viewModel.filter.PersonFilterService;
 import ch.buhls.billmanager.gui.viewModel.wrappers.PersonWrapper;
-import ch.buhls.billmanager.model.ModelFascade;
 import ch.buhls.billmanager.model.Project;
-import ch.buhls.billmanager.model.data.filter.AgePersonFilter;
-import ch.buhls.billmanager.model.data.filter.FilterHandle;
-import ch.buhls.billmanager.model.data.filter.ListFiltersContainer;
-import ch.buhls.billmanager.model.data.filter.RolePersonFilter;
+import ch.buhls.billmanager.gui.viewModel.criteria.AgePersonCriteria;
+import ch.buhls.billmanager.gui.viewModel.criteria.CriteriaHandle;
+import ch.buhls.billmanager.gui.viewModel.criteria.RolePersonCriteria;
 import ch.buhls.billmanager.persistance.PersistanceException;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
 import ch.buhls.billmanager.persistance.csvHandling.CSVPerson;
@@ -41,22 +38,16 @@ import javafx.collections.ObservableList;
  *
  * @author simon
  */
-public class PersonsDataHandler implements IDataBufferContainer
+public class PersonViewModel
 {
+    private static final Logger LOG = Logger.getLogger(PersonViewModel.class.getName());
 
-    private static final Logger LOG = Logger.getLogger(PersonsDataHandler.class.getName());
-    
-
-    private final Project project;
     private final PersistanceFascade persistanceFascade;
-    private final ModelFascade modelFascade;
     
     private final BufferDataService<Person, GUIPerson> bufferService;
 
-    public PersonsDataHandler(Project project) {
-        this.project = project;
+    public PersonViewModel(Project project) {
         persistanceFascade = project.getDb();
-        modelFascade = new ModelFascade();
 
         this.bufferService = new BufferDataService<>(
                 new PersonFilterService(), 
@@ -95,18 +86,18 @@ public class PersonsDataHandler implements IDataBufferContainer
 
     
     // criterias
-    public FilterHandle addRoleFilter(RoleFilterType type, GUIRole role) {
-        RolePersonFilter filter = new RolePersonFilter(type, role.getData());
+    public CriteriaHandle addRoleFilter(RoleFilterType type, GUIRole role) {
+        RolePersonCriteria filter = new RolePersonCriteria(type, role.getData());
         this.bufferService.addCriteria(filter);
         
-        return new FilterHandle(filter, this.bufferService);
+        return new CriteriaHandle(filter, this.bufferService);
     }
 
-    public FilterHandle addAgeFilter(AgeFilterType type, GUIFinancialYear year, int age) {
-        AgePersonFilter filter = new AgePersonFilter(type, year.getData(), age);
+    public CriteriaHandle addAgeFilter(AgeFilterType type, GUIFinancialYear year, int age) {
+        AgePersonCriteria filter = new AgePersonCriteria(type, year.getData(), age);
         this.bufferService.addCriteria(filter);
         
-        return new FilterHandle(filter, this.bufferService);
+        return new CriteriaHandle(filter, this.bufferService);
     }
 
     public ObservableList<GUIPerson> getPersonsBuffer() {
@@ -154,17 +145,9 @@ public class PersonsDataHandler implements IDataBufferContainer
 
         return busket;
     }
-
-    
-    
-    
-    
-    
-    
-    
-    
     
     // import
+    
     public List<GUIImportedPerson> importPersons(File file) throws PersistanceException {
         List<CSVPerson> persons = persistanceFascade.importPersons(file);
         List<GUIImportedPerson> buffer = new ArrayList<>();
@@ -280,10 +263,4 @@ public class PersonsDataHandler implements IDataBufferContainer
 
         return pers;
     }
-
-    @Override
-    public void reloadBuffer() {
-        this.reloadPersonsBuffer();
-    }
-
 }

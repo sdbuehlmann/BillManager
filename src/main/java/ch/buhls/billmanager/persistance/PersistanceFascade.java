@@ -6,6 +6,7 @@ import ch.buhls.billmanager.persistance.database.ContainerFactory;
 import ch.buhls.billmanager.persistance.database.container.BillContainer;
 import ch.buhls.billmanager.persistance.database.container.EntityNotFoundException;
 import ch.buhls.billmanager.persistance.database.container.PersonBaseDataContainer;
+import ch.buhls.billmanager.persistance.database.container.PersonContainer;
 import ch.buhls.billmanager.persistance.database.entities.AEntity;
 import ch.buhls.billmanager.persistance.database.entities.ATrackedEntity;
 import ch.buhls.billmanager.persistance.database.entities.Article;
@@ -36,6 +37,7 @@ import java.util.List;
  */
 public class PersistanceFascade
 {
+    private ContainerFactory factory;
 
     private ArticleService articleService;
     private PositionService positionService;
@@ -49,7 +51,7 @@ public class PersistanceFascade
     private CSVManager csvManager;
 
     public PersistanceFascade(File project) {
-        ContainerFactory factory = new ContainerFactory(project);
+        factory = new ContainerFactory(project);
 
         articleService = new ArticleService(factory);
         positionService = new PositionService(factory);
@@ -219,7 +221,7 @@ public class PersistanceFascade
     }
     
     public List<Bill> getBillsByRole(Role role){
-        List<Person> roleMembers = this.personService.getPersonsByRole(role);
+        List<Person> roleMembers = this.factory.getPersonContainer().getPersonsByRole(role);
         
         List<Bill> bills = new ArrayList();
         
@@ -244,6 +246,10 @@ public class PersistanceFascade
         }
         
         return bills;
+    }
+    
+    public BillContainer getBillContainer(){
+        return this.factory.getBillContainer();
     }
     
     // financial year
@@ -397,6 +403,9 @@ public class PersistanceFascade
     public PersonService getPersonService() {
         return personService;
     }
+    public PersonContainer getPersonContainer(){
+        return factory.getPersonContainer();
+    }
     
     public void updatePersonIdInAllPersonBaseDatas() throws ServiceException
     {
@@ -452,11 +461,6 @@ public class PersistanceFascade
         return tempBill;
     }
     
-    /**
-     * Stores only the bill (without the base data) into the db.
-     * @param bill
-     * @throws PersistanceException 
-     */
     public void storeBill(Bill bill) throws PersistanceException {
         try {
             if (bill.getId() == 0) {
@@ -467,6 +471,15 @@ public class PersistanceFascade
                 // existing
                 billService.update(bill);
             }
+        }
+        catch (ServiceException ex) {
+            throw new PersistanceException(ex);
+        }
+    }
+    
+    public void updateBill(Bill bill) throws PersistanceException {
+        try {
+            billService.update(bill);
         }
         catch (ServiceException ex) {
             throw new PersistanceException(ex);

@@ -1,5 +1,5 @@
 
-package ch.buhls.billmanager.model.data.filter;
+package ch.buhls.billmanager.gui.viewModel.criteria;
 
 /**
  *

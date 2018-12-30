@@ -1,11 +1,11 @@
 package ch.buhls.billmanager.gui.controller;
 
-import ch.buhls.billmanager.model.data.filter.AgePersonFilter.AgeFilterType;
+import ch.buhls.billmanager.gui.viewModel.criteria.AgePersonCriteria.AgeFilterType;
 import ch.buhls.billmanager.gui.viewModel.DataHandler;
-import ch.buhls.billmanager.model.data.filter.FilterHandle;
+import ch.buhls.billmanager.gui.viewModel.criteria.CriteriaHandle;
 import ch.buhls.billmanager.gui.GUIStringCollection;
-import ch.buhls.billmanager.gui.viewModel.PersonsDataHandler;
-import ch.buhls.billmanager.model.data.filter.RolePersonFilter;
+import ch.buhls.billmanager.gui.viewModel.PersonViewModel;
+import ch.buhls.billmanager.gui.viewModel.criteria.RolePersonCriteria;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.data.GUIFinancialYear;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
@@ -31,7 +31,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
 
     private final ListPersonsBuilder builder;
 
-    private final PersonsDataHandler personsDataHandler;
+    private final PersonViewModel personsDataHandler;
     
     private final DEPersonStringCollection stringCollection;
 
@@ -168,20 +168,20 @@ public class ListPersonsController extends AController implements IListPersonsLi
     public void filterMembersByMarkedRole() {
         GUIRole role = dataHandler.getMarkedRole().get();
         
-        FilterHandle filterHandle = personsDataHandler.addRoleFilter(RolePersonFilter.RoleFilterType.SHOW, role);
+        CriteriaHandle filterHandle = personsDataHandler.addRoleFilter(RolePersonCriteria.RoleFilterType.SHOW, role);
         personsDataHandler.reloadPersonsBuffer();
         
-        new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getHintTxt_showRoleFilter(role));
+        new FilterHintController(builder, filterHandle, GUIStringCollection.getHintTxt_showRoleFilter(role));
     }
 
     @Override
     public void hideMarkedRoleMembers() {
         GUIRole role = dataHandler.getMarkedRole().get();
         
-        FilterHandle filterHandle = personsDataHandler.addRoleFilter(RolePersonFilter.RoleFilterType.HIDE, role);
+        CriteriaHandle filterHandle = personsDataHandler.addRoleFilter(RolePersonCriteria.RoleFilterType.HIDE, role);
         personsDataHandler.reloadPersonsBuffer();
         
-        new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getHintTxt_showRoleFilter(role));
+        new FilterHintController(builder, filterHandle, GUIStringCollection.getHintTxt_showRoleFilter(role));
     }
 
     @Override
@@ -195,24 +195,24 @@ public class ListPersonsController extends AController implements IListPersonsLi
             
             GUIFinancialYear year = dataHandler.getMarkedYear().get();
             
-            FilterHandle filterHandle = personsDataHandler.addAgeFilter(ageFilterType, year, age);
+            CriteriaHandle filterHandle = personsDataHandler.addAgeFilter(ageFilterType, year, age);
             personsDataHandler.reloadPersonsBuffer();
             
             switch(ageFilterType){
                 case EQUAL:
-                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_Equal(year, age));
+                    new FilterHintController(builder, filterHandle, GUIStringCollection.getFilterHintTxt_Equal(year, age));
                     break;
                 case OLDER:
-                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_Older(year, age));
+                    new FilterHintController(builder, filterHandle, GUIStringCollection.getFilterHintTxt_Older(year, age));
                     break;
                 case YOUNGER:
-                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_Younger(year, age));
+                    new FilterHintController(builder, filterHandle, GUIStringCollection.getFilterHintTxt_Younger(year, age));
                     break;
                 case OLDER_OR_EQUAL:
-                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_OlderOrEqual(year, age));
+                    new FilterHintController(builder, filterHandle, GUIStringCollection.getFilterHintTxt_OlderOrEqual(year, age));
                     break;
                 case YOUNGER_OR_EQUAL:
-                    new FilterHintController(builder, personsDataHandler, filterHandle, GUIStringCollection.getFilterHintTxt_YoungerOrEqual(year, age));
+                    new FilterHintController(builder, filterHandle, GUIStringCollection.getFilterHintTxt_YoungerOrEqual(year, age));
                     break;
             }
         }

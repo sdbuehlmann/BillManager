@@ -6,13 +6,13 @@ import ch.buhls.billmanager.gui.viewModel.filter.IFilterService;
 import ch.buhls.billmanager.gui.viewModel.wrappers.IDataWrapper;
 import ch.buhls.billmanager.gui.data.AGUIData;
 import ch.buhls.billmanager.gui.data.CopiedDataObjectContainer;
-import ch.buhls.billmanager.model.data.filter.ICriteriaContainer;
-import ch.buhls.billmanager.model.data.filter.IFilter;
+import ch.buhls.billmanager.gui.viewModel.criteria.ICriteriaContainer;
 import ch.buhls.billmanager.persistance.database.entities.AEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ch.buhls.billmanager.gui.viewModel.criteria.ICriteria;
 
 /**
  *
@@ -23,7 +23,7 @@ import javafx.collections.ObservableList;
 public class BufferDataService<T extends AEntity<T>, G extends AGUIData<T>> implements ICriteriaContainer<T>
 {
     private final ObservableList<G> buffer;
-    private final List<IFilter<T>> criterias;
+    private final List<ICriteria<T>> criterias;
     
     private final IFilterService filterService;
     private final IDataLoader<T> loadDataService;
@@ -43,12 +43,17 @@ public class BufferDataService<T extends AEntity<T>, G extends AGUIData<T>> impl
         this.filterService.filter(criterias, this.wrapper.unwrapListElements(buffer));
     }
     
+    public void add(T data){
+        this.buffer.add(this.wrapper.wrapEntity(data));
+        this.filterService.filter(criterias, this.wrapper.unwrapListElements(buffer));
+    }
+    
     public void update(CopiedDataObjectContainer<G> copiedDataContainer){
         copiedDataContainer.getOriginalDataObject().setData(copiedDataContainer.getCopiedDataObject().getData());
         this.filterService.filter(criterias, this.wrapper.unwrapListElements(buffer));
     }
     
-    public void addCriteria(IFilter criteria){
+    public void addCriteria(ICriteria criteria){
         this.criterias.add(criteria);
         
         if(criterias.size() == 1){
@@ -61,7 +66,7 @@ public class BufferDataService<T extends AEntity<T>, G extends AGUIData<T>> impl
     }
     
     @Override
-    public void deleteCriteria(IFilter<T> criteria){
+    public void deleteCriteria(ICriteria<T> criteria){
         this.criterias.remove(criteria);
         this.reloadData();
     }

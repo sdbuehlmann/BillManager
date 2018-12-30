@@ -49,42 +49,7 @@ public class PersonService extends AService<Person>
         this.handleBills(managedEntity, entity);
     }
 
-    public List<Person> getPersonsByRole(Role role) {
-        Query query = this.factory.getEntityManager().
-                createQuery("SELECT p FROM Person p JOIN p.roles r WHERE r.id = " + role.getId(), Person.class);
-        List<Person> list = query.getResultList();
-
-        return list;
-    }
-
-    public Person getPersonByBaseData(PersonBaseData baseData){
-        TypedQuery<Person> personQuery = this.factory.getEntityManager().
-                createQuery("SELECT p FROM Person p WHERE p.personBaseData.id = " + baseData.getId(), Person.class);
-        List<Person> list = personQuery.getResultList();
-        
-        if(!list.isEmpty()){
-            return list.get(0);
-        }
-        
-        // is a old bas data -> find newest
-        TypedQuery<PersonBaseData> baseDataQuery = this.factory.getEntityManager().
-                createQuery("SELECT pbd FROM PersonBaseData pbd WHERE pbd.previousVersion.id = " + baseData.getId(), PersonBaseData.class);
-        
-        PersonBaseData newest = null;
-        
-        for(PersonBaseData dbEntry : baseDataQuery.getResultList()){
-            if(dbEntry.getFollowingVersion() == null){
-                // newest version
-                newest = dbEntry;
-                break;
-            }
-        }
-        
-        personQuery = this.factory.getEntityManager().
-                createQuery("SELECT p FROM Person p WHERE p.personBaseData.id = " + newest.getId(), Person.class);
-        
-        return personQuery.getSingleResult();
-    }
+    
     
     private void handlePositions(Person managedEntity, Person entity) throws ServiceException {
         if (listContainsDeltas(managedEntity.getBusket(), entity.getBusket())) {
