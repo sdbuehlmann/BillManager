@@ -114,4 +114,10 @@ public class GUIPerson extends AGUIData<Person>
         nrOfRoles.markInvalid();
         nrOfBills.markInvalid();
     }
+
+    @Override
+    public void setData(Person data) {
+        super.setData(data);
+        baseData.setData(data.getPersonBaseData());
+    }
 }

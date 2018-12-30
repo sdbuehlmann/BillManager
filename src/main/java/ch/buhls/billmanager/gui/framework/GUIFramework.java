@@ -70,11 +70,12 @@ public class GUIFramework implements IGUIFramework
         FileChooser chooser = new FileChooser();
 
         if (lastDirectory != null) {
-            if (!lastDirectory.isDirectory()) {
-                lastDirectory = lastDirectory.getParentFile();
+            if(!lastDirectory.isDirectory()) {
+                lastDirectory = lastDirectory.getParentFile().getParentFile();
             }
-
-            chooser.setInitialDirectory(lastDirectory);
+            if(lastDirectory.exists()){
+                chooser.setInitialDirectory(lastDirectory);
+            }
         }
         chooser.setTitle(title);
 
