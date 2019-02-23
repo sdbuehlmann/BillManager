@@ -39,6 +39,8 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
         
         LabledSwitchableControlContainer.bindTextfield(maskContainer.getTfPrenameContainer(), person.getPrename(), false);
         LabledSwitchableControlContainer.bindTextfield(maskContainer.getTfNameContainer(), person.getName(), false);
+        LabledSwitchableControlContainer.bindTextfield(maskContainer.getTfCompanyContainer(), person.getCompany(), false);
+        
         LabledSwitchableControlContainer.bindTextfield(maskContainer.getTfStreetContainer(), person.getStreet(), false);
         LabledSwitchableControlContainer.bindNumberfield(maskContainer.getNfPostalCodeContainer(), person.getPostalcode(), false);
         LabledSwitchableControlContainer.bindTextfield(maskContainer.getTfCityContainer(), person.getCity(), false);
@@ -70,6 +72,7 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
         
         LabledSwitchableControlContainer.changeToSwitchableState(maskContainer.getTfPrenameContainer());
         LabledSwitchableControlContainer.changeToSwitchableState(maskContainer.getTfNameContainer());
+        LabledSwitchableControlContainer.changeToSwitchableState(maskContainer.getTfCompanyContainer());
         LabledSwitchableControlContainer.changeToSwitchableState(maskContainer.getTfStreetContainer());
         LabledSwitchableControlContainer.changeToSwitchableState(maskContainer.getNfPostalCodeContainer());
         LabledSwitchableControlContainer.changeToSwitchableState(maskContainer.getTfCityContainer());
@@ -94,6 +97,7 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
         
         LabledSwitchableControlContainer.changeToEditableState(maskContainer.getTfPrenameContainer());
         LabledSwitchableControlContainer.changeToEditableState(maskContainer.getTfNameContainer());
+        LabledSwitchableControlContainer.changeToEditableState(maskContainer.getTfCompanyContainer());
         LabledSwitchableControlContainer.changeToEditableState(maskContainer.getTfStreetContainer());
         LabledSwitchableControlContainer.changeToEditableState(maskContainer.getNfPostalCodeContainer());
         LabledSwitchableControlContainer.changeToEditableState(maskContainer.getTfCityContainer());
@@ -118,6 +122,7 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
         
         LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getTfPrenameContainer());
         LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getTfNameContainer());
+        LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getTfCompanyContainer());
         LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getTfStreetContainer());
         LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getNfPostalCodeContainer());
         LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getTfCityContainer());
@@ -135,6 +140,4 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
         
         maskContainer.getbSave().setDisable(true);
     }
-    
-    
 }

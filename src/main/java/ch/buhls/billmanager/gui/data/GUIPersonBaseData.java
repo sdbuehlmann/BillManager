@@ -19,7 +19,7 @@ import javafx.beans.property.StringProperty;
 public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
 {
 
-    private final StringAdapterProperty name, prename, street, city;
+    private final StringAdapterProperty name, prename, street, city, company;
     private final StringAdapterProperty salutation, title;
     private final StringAdapterProperty phoneP, phoneM, mail;
     private final StringAdapterProperty iban;
@@ -119,7 +119,29 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
                 return "Stadt";
             }
         });
+        company = new StringAdapterProperty(new IPropertyData<String>()
+        {
+            @Override
+            public String get() {
+                return getData().getCompany();
+            }
 
+            @Override
+            public void set(String set) {
+                getData().setCompany(set);
+            }
+
+            @Override
+            public Object getBean() {
+                return getData();
+            }
+
+            @Override
+            public String getName() {
+                return "Firma";
+            }
+        });
+        
         salutation = new StringAdapterProperty(new IPropertyData<String>()
         {
             @Override
@@ -319,6 +341,10 @@ public class GUIPersonBaseData extends AGUITrackedData<PersonBaseData>
         return prename;
     }
 
+    public StringProperty getCompany() {
+        return company;
+    }
+    
     public StringProperty getStreet() {
         return street;
     }

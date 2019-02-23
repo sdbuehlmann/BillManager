@@ -23,6 +23,7 @@ public class PersonTableContainer extends ATableContainer<GUIPerson>
 
     private final TableColumn<GUIPerson, String> nameColumn;
     private final TableColumn<GUIPerson, String> prenameColumn;
+    private final TableColumn<GUIPerson, String> companyColumn;
     private final TableColumn<GUIPerson, String> streetColumn;
     private final TableColumn<GUIPerson, Number> postalCodeColumn;
     private final TableColumn<GUIPerson, String> cityColumn;
@@ -64,6 +65,9 @@ public class PersonTableContainer extends ATableContainer<GUIPerson>
         nameColumn = new TableColumn(GUIStringCollection.NAME);
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getName());
 
+        companyColumn = new TableColumn(GUIStringCollection.COMPANY);
+        companyColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getCompany());
+        
         prenameColumn = new TableColumn(GUIStringCollection.PRENAME);
         prenameColumn.setCellValueFactory(cellData -> cellData.getValue().getBaseData().getPrename());
 
@@ -120,6 +124,7 @@ public class PersonTableContainer extends ATableContainer<GUIPerson>
 
         this.addColumn(nameColumn);
         this.addColumn(prenameColumn);
+        this.addColumn(companyColumn);
         this.addColumn(streetColumn);
         this.addColumn(postalCodeColumn);
         this.addColumn(cityColumn);

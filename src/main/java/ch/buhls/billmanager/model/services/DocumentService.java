@@ -111,8 +111,9 @@ public class DocumentService
                 break;
         }
 
-        sb.append(Integer.toString(date.getYear() + 1900));
-
+        // sb.append(Integer.toString(date.getYear() + 1900)); Works on Linux
+        sb.append(Integer.toString(date.getYear()));
+        
         return sb.toString();
     }
     

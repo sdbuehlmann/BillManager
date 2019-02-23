@@ -17,6 +17,7 @@ public class PersonFormContainer extends TrackableEntityFormContainer
 {
     private final LabledSwitchableControlContainer<TextField> tfNameContainer;
     private final LabledSwitchableControlContainer<TextField> tfPrenameContainer;
+    private final LabledSwitchableControlContainer<TextField> tfCompanyContainer;
     private final LabledSwitchableControlContainer<TextField> tfStreetContainer;
     private final LabledSwitchableControlContainer<NumberField> nfPostalCodeContainer;
     private final LabledSwitchableControlContainer<TextField> tfCityContainer;
@@ -38,6 +39,8 @@ public class PersonFormContainer extends TrackableEntityFormContainer
     {
         tfNameContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.NAME, GUIStringCollection.EDIT, new TextField());
         tfPrenameContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.PRENAME, GUIStringCollection.EDIT, new TextField());
+        tfCompanyContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.COMPANY, GUIStringCollection.EDIT, new TextField());
+        
         tfStreetContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.STREET, GUIStringCollection.EDIT, new TextField());
         nfPostalCodeContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.POSTAL_CODE, GUIStringCollection.EDIT, new NumberField());
         tfCityContainer = new LabledSwitchableControlContainer<>(GUIStringCollection.CITY, GUIStringCollection.EDIT, new TextField());
@@ -58,6 +61,7 @@ public class PersonFormContainer extends TrackableEntityFormContainer
         getView().getChildren().addAll(
                 tfNameContainer.getView(),
                 tfPrenameContainer.getView(),
+                tfCompanyContainer.getView(),
                 tfStreetContainer.getView(),
                 nfPostalCodeContainer.getView(),
                 tfCityContainer.getView(),
@@ -80,6 +84,10 @@ public class PersonFormContainer extends TrackableEntityFormContainer
 
     public LabledSwitchableControlContainer<TextField> getTfPrenameContainer() {
         return tfPrenameContainer;
+    }
+
+    public LabledSwitchableControlContainer<TextField> getTfCompanyContainer() {
+        return tfCompanyContainer;
     }
 
     public LabledSwitchableControlContainer<TextField> getTfStreetContainer() {

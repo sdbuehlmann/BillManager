@@ -30,6 +30,7 @@ public class GUIStringCollection
     public static final String PERSONAL_ID = "ID";
     public static final String NAME = "Namen";
     public static final String PRENAME = "Vornamen";
+    public static final String COMPANY = "Firma";
     public static final String STREET = "Strasse";
     public static final String POSTAL_CODE = "PLZ";
     public static final String CITY = "Ort";

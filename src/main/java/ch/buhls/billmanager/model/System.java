@@ -1,6 +1,7 @@
 package ch.buhls.billmanager.model;
 
 import ch.buhls.billmanager.model.converter.ConverterException;
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,8 @@ public class System
     
 
     public static synchronized void openPDF(File path) throws IOException {
-        Runtime.getRuntime().exec("xdg-open " + path.getAbsolutePath());
+        //Runtime.getRuntime().exec("xdg-open " + path.getAbsolutePath()); // linux
+        Desktop.getDesktop().open(path);
     }
 
     public synchronized void convertSVG2PDF(File svg, File pdf, String pathInkscape) throws ConverterException {

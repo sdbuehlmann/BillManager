@@ -15,6 +15,7 @@ public class PersonBaseData extends ATrackedEntity<PersonBaseData>
 {
     private String name, prename;
     private String street, city;
+    private String company;
     private String salutation, title;
     private String phoneP, phoneM, email;
     private String iban;
@@ -48,6 +49,14 @@ public class PersonBaseData extends ATrackedEntity<PersonBaseData>
         this.prename = prename;
     }
 
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+    
     public String getStreet() {
         return street;
     }
@@ -142,6 +151,7 @@ public class PersonBaseData extends ATrackedEntity<PersonBaseData>
         
         other.name = name;
         other.prename = prename;
+        other.company = company;
         other.street = street;
         other.city = city;
         other.salutation = salutation;
