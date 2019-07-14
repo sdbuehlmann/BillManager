@@ -1,6 +1,7 @@
 package ch.buhls.billmanager.persistance.database.services;
 
 import ch.buhls.billmanager.persistance.database.ContainerFactory;
+import ch.buhls.billmanager.persistance.database.container.PositionContainer;
 import ch.buhls.billmanager.persistance.database.entities.Person;
 import ch.buhls.billmanager.persistance.database.entities.PersonBaseData;
 import ch.buhls.billmanager.persistance.database.entities.Position;
@@ -17,11 +18,13 @@ public class PersonService extends AService<Person>
 {
 
     private PositionService positionService;
+    private PositionContainer positionContainer;
 
     public PersonService(ContainerFactory factory) {
         super(factory, factory.getPersonContainer());
 
         this.positionService = new PositionService(factory);
+        this.positionContainer = factory.getPositionContainer();
     }
 
     @Override
@@ -44,7 +47,7 @@ public class PersonService extends AService<Person>
     protected void updateManagedEntity(Person managedEntity, Person entity) throws ServiceException {
         managedEntity.setPersonBaseData(entity.getPersonBaseData());
 
-        //this.handlePositions(managedEntity, entity);
+        this.handlePositions(managedEntity, entity);
         this.handleRoles(managedEntity, entity);
         this.handleBills(managedEntity, entity);
     }
@@ -55,22 +58,26 @@ public class PersonService extends AService<Person>
         if (listContainsDeltas(managedEntity.getBusket(), entity.getBusket())) {
             ListDeltasTO<Position> deltas = getDeltasInList(entity.getBusket(), managedEntity.getBusket());
 
-            // add new positions to db
-            for (Position pos : deltas.getNewElements()) {
-                positionService.add(pos);
-                managedEntity.getBusket().add(pos);
-            }
-
-            // handle changes in existing positions
-            for (UpdatableEntityPaire<Position> posPaire : deltas.getExistingElements()) {
-                positionService.update(posPaire.getSrcEntity());
-            }
+//            // add new positions to db
+//            for (Position pos : deltas.getNewElements()) {
+//                positionService.add(pos);
+//                managedEntity.getBusket().add(pos);
+//            }
+//
+//            // handle changes in existing positions
+//            for (UpdatableEntityPaire<Position> posPaire : deltas.getExistingElements()) {
+//                positionService.update(posPaire.getSrcEntity());
+//            }
 
             // remove unused positions
             for (Position pos : deltas.getRemovedElements()) {
-                managedEntity.getBusket().remove(pos);
+                //Position managedPosition = positionContainer.findByID(pos.getId());
                 positionService.remove(pos);
             }
+            
+            managedEntity.getBusket().clear();
+            managedEntity.getBusket().addAll(entity.getBusket());
+            
         }
     }
 
