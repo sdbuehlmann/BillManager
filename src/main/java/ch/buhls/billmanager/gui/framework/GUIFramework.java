@@ -12,6 +12,7 @@ import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -40,6 +41,7 @@ public class GUIFramework implements IGUIFramework
     public static GUIFramework INSTANCE;
 
     private final Stage mainStage;
+    private Scene splitScreenScene;
     private SplitScreen splitScreen;
 
     private HintBarContainer hintBarContainer;
@@ -134,6 +136,24 @@ public class GUIFramework implements IGUIFramework
     public void setAppTitle(String title) {
         this.mainStage.setTitle(GUIStringCollection.APPLICATION_TITLE + " - " + title);
     }
+    
+    @Override
+    public void setCursorType(CursorType cursorType){
+        switch(cursorType){
+            case DEFAULT:
+                splitScreenScene.setCursor(Cursor.DEFAULT);
+                break;
+            case WAITING:
+                splitScreenScene.setCursor(Cursor.WAIT);
+                break;
+            case HORIZONTAL_SCALING:
+                splitScreenScene.setCursor(Cursor.H_RESIZE);
+                break;
+            case VERTICAL_SCALING:
+                splitScreenScene.setCursor(Cursor.V_RESIZE);
+                break;
+        }
+    }
 
     @Override
     public ITabHandle displayMask(Node node, String title, Area area) {
@@ -182,11 +202,12 @@ public class GUIFramework implements IGUIFramework
         this.hintBarContainer = hintBarContainer;
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        Scene scene = new Scene(parent, 500, 500);
-        scene.getStylesheets().add("styles/Styles.css");
+        splitScreenScene = new Scene(parent, 500, 500);
+        splitScreenScene.getStylesheets().add("styles/Styles.css");
+        splitScreenScene.getStylesheets().add("styles/PropertyGridStyles.css");
 
         mainStage.setTitle(GUIStringCollection.APPLICATION_TITLE);
-        mainStage.setScene(scene);
+        mainStage.setScene(splitScreenScene);
 
         mainStage.show();
     }
