@@ -72,7 +72,7 @@ public class FormGridContainer
         currentRow++;
     }
     
-    public void addPropertyRow(String text, TextField child)
+    public void addPropertyRow(String text, Node child)
     {
         Label label = new Label(text);
         HBox labelBox = new HBox(label);
