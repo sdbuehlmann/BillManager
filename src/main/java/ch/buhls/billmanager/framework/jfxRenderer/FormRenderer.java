@@ -5,8 +5,12 @@ import ch.buhls.billmanager.framework.propertyDescription.PropertiesView;
 import ch.buhls.billmanager.framework.propertyDescription.PropertyDescriptor;
 import ch.buhls.billmanager.gui.data.properties.IPropertyData;
 import ch.buhls.billmanager.gui.data.properties.IntegerAdapterProperty;
+import ch.buhls.billmanager.gui.data.properties.ObjectAdapterProperty;
 import ch.buhls.billmanager.gui.data.properties.StringAdapterProperty;
 import ch.buhls.billmanager.gui.view.elements.NumberField;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -33,6 +37,9 @@ public class FormRenderer
                 }
                 else if(property.getTypeProperty() == Integer.class){
                     gridContainer.addPropertyRow(property.getKey(), createNumberField(owner, property));
+                }
+                else if(property.getTypeProperty() == Date.class){
+                    gridContainer.addPropertyRow(property.getKey(), createDatePicker(owner, property));
                 }
             }
         }
@@ -120,16 +127,25 @@ public class FormRenderer
     
     private static DatePicker createDatePicker(Object owner, PropertyDescriptor property)
     {
-        IntegerAdapterProperty adapter = new IntegerAdapterProperty(new IPropertyData<Integer>()
+        if(property.getTypeProperty() != Date.class){
+            throw new RuntimeException("Illegal property descriptor type for a date picker (needs a Date.type)");
+        }
+        
+        ObjectAdapterProperty<LocalDate> adapter = new ObjectAdapterProperty<>(new IPropertyData<LocalDate>()
         {
             @Override
-            public Integer get()
+            public LocalDate get()
             {
-                return (Integer) property.getGetter().Get(owner);
+                if (property.getGetter().Get(owner) == null) {
+                    return null;
+                }
+
+                Date temp = (Date)property.getGetter().Get(owner);
+                return temp.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             }
 
             @Override
-            public void set(Integer set)
+            public void set(LocalDate set)
             {
                 property.getSetter().Set(owner, set);
             }
@@ -147,13 +163,13 @@ public class FormRenderer
             }
         });
         
-        NumberField numberfield = new NumberField();
-        numberfield.getValueProperty().bindBidirectional(adapter);
+        DatePicker datepicker = new DatePicker();
+        datepicker.valueProperty().bindBidirectional(adapter);
         
         if(property.getSetter() == null){
-            numberfield.setDisable(true);
+            datepicker.setDisable(true);
         }
         
-        return numberfield;
+        return datepicker;
     }
 }
