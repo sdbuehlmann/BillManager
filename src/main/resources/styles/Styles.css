@@ -2,6 +2,8 @@
    -fx-info-color: rgb(160, 255, 255);
    -fx-marked-color: rgb(255, 255, 160);
    -fx-filter-color: rgb(255, 160, 255);
+   -fx-background1-color: rgb(244, 244, 244);
+   -fx-background2-color: rgb(255, 255, 255);
 }
 
 .info-hint{
@@ -14,4 +16,15 @@
 
 .filter-hint{
     -fx-background-color: -fx-filter-color;
+}
+
+.form-group-name{
+    -fx-font-weight: bold;
+}
+
+.form{
+    -fx-hgap: 5;
+    -fx-vgap: 5;
+    -fx-alignment: center-left;
+    -fx-grid-lines-visible: false;
 }

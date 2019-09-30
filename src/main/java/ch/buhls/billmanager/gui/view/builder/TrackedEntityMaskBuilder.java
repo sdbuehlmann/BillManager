@@ -4,6 +4,7 @@ package ch.buhls.billmanager.gui.view.builder;
 import ch.buhls.billmanager.gui.data.AGUITrackedData;
 import ch.buhls.billmanager.gui.view.container.form.TrackableEntityFormContainer;
 import ch.buhls.billmanager.gui.view.elements.LabledSwitchableControlContainer;
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 /**
@@ -60,7 +61,7 @@ public class TrackedEntityMaskBuilder<T extends AGUITrackedData>
     }
     
     // getter & setter
-    public VBox getView() {
+    public Node getView() {
         return formContainer.getView();
     }
 

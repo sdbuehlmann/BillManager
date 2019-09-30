@@ -1,5 +1,6 @@
 package frameworkTest;
 
+import ch.buhls.billmanager.framework.propertyDescription.CategoryDescriptor;
 import ch.buhls.billmanager.framework.propertyDescription.PropertiesView;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -12,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author buhls
  */
-public class PropertyDescriptorTest
+public class PropertiesViewTest
 {
     
-    public PropertyDescriptorTest()
+    public PropertiesViewTest()
     {
     }
     
@@ -40,7 +41,7 @@ public class PropertyDescriptorTest
     }
 
      @Test
-     public void hello() {
+     public void DescriptionTest() {
         PropertiesView<Person> desc = new PropertiesView<>("person", Person.class);
         
         desc.addCategory("editable");
@@ -49,7 +50,20 @@ public class PropertyDescriptorTest
         
         desc.addCategory("readonly");
         desc.addProperty("age", Integer.class, (owner) -> { return owner.getName(); });
-        desc.addProperty("sex", ESex.class, (owner) -> { return owner.getSex(); });
+        
+        // test
+        assertEquals(2, desc.getCategories().size());
+        
+        CategoryDescriptor category = desc.getCategories().get(0);
+        assertEquals("editable", category.getKey());
+        assertEquals(2, category.getProperties().size());
+        assertEquals("name", category.getProperties().get(0).getKey());
+        assertEquals("prename", category.getProperties().get(1).getKey());
+        
+        category = desc.getCategories().get(1);
+        assertEquals("readonly", category.getKey());
+        assertEquals(1, category.getProperties().size());
+        assertEquals("age", category.getProperties().get(0).getKey());
      }
      
      private class Person{
@@ -57,7 +71,6 @@ public class PropertyDescriptorTest
         private String prename;
         
         private int age;
-        private ESex sex;
 
         public String getName(){
             return name;
@@ -81,17 +94,5 @@ public class PropertyDescriptorTest
         {
             return age;
         }
-
-        public ESex getSex()
-        {
-            return sex;
-        }
      }
-     
-     private enum ESex{
-            FEMALE,
-            MALE
-        }
-     
-     
 }

@@ -1,11 +1,16 @@
 
 package ch.buhls.billmanager.gui.view.builder;
 
+import ch.buhls.billmanager.framework.jfxRenderer.FormRenderer;
+import ch.buhls.billmanager.framework.propertyDescription.PropertiesView;
 import ch.buhls.billmanager.gui.data.GUIArticle;
 import ch.buhls.billmanager.gui.view.container.form.ArticleFormContainer;
 import ch.buhls.billmanager.gui.view.elements.LabledSwitchableControlContainer;
 import javafx.scene.layout.VBox;
 import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
+import ch.buhls.billmanager.persistance.database.entities.Article;
+import javafx.scene.Node;
+import javafx.scene.layout.GridPane;
 
 /**
  *
@@ -13,6 +18,9 @@ import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
  */
 public class ArticleMaskBuilder
 {
+    private static PropertiesView<Article> propView;
+    private final GridPane view;
+    
     // data
     private final GUIArticle article;
     
@@ -25,7 +33,14 @@ public class ArticleMaskBuilder
     public ArticleMaskBuilder(GUIArticle article, IDefaultMaskListener listener) {
         this.listener = listener;
         this.article = article;
+        
         this.formContainer = new ArticleFormContainer();
+        
+        if(propView == null)
+        {
+            propView = getPropertiesView();
+        }
+        view = FormRenderer.render(propView, article.getData());
         
         bindProperties();
         bindListeners();
@@ -93,8 +108,23 @@ public class ArticleMaskBuilder
         LabledSwitchableControlContainer.changeToEditableState(formContainer.getNfPrizeContainer());
     }
     
+    private PropertiesView getPropertiesView(){
+        PropertiesView<Article> desc = new PropertiesView<>("article", Article.class);
+        
+        desc.addCategory("textes");
+        desc.addProperty("title", String.class, (owner) -> { return owner.getTitle(); }, (owner,value) -> { owner.setTitle(value); });
+        desc.addProperty("description", String.class, (owner) -> { return owner.getDescription(); }, (owner,value) -> { owner.setDescription(value); });
+        
+        desc.addCategory("internal");
+        desc.addProperty("category", String.class, (owner) -> { return owner.getInternalCategorie(); }, (owner,value) -> { owner.setInternalCategorie(value); });
+        desc.addProperty("changeText", String.class, (owner) -> { return owner.getChangeTxt(); }, (owner,value) -> { owner.setChangeTxt(value); });
+        
+        return desc;
+    }
+    
     // getter & setter
-    public VBox getView() {
+    public Node getView() {
+        //return view;
         return formContainer.getView();
     }
 }
