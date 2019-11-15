@@ -25,7 +25,7 @@ public class EditPersonController extends AFormController<GUIPerson> implements 
         
         this.person = dataHandler.getPersonsDataHandler().copyPerson(person);
         
-        this.builder = new PersonMaskBuilder(this.person.getCopiedDataObject().getBaseData(), this);
+        this.builder = new PersonMaskBuilder(this.person.getCopiedDataObject().getBaseData(), this, framework);
         this.builder.changeToEditMode();
         
         displayEditMask(builder.getView(), person);

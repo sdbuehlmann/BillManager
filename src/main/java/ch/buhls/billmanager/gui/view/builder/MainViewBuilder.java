@@ -101,9 +101,12 @@ public class MainViewBuilder
         for(String project : projects){
             if(cnt + 1 <= projects.size()){
                 MenuItem item = getOpenRecentItem(cnt);
-                item.setText(project);
-                item.setVisible(true);
-                menuBarContainer.getmOpenRecent().setDisable(false);
+                if(item != null){ // ToDo: Remove this dirty and fast fix
+                    item.setText(project);
+                    item.setVisible(true);
+                    menuBarContainer.getmOpenRecent().setDisable(false);
+                }
+
                 
                 cnt++;
             }else{
