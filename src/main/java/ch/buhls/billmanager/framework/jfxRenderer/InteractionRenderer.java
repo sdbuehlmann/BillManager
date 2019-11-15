@@ -2,6 +2,7 @@ package ch.buhls.billmanager.framework.jfxRenderer;
 
 import ch.buhls.billmanager.framework.eventsDescription.IntentDescriptor;
 import ch.buhls.billmanager.framework.eventsDescription.InteractionDescriptor;
+import ch.buhls.billmanager.framework.jfxRenderer.containers.ButtonBarContainer;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import javafx.scene.control.ButtonBar;
 
