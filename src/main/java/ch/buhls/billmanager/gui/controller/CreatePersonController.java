@@ -23,7 +23,7 @@ public class CreatePersonController extends AFormController<GUIPerson> implement
         super(framework, dataHandler, framework.getStringCollections().getPersonStringCollection());
         
         person = dataHandler.getPersonsDataHandler().createPerson();
-        builder = new PersonMaskBuilder(person.getBaseData(), this);
+        builder = new PersonMaskBuilder(person.getBaseData(), this, framework);
         
         displayCreateMask(builder.getView());
     }
