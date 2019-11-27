@@ -22,6 +22,7 @@ import javafx.scene.layout.GridPane;
  */
 public class FormRenderer
 {
+
     public static <TOwner> GridPane render(PropertiesView<TOwner> properties, TOwner owner)
     {
         FormGridContainer gridContainer = new FormGridContainer();

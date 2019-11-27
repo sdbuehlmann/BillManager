@@ -1,24 +1,18 @@
 
 package ch.buhls.billmanager.gui.view.builder;
 
-import ch.buhls.billmanager.framework.eventsDescription.EIntentType;
-import ch.buhls.billmanager.framework.eventsDescription.InteractionDescriptor;
 import ch.buhls.billmanager.framework.jfxRenderer.FormRenderer;
-import ch.buhls.billmanager.framework.jfxRenderer.InteractionRenderer;
 import ch.buhls.billmanager.framework.propertyDescription.PropertiesView;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
-import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.container.form.PersonFormContainer;
 import ch.buhls.billmanager.gui.view.elements.LabledSwitchableControlContainer;
 import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
+import ch.buhls.billmanager.persistance.database.entities.Article;
 import ch.buhls.billmanager.persistance.database.entities.Person;
 import ch.buhls.billmanager.persistance.database.entities.PersonBaseData;
 import java.util.Date;
 import javafx.scene.Node;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 
 /**
  *
@@ -26,10 +20,8 @@ import javafx.scene.layout.VBox;
  */
 public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseData>
 {
-    private final static PropertiesView<PersonBaseData> propView = getPropertiesView();
-    private final static InteractionDescriptor<PersonMaskBuilder> interactionDesc = getEventsDescriptor();
-
-    private final VBox view;
+    private static PropertiesView<PersonBaseData> propView;
+    private final GridPane view;
     
     // data
     private final GUIPersonBaseData person;
@@ -40,18 +32,21 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
     // listener
     private final IDefaultMaskListener<GUIPersonBaseData> listener;
     
-    public PersonMaskBuilder(GUIPersonBaseData person, IDefaultMaskListener<GUIPersonBaseData> listener, IGUIFramework framework){
+    public PersonMaskBuilder(GUIPersonBaseData person, IDefaultMaskListener<GUIPersonBaseData> listener){
         super(person, new PersonFormContainer());
         this.listener = listener;
         this.maskContainer = (PersonFormContainer)getFormContainer();
         
         this.person = person;
-
-        ButtonBar bar = InteractionRenderer.render(interactionDesc, this, framework);
-        GridPane form = FormRenderer.render(propView, person.getData());
-
-        view = new VBox(bar,form);
-        view.setVgrow(form, Priority.ALWAYS);
+        
+        if(propView == null)
+        {
+            propView = getPropertiesView();
+        }
+        view = FormRenderer.render(propView, person.getData());
+        
+        bindProperties();
+        bindListeners();
     }
     
     @Override
@@ -163,7 +158,7 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
         maskContainer.getbSave().setDisable(true);
     }
     
-    private static PropertiesView getPropertiesView(){
+    private PropertiesView getPropertiesView(){
         PropertiesView<PersonBaseData> desc = new PropertiesView<>("person", Person.class);
         
         desc.addCategory("db");
@@ -197,24 +192,7 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
         
         return desc;
     }
-
-    private static InteractionDescriptor<PersonMaskBuilder> getEventsDescriptor(){
-        InteractionDescriptor<PersonMaskBuilder> descriptor = new InteractionDescriptor<>("person", IDefaultMaskListener.class);
-        descriptor.addUserInteraction("save", EIntentType.CONFIRMATION_EXPECTED, (handler) -> handler.save());
-        descriptor.addUserInteraction("cancel with confirmation", EIntentType.CONFIRMATION_EXPECTED, (handler) -> handler.cancel());
-        descriptor.addUserInteraction("cancel", (handler) -> handler.cancel());
-
-        return descriptor;
-    }
-
-    public void save(){
-        this.listener.save(person);
-    }
-
-    public void cancel(){
-        System.out.println("Cancled!");
-    }
-
+    
     @Override
     public Node getView() {
         return view;

@@ -17,7 +17,7 @@ public class ShowPersonController extends AFormController<GUIPersonBaseData> imp
     public ShowPersonController(GUIPersonBaseData person, IGUIFramework framework, DataHandler dataHandler){
         super(framework, dataHandler, framework.getStringCollections().getPersonBaseDataStringCollection());
         
-        PersonMaskBuilder builder = new PersonMaskBuilder(person, this, framework);
+        PersonMaskBuilder builder = new PersonMaskBuilder(person, this);
         builder.changeToReadOnlyMode();
         
         displayShowMask(builder.getView(), person);

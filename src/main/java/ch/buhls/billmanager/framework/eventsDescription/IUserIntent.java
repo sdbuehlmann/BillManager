@@ -5,7 +5,7 @@ package ch.buhls.billmanager.framework.eventsDescription;
  * @author buhls
  */
 @FunctionalInterface
-public interface IUserIntent<THandler>
+public interface IUserIntent
 {
-    public void DoOnHandler(THandler handler);
+    public void Do();
 }
