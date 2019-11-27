@@ -40,8 +40,7 @@ public class CSVFileManager
 
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
-                        //new FileInputStream(file), "UTF-8")); // Linux
-                        new FileInputStream(file))); // Windows
+                        new FileInputStream(file), "UTF-8"));
 
 //        BufferedReader reader = new BufferedReader(
 //                new InputStreamReader(

@@ -1,6 +1,5 @@
 package frameworkTest;
 
-import ch.buhls.billmanager.framework.propertyDescription.CategoryDescriptor;
 import ch.buhls.billmanager.framework.propertyDescription.PropertiesView;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -13,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author buhls
  */
-public class PropertiesViewTest
+public class PropertyDescriptorTest
 {
     
-    public PropertiesViewTest()
+    public PropertyDescriptorTest()
     {
     }
     
@@ -41,7 +40,7 @@ public class PropertiesViewTest
     }
 
      @Test
-     public void DescriptionTest() {
+     public void hello() {
         PropertiesView<Person> desc = new PropertiesView<>("person", Person.class);
         
         desc.addCategory("editable");
@@ -50,20 +49,7 @@ public class PropertiesViewTest
         
         desc.addCategory("readonly");
         desc.addProperty("age", Integer.class, (owner) -> { return owner.getName(); });
-        
-        // test
-        assertEquals(2, desc.getCategories().size());
-        
-        CategoryDescriptor category = desc.getCategories().get(0);
-        assertEquals("editable", category.getKey());
-        assertEquals(2, category.getProperties().size());
-        assertEquals("name", category.getProperties().get(0).getKey());
-        assertEquals("prename", category.getProperties().get(1).getKey());
-        
-        category = desc.getCategories().get(1);
-        assertEquals("readonly", category.getKey());
-        assertEquals(1, category.getProperties().size());
-        assertEquals("age", category.getProperties().get(0).getKey());
+        desc.addProperty("sex", ESex.class, (owner) -> { return owner.getSex(); });
      }
      
      private class Person{
@@ -71,6 +57,7 @@ public class PropertiesViewTest
         private String prename;
         
         private int age;
+        private ESex sex;
 
         public String getName(){
             return name;
@@ -94,5 +81,17 @@ public class PropertiesViewTest
         {
             return age;
         }
+
+        public ESex getSex()
+        {
+            return sex;
+        }
      }
+     
+     private enum ESex{
+            FEMALE,
+            MALE
+        }
+     
+     
 }

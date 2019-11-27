@@ -1,18 +1,10 @@
 
 package ch.buhls.billmanager.gui.view.builder;
 
-import ch.buhls.billmanager.framework.jfxRenderer.FormRenderer;
-import ch.buhls.billmanager.framework.propertyDescription.PropertiesView;
 import ch.buhls.billmanager.gui.data.GUIPersonBaseData;
 import ch.buhls.billmanager.gui.view.container.form.PersonFormContainer;
 import ch.buhls.billmanager.gui.view.elements.LabledSwitchableControlContainer;
 import ch.buhls.billmanager.gui.view.builder.listener.IDefaultMaskListener;
-import ch.buhls.billmanager.persistance.database.entities.Article;
-import ch.buhls.billmanager.persistance.database.entities.Person;
-import ch.buhls.billmanager.persistance.database.entities.PersonBaseData;
-import java.util.Date;
-import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
 
 /**
  *
@@ -20,9 +12,6 @@ import javafx.scene.layout.GridPane;
  */
 public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseData>
 {
-    private static PropertiesView<PersonBaseData> propView;
-    private final GridPane view;
-    
     // data
     private final GUIPersonBaseData person;
     
@@ -38,12 +27,6 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
         this.maskContainer = (PersonFormContainer)getFormContainer();
         
         this.person = person;
-        
-        if(propView == null)
-        {
-            propView = getPropertiesView();
-        }
-        view = FormRenderer.render(propView, person.getData());
         
         bindProperties();
         bindListeners();
@@ -156,45 +139,5 @@ public class PersonMaskBuilder extends TrackedEntityMaskBuilder<GUIPersonBaseDat
         LabledSwitchableControlContainer.changeToReadOnlyState(maskContainer.getTfTitleContainer());
         
         maskContainer.getbSave().setDisable(true);
-    }
-    
-    private PropertiesView getPropertiesView(){
-        PropertiesView<PersonBaseData> desc = new PropertiesView<>("person", Person.class);
-        
-        desc.addCategory("db");
-        desc.addProperty("id", Integer.class, (owner) -> { return owner.getId(); });
-        desc.addProperty("version", Integer.class, (owner) -> { return owner.getVersion(); });
-        
-        desc.addCategory("versioning");
-        desc.addProperty("version", Integer.class, (owner) -> { return owner.getVersionNr(); });
-        desc.addProperty("changeText", String.class, (owner) -> { return owner.getChangeTxt(); }, (owner,value) -> { owner.setChangeTxt(value); });
-        
-        desc.addCategory("identification");
-        desc.addProperty("name", String.class, (owner) -> { return owner.getName(); }, (owner,value) -> { owner.setName(value); });
-        desc.addProperty("prename", String.class, (owner) -> { return owner.getPrename(); }, (owner,value) -> { owner.setPrename(value); });
-        desc.addProperty("birthday", Date.class, (owner) -> { return owner.getBirthday(); }, (owner,value) -> { owner.setBirthday(value); });
-        
-        desc.addCategory("contact");
-        desc.addProperty("phoneP", String.class, (owner) -> { return owner.getPhoneP(); }, (owner,value) -> { owner.setPhoneP(value); });
-        desc.addProperty("phoneM", String.class, (owner) -> { return owner.getPhoneM(); }, (owner,value) -> { owner.setPhoneM(value); });
-        desc.addProperty("mail", String.class, (owner) -> { return owner.getEmail(); }, (owner,value) -> { owner.setEmail(value); });
-        desc.addProperty("iban", String.class, (owner) -> { return owner.getIban(); }, (owner,value) -> { owner.setIban(value); });
-        
-        desc.addCategory("adress");
-        desc.addProperty("company", String.class, (owner) -> { return owner.getCompany(); }, (owner,value) -> { owner.setCompany(value); });
-        desc.addProperty("street", String.class, (owner) -> { return owner.getStreet(); }, (owner,value) -> { owner.setStreet(value); });
-        desc.addProperty("postalcode", Integer.class, (owner) -> { return owner.getPostalcode(); }, (owner,value) -> { owner.setPostalcode(value); });
-        desc.addProperty("city", String.class, (owner) -> { return owner.getCity(); }, (owner,value) -> { owner.setCity(value); });
-        
-        desc.addCategory("letter");
-        desc.addProperty("salutation", String.class, (owner) -> { return owner.getSalutation(); }, (owner,value) -> { owner.setSalutation(value); });
-        desc.addProperty("title", String.class, (owner) -> { return owner.getTitle(); }, (owner,value) -> { owner.setTitle(value); });
-        
-        return desc;
-    }
-    
-    @Override
-    public Node getView() {
-        return view;
     }
 }

@@ -13,9 +13,7 @@ import javafx.scene.Parent;
  */
 public interface IGUIFramework
 {
-    // global
     public void setAppTitle(String title);
-    public void setCursorType(CursorType cursorType);
     
     // masks
     public void displayMainMask(Parent parent, SplitScreen splitScreen, HintBarContainer hintBarContainer);
@@ -48,13 +46,6 @@ public interface IGUIFramework
     {
         LEFT,
         RIGHT
-    }
-    
-    public enum CursorType{
-        DEFAULT,
-        WAITING,
-        HORIZONTAL_SCALING,
-        VERTICAL_SCALING
     }
     
     public StringCollections getStringCollections();
