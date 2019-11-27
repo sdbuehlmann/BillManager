@@ -1,6 +1,5 @@
 package ch.buhls.billmanager.framework.jfxRenderer;
 
-import ch.buhls.billmanager.framework.jfxRenderer.containers.FormGridContainer;
 import ch.buhls.billmanager.framework.propertyDescription.CategoryDescriptor;
 import ch.buhls.billmanager.framework.propertyDescription.PropertiesView;
 import ch.buhls.billmanager.framework.propertyDescription.PropertyDescriptor;

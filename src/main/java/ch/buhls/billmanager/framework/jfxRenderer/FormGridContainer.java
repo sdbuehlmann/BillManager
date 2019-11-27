@@ -1,5 +1,5 @@
 
-package ch.buhls.billmanager.framework.jfxRenderer.containers;
+package ch.buhls.billmanager.framework.jfxRenderer;
 import ch.buhls.billmanager.gui.framework.GUIFramework;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import javafx.geometry.Insets;

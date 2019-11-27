@@ -43,7 +43,7 @@ public class ListPersonsController extends AController implements IListPersonsLi
         personsDataHandler = dataHandler.getPersonsDataHandler();
         personsDataHandler.reloadPersonsBuffer();
 
-        builder = new ListPersonsBuilder(this, personsDataHandler.getPersonsBufferHack());
+        builder = new ListPersonsBuilder(this, personsDataHandler.getPersonsBuffer());
         this.bindBuilder(builder);
 
         this.display(builder.getView(), IGUIFramework.Area.LEFT);

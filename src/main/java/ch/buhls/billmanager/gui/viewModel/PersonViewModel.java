@@ -104,12 +104,6 @@ public class PersonViewModel
         return this.bufferService.getBuffer();
     }
 
-    public ObservableList<Person> getPersonsBufferHack() { // ToDo: Remove this dirty hack
-        ObservableList<Person> observableList = FXCollections.observableArrayList();
-        observableList.addAll(new PersonDataLoader(persistanceFascade).loadData());
-        return observableList;
-    }
-
     public void reloadPersonsBuffer() {
         this.bufferService.reloadData();
     }

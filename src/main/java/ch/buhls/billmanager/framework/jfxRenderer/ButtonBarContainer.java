@@ -1,4 +1,4 @@
-package ch.buhls.billmanager.framework.jfxRenderer.containers;
+package ch.buhls.billmanager.framework.jfxRenderer;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
