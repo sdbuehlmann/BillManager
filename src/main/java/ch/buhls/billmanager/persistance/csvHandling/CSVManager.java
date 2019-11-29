@@ -1,15 +1,20 @@
 package ch.buhls.billmanager.persistance.csvHandling;
 
+import ch.buhls.billmanager.utils.IPropertiesSet;
+import ch.buhls.billmanager.utils.IPropertyDescriptor;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author sdb
  */
-public class CSVManager
+public class CSVManager<TDataContainer>
 {
 
     private CSVFileManager csvManager;
@@ -69,5 +74,38 @@ public class CSVManager
         }
 
         return value;
+    }
+
+    public TDataContainer read(File location, IPropertiesSet propertiesSet, TDataContainer container) throws IOException {
+        List<Line> lines = csvManager.readCSVFile(location);
+
+        return null;
+    }
+
+    public void write(File location, IPropertiesSet propertiesSet, Collection<TDataContainer> containers) throws IOException {
+        List<Line> lines = containers.stream()
+                .map(dataContainer -> containerToLine(propertiesSet, dataContainer))
+                .collect(Collectors.toList());
+
+        csvManager.writeCSVFile(location, lines);
+    }
+
+    private Line containerToLine(IPropertiesSet propertiesSet, TDataContainer container){
+        Line line = new Line();
+
+        propertiesSet.getProperties().stream()
+                .forEach(propertyDescriptor -> line.getElements().add(propertyToString(propertyDescriptor, container)));
+
+        return line;
+    }
+
+    private String propertyToString(IPropertyDescriptor propertyDescriptor, TDataContainer container){
+        if(propertyDescriptor.getType().equals(Integer.class)){
+            return Integer.toString((int)propertyDescriptor.getGetter().Get(container));
+        }else if(propertyDescriptor.getType().equals(String.class)){
+            return (String)propertyDescriptor.getGetter().Get(container);
+        }
+
+        return "unsupported";
     }
 }

@@ -22,6 +22,12 @@ public class Line
         this.comment = "";
     }
 
+    public Line() {
+        this.lineNumber = -1;
+        this.elements = new ArrayList<>();
+        this.comment = "";
+    }
+
     public List<String> getElements()
     {
         return elements;
