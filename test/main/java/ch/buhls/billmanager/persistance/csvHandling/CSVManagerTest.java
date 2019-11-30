@@ -54,15 +54,14 @@ public class CSVManagerTest {
 		}
 	}
 
+	private static PropertiesSetBuilder<TestData> propertiesSetBuilder = new PropertiesSetBuilder<TestData>(TestData.class)
+			.addProperty("stringA", String.class, TestData::getTestStringA, TestData::setTestStringA)
+			.addProperty("intA", Integer.class, TestData::getTestIntA, TestData::setTestIntA)
+			.addProperty("stringB", String.class, TestData::getTestStringB, TestData::setTestStringB)
+			.addProperty("intB", Integer.class, TestData::getTestIntB, TestData::setTestIntB);
+
 	@Test
 	public void testReadWrite() throws IOException {
-		PropertiesSetBuilder<TestData> propertiesSetBuilder = new PropertiesSetBuilder<>(TestData.class);
-		propertiesSetBuilder
-				.addProperty("stringA", String.class, TestData::getTestStringA, TestData::setTestStringA)
-				.addProperty("intA", Integer.class, TestData::getTestIntA, TestData::setTestIntA)
-				.addProperty("stringB", String.class, TestData::getTestStringB, TestData::setTestStringB)
-				.addProperty("intB", Integer.class, TestData::getTestIntB, TestData::setTestIntB);
-
 		String inputString =
 				"I am string A;1001;I am String B;1002\n" +
 				"Again: I am string A;2001;Again: I am String B;2002\n" +
@@ -79,6 +78,51 @@ public class CSVManagerTest {
 		String outputString = out.toString();
 
 		Assert.assertEquals(inputString, outputString);
+	}
+
+	@Test
+	public void readNotValidValue() throws IOException {
+		String inputString = "I am string A;1001x;I am String B;1002"; // "1001x" is not a valid integer
+
+		CsvManager<TestData> manager = new CsvManager<>(CsvMapper.LineMappingPolicy.SKIPP_FAULTY_FIELDS);
+		List<TestData> datas = manager.read(new ByteArrayInputStream(inputString.getBytes()), propertiesSetBuilder.getPropertiesSet());
+
+		Assert.assertEquals(1, datas.size());
+
+		manager = new CsvManager<>(CsvMapper.LineMappingPolicy.ACCEPT_ONLY_WELL_FORMATED);
+		datas = manager.read(new ByteArrayInputStream(inputString.getBytes()), propertiesSetBuilder.getPropertiesSet());
+
+		Assert.assertEquals(0, datas.size());
+	}
+
+	@Test
+	public void readNotEnoughValues() throws IOException {
+		String inputString = "I am string A;1001;I am String B"; // last value is missing
+
+		CsvManager<TestData> manager = new CsvManager<>();
+		List<TestData> datas = manager.read(new ByteArrayInputStream(inputString.getBytes()), propertiesSetBuilder.getPropertiesSet());
+
+		Assert.assertEquals(1, datas.size());
+
+		manager = new CsvManager<>(CsvMapper.LineMappingPolicy.ACCEPT_ONLY_WELL_FORMATED);
+		datas = manager.read(new ByteArrayInputStream(inputString.getBytes()), propertiesSetBuilder.getPropertiesSet());
+
+		Assert.assertEquals(0, datas.size());
+	}
+
+	@Test
+	public void readTooMuchValues() throws IOException {
+		String inputString = "I am string A;1001;I am String B;1001;Additional value"; // last value is missing
+
+		CsvManager<TestData> manager = new CsvManager<>();
+		List<TestData> datas = manager.read(new ByteArrayInputStream(inputString.getBytes()), propertiesSetBuilder.getPropertiesSet());
+
+		Assert.assertEquals(1, datas.size());
+
+		manager = new CsvManager<>(CsvMapper.LineMappingPolicy.ACCEPT_ONLY_WELL_FORMATED);
+		datas = manager.read(new ByteArrayInputStream(inputString.getBytes()), propertiesSetBuilder.getPropertiesSet());
+
+		Assert.assertEquals(0, datas.size());
 	}
 
 }

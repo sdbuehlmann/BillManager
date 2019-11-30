@@ -19,7 +19,12 @@ public class CsvManager<TDataContainer> {
 
 	public CsvManager() {
 		reader = new CsvReader();
-		mapper = new CsvMapper<>();
+		mapper = new CsvMapper<>(CsvMapper.LineMappingPolicy.SKIPP_FAULTY_FIELDS);
+	}
+
+	public CsvManager(CsvMapper.LineMappingPolicy lineMappingPolicy) {
+		reader = new CsvReader();
+		mapper = new CsvMapper<>(lineMappingPolicy);
 	}
 
 	// read methods
