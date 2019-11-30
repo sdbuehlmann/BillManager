@@ -1,6 +1,6 @@
 package ch.buhls.billmanager.persistance;
 
-import ch.buhls.billmanager.persistance.csvHandling.CSVManager;
+import ch.buhls.billmanager.persistance.csvHandling.CsvManager;
 import ch.buhls.billmanager.persistance.csvHandling.CSVPerson;
 import ch.buhls.billmanager.persistance.database.ContainerFactory;
 import ch.buhls.billmanager.persistance.database.container.BillContainer;
@@ -26,6 +26,8 @@ import ch.buhls.billmanager.persistance.database.services.PersonService;
 import ch.buhls.billmanager.persistance.database.services.PositionService;
 import ch.buhls.billmanager.persistance.database.services.RoleService;
 import ch.buhls.billmanager.persistance.database.services.ServiceException;
+import ch.buhls.billmanager.utils.PropertiesSetBuilder;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,8 +49,6 @@ public class PersistanceFascade
     private BillTemplateService billTemplateService;
     private FinancialYearService financialYearService;
     private BillService billService;
-    
-    private CSVManager csvManager;
 
     public PersistanceFascade(File project) {
         factory = new ContainerFactory(project);
@@ -61,8 +61,6 @@ public class PersistanceFascade
         billTemplateService = new BillTemplateService(factory);
         financialYearService = new FinancialYearService(factory);
         billService = new BillService(factory);
-        
-        csvManager = new CSVManager();
     }
 
     public <T extends ATrackedEntity<T>> List<T> getAllVersions(T art) {
@@ -425,8 +423,32 @@ public class PersistanceFascade
     }
     
     public List<CSVPerson> importPersons(File file) throws PersistanceException{
+        CsvManager<CSVPerson> csvManager = new CsvManager();
+        PropertiesSetBuilder<CSVPerson> propertiesSetBuilder = new PropertiesSetBuilder<>(CSVPerson.class);
+
+        //Name;Vornamen;Firma;Geburtstag;Geburtsmonat;Geburtsjahr;Strasse;PLZ;Ort;TelP;TelM;E-Mail;Begrüssung;Titel
+        propertiesSetBuilder
+                .addProperty("name", String.class, CSVPerson::getName, CSVPerson::setName)
+                .addProperty("prename", String.class, CSVPerson::getPrename, CSVPerson::setPrename)
+                .addProperty("company", String.class, CSVPerson::getCompany, CSVPerson::setCompany)
+
+                .addProperty("birthday_day", Integer.class, CSVPerson::getBirthday_day, CSVPerson::setBirthday_day)
+                .addProperty("birthday_month", Integer.class, CSVPerson::getBirthday_month, CSVPerson::setBirthday_month)
+                .addProperty("birthday_year", Integer.class, CSVPerson::getBirthday_year, CSVPerson::setBirthday_year)
+
+                .addProperty("street", String.class, CSVPerson::getStreet, CSVPerson::setStreet)
+                .addProperty("postalcode", Integer.class, CSVPerson::getPlz, CSVPerson::setPlz)
+                .addProperty("city", String.class, CSVPerson::getCity, CSVPerson::setCity)
+
+                .addProperty("phone_p", String.class, CSVPerson::getPhone_landline, CSVPerson::setPhone_landline)
+                .addProperty("phone_m", String.class, CSVPerson::getPhone_mobile, CSVPerson::setPhone_mobile)
+                .addProperty("e_mail", String.class, CSVPerson::getMail, CSVPerson::setMail)
+
+                .addProperty("salutation", String.class, CSVPerson::getSalutation, CSVPerson::setSalutation)
+                .addProperty("title", String.class, CSVPerson::getTitle, CSVPerson::setTitle);
+
         try {
-            return csvManager.readMembers(file);
+            return csvManager.read(file, propertiesSetBuilder.getPropertiesSet());
         }
         catch (Exception ex) {
             throw new PersistanceException(ex);

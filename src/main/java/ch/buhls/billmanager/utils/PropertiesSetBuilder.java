@@ -8,6 +8,10 @@ public class PropertiesSetBuilder<TOwner> {
         propertiesSet = new PropertiesSet(key, typeOwner);
     }
 
+    public PropertiesSetBuilder(Class typeOwner) {
+        propertiesSet = new PropertiesSet(typeOwner.getSimpleName(), typeOwner);
+    }
+
     public <TProperty> PropertiesSetBuilder<TOwner> addProperty(String key, Class typeProperty, IGetter<TOwner,TProperty> getter, ISetter<TOwner,TProperty> setter){
         propertiesSet.getProperties().add(new PropertyDescriptor(typeProperty, key, getter, setter));
         return this;
