@@ -1,4 +1,4 @@
-package ch.buhls.billmanager.persistance.csvHandling;
+package ch.buhls.billmanager.persistance.csvHandling.reader;
 
 import java.io.*;
 import java.util.ArrayList;
