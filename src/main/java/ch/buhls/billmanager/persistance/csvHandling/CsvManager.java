@@ -42,13 +42,20 @@ public class CsvManager<TDataContainer> {
 
 	// write methods
 
-	public void write(OutputStream out, IPropertiesSet propertiesSet, Collection<TDataContainer> containers) throws IOException {
-		List<Line> lines = mapper.map(propertiesSet, containers);
+	public void write(OutputStream out, IPropertiesSet propertiesSet, Collection<TDataContainer> containers, boolean writeHeader) throws IOException {
+		List<Line>  lines;
+		if(writeHeader){
+			lines = mapper.mapWithHeader(propertiesSet, containers);
+		}
+		else{
+			lines = mapper.map(propertiesSet, containers);
+		}
+
 		reader.write(out, lines);
 	}
 
-	public void write(File file, IPropertiesSet propertiesSet, Collection<TDataContainer> containers) throws IOException {
+	public void write(File file, IPropertiesSet propertiesSet, Collection<TDataContainer> containers, boolean writeHeader) throws IOException {
 		Logger.getLogger(CsvReader.class.getName()).log(Level.INFO, "Write CSV file: {0}", file.getAbsolutePath());
-		write(new FileOutputStream(file), propertiesSet, containers);
+		write(new FileOutputStream(file), propertiesSet, containers, writeHeader);
 	}
 }

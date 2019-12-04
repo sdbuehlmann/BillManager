@@ -43,7 +43,28 @@ public class CsvMapper<TDataContainer> {
 				.collect(Collectors.toList());
 	}
 
+	public List<Line> mapWithHeader(IPropertiesSet propertiesSet, Collection<TDataContainer> containers){
+		List<Line> lines = map(propertiesSet, containers);
+		lines.add(0, propertiesSetToHeaderLine(propertiesSet));
+
+		return lines;
+	}
+
 	// private methods
+
+	private Line propertiesSetToHeaderLine(IPropertiesSet propertiesSet){
+		Line line = new Line();
+
+		propertiesSet.getProperties().stream()
+				.forEach(propertyDescriptor -> line.getElements().add(propertyDescriptor.getKey()));
+
+		if(line.getElements().size() > 0){
+			// add comment identifier to first element
+			line.getElements().set(0, "//" + line.getElements().get(0));
+		}
+
+		return line;
+	}
 
 	private Line containerToLine(IPropertiesSet propertiesSet, TDataContainer container) {
 		Line line = new Line();

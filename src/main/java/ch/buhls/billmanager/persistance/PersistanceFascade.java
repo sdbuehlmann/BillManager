@@ -533,7 +533,7 @@ public class PersistanceFascade
                 .addProperty("nrPositions", Integer.class, bill -> bill.getPositions().size());
 
         try {
-            csvManager.write(new File(location, "bills_export.csv"), propertiesSetBuilder.getPropertiesSet(), bills);
+            csvManager.write(new File(location, "bills_export.csv"), propertiesSetBuilder.getPropertiesSet(), bills, true);
         }
         catch (Exception ex) {
             throw new PersistanceException(ex);

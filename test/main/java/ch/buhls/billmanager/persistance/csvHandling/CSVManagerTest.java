@@ -73,7 +73,7 @@ public class CSVManagerTest {
 		Assert.assertEquals(3, datas.size());
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		manager.write(out, propertiesSetBuilder.getPropertiesSet(), datas);
+		manager.write(out, propertiesSetBuilder.getPropertiesSet(), datas, false);
 
 		String outputString = out.toString();
 
