@@ -1,12 +1,14 @@
 package ch.buhls.billmanager.persistance.csvHandling.mapper;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateMapper implements IFieldMapper<Date> {
 
 	@Override
 	public String mapPropertyToString(Date propertyValue) {
-		return propertyValue.toString();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		return simpleDateFormat.format(propertyValue);
 	}
 
 	@Override
