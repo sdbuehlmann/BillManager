@@ -57,7 +57,8 @@ public class GUIFramework implements IGUIFramework
     @Override
     public File openPathChooser(String title, File lastDirectory) {
         DirectoryChooser chooser = new DirectoryChooser();
-        if (lastDirectory != null) {
+        if (lastDirectory != null &&
+            lastDirectory.isDirectory()) {
             chooser.setInitialDirectory(lastDirectory);
         }
         chooser.setTitle(title);

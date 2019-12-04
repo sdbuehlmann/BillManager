@@ -7,6 +7,7 @@ import ch.buhls.billmanager.gui.data.GUIRole;
 import ch.buhls.billmanager.gui.framework.IGUIFramework;
 import ch.buhls.billmanager.gui.view.builder.ListBillsBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.IListBillsBuilderListener;
+import ch.buhls.billmanager.model.App;
 import ch.buhls.billmanager.model.ModelException;
 import ch.buhls.billmanager.gui.viewModel.criteria.IFilterHandle;
 
@@ -101,11 +102,12 @@ public class ListBillsController extends AController implements IListBillsBuilde
 
     @Override
     public void exportSelected(List<GUIBill> bills) {
-        File file = framework.openPathChooser("Pfad für den Rechnungs-Export selektieren", null);
+        File file = framework.openPathChooser("Zielordner für den Rechnungs-Export auswählen", App.INSTANCE.getLastPath());
         if(file != null){
+            App.INSTANCE.setLastPath(file);
             try {
-                dataHandler.getBillViewModel().exportBills(bills, file);
-                framework.displayInfoHint(String.format("%d Rechnungen erfolgreich exportiert nach %s", bills.size(), file.getPath()));
+                File exportedDataLocation = dataHandler.getBillViewModel().exportBills(bills, file);
+                framework.displayInfoHint(String.format("%d Rechnungen erfolgreich exportiert nach %s", bills.size(), exportedDataLocation.getPath()));
             }
             catch (Exception ex) {
                 framework.showExceptionDialoque(ex);

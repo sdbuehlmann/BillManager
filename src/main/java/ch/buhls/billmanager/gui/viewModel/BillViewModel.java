@@ -20,6 +20,7 @@ import ch.buhls.billmanager.persistance.PersistanceException;
 import ch.buhls.billmanager.persistance.PersistanceFascade;
 import ch.buhls.billmanager.persistance.database.entities.Bill;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -223,12 +224,24 @@ public class BillViewModel
         return this.app.getLastUsedDate();
     }
 
-    public void exportBills(List<GUIBill> guiBills, File location) throws PersistanceException, ModelException {
+    /**
+     * Does export the specified bills and return the location of the exported data
+     * @param guiBills
+     * @param location
+     * @return
+     * @throws PersistanceException
+     * @throws ModelException
+     */
+    public File exportBills(List<GUIBill> guiBills, File location) throws PersistanceException, ModelException {
+        // init export directory
+        File exportDirectory = ModelFascade.createUniqueSubDirectory(location, "export");
+
+        // create csv
         List<Bill> bills = guiBills.stream()
                 .map(AGUIData::getData)
                 .collect(Collectors.toList());
 
-        persistanceFascade.exportBill(bills, location);
+        persistanceFascade.exportBill(bills, exportDirectory);
 
         // copy pdf's
         List<File> pdfs = bills.stream()
@@ -236,8 +249,9 @@ public class BillViewModel
                 .collect(Collectors.toList());
 
         for (File file: pdfs) {
-            modelFascade.copyPDFToDirectory(file, location);
+            modelFascade.copyPDFToDirectory(file, exportDirectory);
         }
 
+        return exportDirectory;
     }
 }

@@ -111,6 +111,33 @@ public class ModelFascade
         }
     }
 
+    /**
+     * If the specified sub-directory does not exist, the method will create it.
+     * Otherwise, it will add a number as suffix to the end of the subdirectory.
+     * @param parent
+     */
+    public static File createUniqueSubDirectory(File parent, String nameSubDir) throws ModelException {
+        File subDir = new File(parent, nameSubDir);
+
+        int cnt = 0;
+        while(true){
+            if(subDir.exists()) {
+                cnt++;
+                subDir = new File(parent, nameSubDir + "_" + cnt);
+            }else{
+                break;
+            }
+        }
+
+        try {
+            Files.createDirectory(subDir.toPath());
+        } catch (IOException e) {
+            throw new ModelException("Can not create unique subdirectory.", e);
+        }
+
+        return subDir;
+    }
+
     public void printPDFs(List<File> pdfFiles) throws Exception {
         System.printPDF(pdfFiles);
     }
