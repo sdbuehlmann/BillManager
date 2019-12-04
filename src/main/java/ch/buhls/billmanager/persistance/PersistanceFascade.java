@@ -524,8 +524,13 @@ public class PersistanceFascade
                 .addProperty("id", Integer.class, Bill::getId)
                 .addProperty("prename", String.class, bill -> bill.getPersonBaseData().getPrename())
                 .addProperty("name", String.class, bill -> bill.getPersonBaseData().getName())
+                .addProperty("company", String.class, bill -> bill.getPersonBaseData().getCompany())
+                .addProperty("street", String.class, bill -> bill.getPersonBaseData().getStreet())
+                .addProperty("postalcode", Integer.class, bill -> bill.getPersonBaseData().getPostalcode())
+                .addProperty("city", String.class, bill -> bill.getPersonBaseData().getCity())
                 .addProperty("date", Date.class, Bill::getDateSendet)
-                .addProperty("sum", Integer.class, Bill::getSumInRp);
+                .addProperty("sumInRp", Integer.class, Bill::getSumInRp)
+                .addProperty("nrPositions", Integer.class, bill -> bill.getPositions().size());
 
         try {
             csvManager.write(new File(location, "bills_export.csv"), propertiesSetBuilder.getPropertiesSet(), bills);
