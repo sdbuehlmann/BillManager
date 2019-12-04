@@ -148,6 +148,7 @@ public class GUIStringCollection
     public static final String GENERATE_PDF = "PDF generieren";
     public static final String PRINT_PDF = "PDF drucken";
     public static final String FILTER = "Filtern";
+    public static final String EXPORT_SELECTED = "Exportieren";
     public static final String CHANGE_STATE_TO_PAID = "bezahlt am %s";
     
     public static final String DIFFERENT_DATA = "<diff>";

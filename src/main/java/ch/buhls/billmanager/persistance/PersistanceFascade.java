@@ -516,7 +516,24 @@ public class PersistanceFascade
         BillContainer container = (BillContainer)billService.getContainer(); // TEMP! Dirty Cast
         return container.findByFinancialYearID(year.getId());
     }
-    
+
+    public void exportBill(List<Bill> bills, File location) throws PersistanceException {
+        CsvManager<Bill> csvManager = new CsvManager();
+        PropertiesSetBuilder<Bill> propertiesSetBuilder = new PropertiesSetBuilder<>(Bill.class);
+        propertiesSetBuilder
+                .addProperty("id", Integer.class, Bill::getId)
+                .addProperty("prename", String.class, bill -> bill.getPersonBaseData().getPrename())
+                .addProperty("name", String.class, bill -> bill.getPersonBaseData().getName())
+                .addProperty("date", Date.class, Bill::getDateSendet)
+                .addProperty("sum", Integer.class, Bill::getSumInRp);
+
+        try {
+            csvManager.write(new File(location, "bills_export.csv"), propertiesSetBuilder.getPropertiesSet(), bills);
+        }
+        catch (Exception ex) {
+            throw new PersistanceException(ex);
+        }
+    }
     
     // position
     public Position createPosition(Article art) {

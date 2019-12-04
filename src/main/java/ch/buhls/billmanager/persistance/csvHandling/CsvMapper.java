@@ -1,5 +1,6 @@
 package ch.buhls.billmanager.persistance.csvHandling;
 
+import ch.buhls.billmanager.persistance.csvHandling.mapper.DateMapper;
 import ch.buhls.billmanager.persistance.csvHandling.mapper.IFieldMapper;
 import ch.buhls.billmanager.persistance.csvHandling.mapper.MappingException;
 import ch.buhls.billmanager.persistance.csvHandling.reader.CsvReader;
@@ -26,6 +27,7 @@ public class CsvMapper<TDataContainer> {
 
 		mappers.put(String.class, new StringMapper());
 		mappers.put(Integer.class, new IntegerMapper());
+		mappers.put(Date.class, new DateMapper());
 	}
 
 	public List<TDataContainer> map(List<Line> lines, IPropertiesSet propertiesSet){

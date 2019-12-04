@@ -90,6 +90,27 @@ public class ModelFascade
         }
     }
 
+    public void copyPDFToDirectory(File src, File destDir) throws ModelException {
+        if (src == null
+                || destDir == null
+                || !src.exists()
+                || !src.isFile()
+                || !destDir.isDirectory()) {
+            throw new ModelException("Illegal files handed");
+        }
+
+        try {
+            if(!destDir.exists()) {
+                Files.createDirectory(destDir.toPath());
+            }
+            File destFile = new File(destDir, src.getName());
+            Files.copy(src.toPath(), destFile.toPath(), REPLACE_EXISTING);
+        }
+        catch (IOException ex) {
+            throw new ModelException(ex.getMessage());
+        }
+    }
+
     public void printPDFs(List<File> pdfFiles) throws Exception {
         System.printPDF(pdfFiles);
     }

@@ -1,11 +1,6 @@
 package ch.buhls.billmanager.gui.viewModel;
 
-import ch.buhls.billmanager.gui.data.CopiedDataObjectContainer;
-import ch.buhls.billmanager.gui.data.GUIBill;
-import ch.buhls.billmanager.gui.data.GUICreateBillsData;
-import ch.buhls.billmanager.gui.data.GUIPerson;
-import ch.buhls.billmanager.gui.data.GUIRegisterBillData;
-import ch.buhls.billmanager.gui.data.GUIRole;
+import ch.buhls.billmanager.gui.data.*;
 import ch.buhls.billmanager.gui.viewModel.buffer.BufferDataService;
 import ch.buhls.billmanager.gui.viewModel.criteria.BillRoleCriteria;
 import ch.buhls.billmanager.gui.viewModel.criteria.BillStatusCriteria;
@@ -31,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import javafx.collections.ObservableList;
 
 /**
@@ -224,5 +221,23 @@ public class BillViewModel
     
     public LocalDate getLastPaidDate(){
         return this.app.getLastUsedDate();
+    }
+
+    public void exportBills(List<GUIBill> guiBills, File location) throws PersistanceException, ModelException {
+        List<Bill> bills = guiBills.stream()
+                .map(AGUIData::getData)
+                .collect(Collectors.toList());
+
+        persistanceFascade.exportBill(bills, location);
+
+        // copy pdf's
+        List<File> pdfs = bills.stream()
+                .map(docService::getBillsPDFFile)
+                .collect(Collectors.toList());
+
+        for (File file: pdfs) {
+            modelFascade.copyPDFToDirectory(file, location);
+        }
+
     }
 }

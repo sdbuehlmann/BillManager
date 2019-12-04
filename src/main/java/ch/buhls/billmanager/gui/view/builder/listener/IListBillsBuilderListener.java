@@ -26,4 +26,7 @@ public interface IListBillsBuilderListener
     // filter
     public void filterByStatus(GUIBillStatus status);
     public void showOnlyBillsFromRoleMembers();
+
+    // export
+    void exportSelected(List<GUIBill> bills);
 }

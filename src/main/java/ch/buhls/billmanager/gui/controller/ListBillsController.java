@@ -9,8 +9,12 @@ import ch.buhls.billmanager.gui.view.builder.ListBillsBuilder;
 import ch.buhls.billmanager.gui.view.builder.listener.IListBillsBuilderListener;
 import ch.buhls.billmanager.model.ModelException;
 import ch.buhls.billmanager.gui.viewModel.criteria.IFilterHandle;
+
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
+
+import ch.buhls.billmanager.persistance.PersistanceException;
 import javafx.collections.ObservableList;
 
 /**
@@ -93,6 +97,20 @@ public class ListBillsController extends AController implements IListBillsBuilde
                 builder,
                 roleFilterHandle,
                 GUIStringCollection.getHintTxt_showBillsByRoleFilter(markedRole));
+    }
+
+    @Override
+    public void exportSelected(List<GUIBill> bills) {
+        File file = framework.openPathChooser("Pfad für den Rechnungs-Export selektieren", null);
+        if(file != null){
+            try {
+                dataHandler.getBillViewModel().exportBills(bills, file);
+                framework.displayInfoHint(String.format("%d Rechnungen erfolgreich exportiert nach %s", bills.size(), file.getPath()));
+            }
+            catch (Exception ex) {
+                framework.showExceptionDialoque(ex);
+            }
+        }
     }
 
     @Override

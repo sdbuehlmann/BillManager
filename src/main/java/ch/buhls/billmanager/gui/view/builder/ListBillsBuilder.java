@@ -99,6 +99,9 @@ public class ListBillsBuilder extends AListBuilder<GUIBill> implements IHintBarC
         menuContainer.getItemShowBillsOfRoleMembers().setOnAction((ActionEvent event) -> {
             listener.showOnlyBillsFromRoleMembers();
         });
+        menuContainer.getItemExportSelected().setOnAction((ActionEvent event) -> {
+            listener.exportSelected(tableContainer.getTable().getSelectionModel().getSelectedItems());
+        });
         
         // other
         menuContainer.getContextMenu().setOnShowing((event) -> {

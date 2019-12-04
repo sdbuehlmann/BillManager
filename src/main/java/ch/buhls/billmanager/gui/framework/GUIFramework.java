@@ -71,9 +71,9 @@ public class GUIFramework implements IGUIFramework
 
         if (lastDirectory != null) {
             if(!lastDirectory.isDirectory()) {
-                lastDirectory = lastDirectory.getParentFile().getParentFile();
+                lastDirectory = lastDirectory.getParentFile();
             }
-            if(lastDirectory.exists()){
+            if(lastDirectory != null && lastDirectory.exists()){
                 chooser.setInitialDirectory(lastDirectory);
             }
         }

@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,8 +44,7 @@ public class DocumentService
     
     public void showPDF(Bill bill) throws ModelException {
         try {
-            File pdfFile = ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getId());
-            modelFascade.openPDF(pdfFile);
+            modelFascade.openPDF(getBillsPDFFile(bill));
         }
         catch (IOException ex) {
             throw new ModelException(ex.getMessage());
@@ -65,6 +65,10 @@ public class DocumentService
         catch (Exception ex) {
             throw new ModelException(ex.getMessage());
         }
+    }
+
+    public File getBillsPDFFile(Bill bill){
+        return ModelFascade.createPathToBillPDF(project.getLocationBills(), bill.getId());
     }
     
     private String dateToString(LocalDate date) {

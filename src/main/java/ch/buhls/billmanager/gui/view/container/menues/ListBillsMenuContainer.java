@@ -20,6 +20,8 @@ public class ListBillsMenuContainer
     
     private final Menu menuFilter, menuStatusFilter;
     private final MenuItem itemStatusSendet, itemStatusCanceled, itemStatusPaid;
+
+    private final MenuItem itemExportSelected;
     
     private final Menu menuRoleFilter;
     private final MenuItem itemShowBillsOfRoleMembers;
@@ -38,10 +40,20 @@ public class ListBillsMenuContainer
         
         itemShowBillsOfRoleMembers = new MenuItem(GUIStringCollection.BILL_SHOW_BILLS_FROM_ROLE_MEMBERS);
         menuRoleFilter = new Menu(GUIStringCollection.BILL_ROLE_FILTER, null, itemShowBillsOfRoleMembers);
-        
-        menuFilter = new Menu(GUIStringCollection.FILTER, null, menuStatusFilter, menuRoleFilter);        
-        
-        contextMenu = new ContextMenu(itemEdit, itemStateToPaid, new SeparatorMenuItem(), itemShowPDF, itemPrint, new SeparatorMenuItem(), menuFilter);
+        menuFilter = new Menu(GUIStringCollection.FILTER, null, menuStatusFilter, menuRoleFilter);
+
+        itemExportSelected = new MenuItem(GUIStringCollection.EXPORT_SELECTED);
+
+        contextMenu = new ContextMenu(
+                itemEdit,
+                itemStateToPaid,
+                new SeparatorMenuItem(),
+                itemShowPDF,
+                itemPrint,
+                new SeparatorMenuItem(),
+                menuFilter,
+                new SeparatorMenuItem(),
+                itemExportSelected);
     }
 
     public ContextMenu getContextMenu() {
@@ -90,5 +102,9 @@ public class ListBillsMenuContainer
 
     public MenuItem getItemShowBillsOfRoleMembers() {
         return itemShowBillsOfRoleMembers;
+    }
+
+    public MenuItem getItemExportSelected() {
+        return itemExportSelected;
     }
 }
