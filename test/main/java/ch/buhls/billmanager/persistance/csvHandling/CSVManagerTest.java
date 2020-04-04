@@ -64,8 +64,8 @@ public class CSVManagerTest {
 	public void testReadWrite() throws IOException {
 		String inputString =
 				"I am string A;1001;I am String B;1002\n" +
-				"Again: I am string A;2001;Again: I am String B;2002\n" +
-				"For the last time: I am string A;3001;For the last time: I am String B;3002\n";
+						"Again: I am string A;2001;Again: I am String B;2002\n" +
+						"For the last time: I am string A;3001;For the last time: I am String B;3002\n";
 
 		CsvManager<TestData> manager = new CsvManager<>();
 		List<TestData> datas = manager.read(new ByteArrayInputStream(inputString.getBytes()), propertiesSetBuilder.getPropertiesSet());
@@ -74,6 +74,27 @@ public class CSVManagerTest {
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		manager.write(out, propertiesSetBuilder.getPropertiesSet(), datas, false);
+
+		String outputString = out.toString();
+
+		Assert.assertEquals(inputString, outputString);
+	}
+
+	@Test
+	public void testReadWriteWithHeader() throws IOException {
+		String inputString =
+						"//stringA;intA;stringB;intB\n" +
+						"I am string A;1001;I am String B;1002\n" +
+						"Again: I am string A;2001;Again: I am String B;2002\n" +
+						"For the last time: I am string A;3001;For the last time: I am String B;3002\n";
+
+		CsvManager<TestData> manager = new CsvManager<>();
+		List<TestData> datas = manager.read(new ByteArrayInputStream(inputString.getBytes()), propertiesSetBuilder.getPropertiesSet());
+
+		Assert.assertEquals(3, datas.size());
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		manager.write(out, propertiesSetBuilder.getPropertiesSet(), datas, true);
 
 		String outputString = out.toString();
 

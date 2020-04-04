@@ -41,14 +41,23 @@ public class LineParser
             
             line.setComment(comment);
         }
-        
-        String[] lineSeperatorSplited = lineCommentSplited[0].split(CSV_SEPERATOR);
-        for(String dataElment : lineSeperatorSplited)
-        {
-            line.getElements().add(dataElment);
-        }
-        
+
+        parseData(lineCommentSplited[0], CSV_SEPERATOR, line);
+
         return line;
+    }
+
+    private void parseData(String data, String seperator, Line container){
+        if(data.isEmpty()){
+            // nothing to parse
+            return;
+        }
+
+        String[] lineSeperatorSplited = data.split(seperator);
+        for(String dataElement : lineSeperatorSplited)
+        {
+            container.getElements().add(dataElement);
+        }
     }
     
     public String replaceSpecialCharacters(String text)
@@ -85,8 +94,7 @@ public class LineParser
         }
     }
     
-    public int countLeadingSpaces(String data)
-    {
+    public int countLeadingSpaces(String data){
         int counter = 0;
         for(char dataChar : data.toCharArray())
         {

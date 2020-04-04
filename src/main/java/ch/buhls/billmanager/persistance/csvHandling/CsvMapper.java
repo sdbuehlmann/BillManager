@@ -33,7 +33,7 @@ public class CsvMapper<TDataContainer> {
 	public List<TDataContainer> map(List<Line> lines, IPropertiesSet propertiesSet){
 		return lines.stream()
 				.map(line -> lineToContainer(propertiesSet, line))
-				.filter(container -> container != null)
+				.fil
 				.collect(Collectors.toList());
 	}
 
@@ -75,7 +75,11 @@ public class CsvMapper<TDataContainer> {
 		return line;
 	}
 
-	private TDataContainer lineToContainer(IPropertiesSet propertiesSet, Line line) {
+	private Optional<TDataContainer> lineToContainer(IPropertiesSet propertiesSet, Line line) {
+		if(!line.containsData()){
+			return Optional.empty();
+		}
+
 		TDataContainer container = createContainer(propertiesSet);
 		Queue<String> fields = new ArrayDeque<>(line.getElements());
 
@@ -91,17 +95,17 @@ public class CsvMapper<TDataContainer> {
 						break;
 					case ACCEPT_ONLY_WELL_FORMATED:
 						LOGGER.log(Level.WARNING, String.format("Value nr. %d of line nr. %d is invalid. The hole line is skipped.", elementNr, line.getLineNumber()));
-						return null;
+						return Optional.empty();
 				}
 			}
 		}
 
 		if(!fields.isEmpty() && mappingPolicy.equals(LineMappingPolicy.ACCEPT_ONLY_WELL_FORMATED)){
 			LOGGER.log(Level.WARNING, "Too much values in line nr. %d. The hole line is skipped.", line.getLineNumber());
-			return null;
+			return Optional.empty();
 		}
 
-		return container;
+		return Optional.of(container);
 	}
 
 	private TDataContainer createContainer(IPropertiesSet propertiesSet){

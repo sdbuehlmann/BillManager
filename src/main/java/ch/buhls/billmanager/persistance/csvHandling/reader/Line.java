@@ -28,6 +28,14 @@ public class Line
         this.comment = "";
     }
 
+    /**
+     * Does return true, if the line contains data (comment is no data)
+     * @return
+     */
+    public boolean containsData(){
+        return elements.size() > 0;
+    }
+
     public List<String> getElements()
     {
         return elements;
