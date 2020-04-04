@@ -33,7 +33,8 @@ public class CsvMapper<TDataContainer> {
 	public List<TDataContainer> map(List<Line> lines, IPropertiesSet propertiesSet){
 		return lines.stream()
 				.map(line -> lineToContainer(propertiesSet, line))
-				.fil
+				.filter(Optional::isPresent)
+				.map(Optional::get)
 				.collect(Collectors.toList());
 	}
 
